@@ -1,0 +1,216 @@
+# Conky sample configuration
+#
+# the list of variables has been removed from this file in favour
+# of keeping the documentation more maintainable.
+# Check http://conky.sf.net for an up-to-date-list.
+
+# set to yes if you want Conky to be forked in the background
+background no
+
+# X font when Xft is disabled, you can pick one with program xfontsel
+#font 5x7
+#font 6x10
+#font 7x13
+#font 8x13
+#font 9x15
+#font *mintsmild.se*
+#font -*-*-*-*-*-*-34-*-*-*-*-*-*-*
+
+# Use Xft?
+use_xft yes
+
+# Xft font when Xft is enabled
+xftfont Bitstream Vera Sans Mono:size=8
+
+# Text alpha when using Xft
+xftalpha 1
+
+# Print everything to stdout?
+# out_to_console no
+
+# MPD host/port
+mpd_host localhost
+mpd_port 6600
+# mpd_password tinker_bell
+
+# mail spool
+mail_spool $MAIL
+
+# Update interval in seconds
+update_interval 2.0
+
+# This is the number of times Conky will update before quitting.
+# Set to zero to run forever.
+total_run_times 0
+
+# Create own window instead of using desktop (required in nautilus)
+own_window yes
+
+# If own_window is yes, you may use type normal, desktop or override
+own_window_type normal
+
+# Use pseudo transparency with own_window?
+own_window_transparent yes
+
+# If own_window_transparent is set to no, you can set the background colour here
+own_window_colour hotpink
+
+# If own_window is yes, these window manager hints may be used
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+# Use double buffering (reduces flicker, may not work for everyone)
+double_buffer yes
+
+# Minimum size of text area
+minimum_size 280 5
+
+# Draw shades?
+draw_shades yes
+
+# Draw outlines?
+draw_outline no
+
+# Draw borders around text
+draw_borders yes
+
+# Draw borders around graphs
+draw_graph_borders yes
+
+# Stippled borders?
+stippled_borders 8
+
+# border margins
+border_margin 4
+
+# border width
+border_width 1
+
+# window
+maximum_width 400
+
+# Default colors and also border colors
+default_color white
+default_shade_color black
+default_outline_color black
+
+#dexter_client no
+#dexter_server no
+# config file for libdexter (default search path: $HOME/.dexterrc; /etc/libdexter/dexter.conf)
+#dexter_config
+
+# Text alignment, other possible values are commented
+#alignment top_left
+#alignment top_right
+#alignment bottom_left
+alignment bottom_right
+#alignment none
+
+# Gap between borders of screen and text
+# same thing as passing -x at command line
+gap_x 20
+gap_y 20
+
+# Subtract file system buffers from used memory?
+no_buffers yes
+
+# set to yes if you want all text to be in uppercase
+uppercase no
+
+# number of cpu samples to average
+# set to 1 to disable averaging
+cpu_avg_samples 2
+
+# number of net samples to average
+# set to 1 to disable averaging
+net_avg_samples 2
+
+# Force UTF8? note that UTF8 support required XFT
+override_utf8_locale yes
+
+# Add spaces to keep things from moving about?  This only affects certain objects.
+use_spacer no
+
+# Allow each port monitor to track at most this many connections (if 0 or not set, default is 256)
+#max_port_monitor_connections 256
+
+# Maximum number of special things, e.g. fonts, offsets, aligns, etc.
+#max_specials 512
+
+# Maximum size of buffer for user text, i.e. below TEXT line.
+#max_user_text 16384
+
+# variable is given either in format $variable or in ${variable}. Latter
+# allows characters right after the variable and must be used in network
+# stuff because of an argument
+
+# stuff after 'TEXT' will be formatted on screen
+
+TEXT
+$nodename - $sysname $kernel on $machine
+${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg
+$stippled_hr
+${color lightgrey}CPUz  $color$cpu% ${color #cc2222}${cpubar}
+${cpubar cpu1 3,195}$alignr${cpubar cpu2 3,195}
+${cpubar cpu3 3,195}$alignr${cpubar cpu4 3,195}
+${color lightgrey}RAM   $color$mem/$memmax - $memperc% ${color #cc5d5b}${membar}
+${color lightgrey}Swap $color$swap/$swapmax - $swapperc% ${color #b78b8b}${swapbar}
+${color lightgrey}Processes:$color $processes  ${color lightgrey}Running:$color $running_processes
+${color red}${cpugraph 0000ff 00ff00}
+$color$stippled_hr
+${color}CPU: Name     PID   CPU%  MEM%${offset 30}RAM: Name      PID   CPU%  MEM%
+${color #ab1c00}${top name 1}${offset -27}${top pid 1}${top cpu 1}${top mem 1}${offset 30}${top_mem name 1}${offset -27}${top_mem pid 1}${top_mem cpu 1}${top_mem mem 1}
+${color #af442f}${top name 2}${offset -27}${top pid 2}${top cpu 2}${top mem 2}${offset 30}${top_mem name 2}${offset -27}${top_mem pid 2}${top_mem cpu 2}${top_mem mem 2}
+${color #cf8171}${top name 3}${offset -27}${top pid 3}${top cpu 3}${top mem 3}${offset 30}${top_mem name 3}${offset -27}${top_mem pid 3}${top_mem cpu 3}${top_mem mem 3}
+${color #af9792}${top name 4}${offset -27}${top pid 4}${top cpu 4}${top mem 4}${offset 30}${top_mem name 4}${offset -27}${top_mem pid 4}${top_mem cpu 4}${top_mem mem 4}
+${color #bababa}${top name 5}${offset -27}${top pid 5}${top cpu 5}${top mem 5}${offset 30}${top_mem name 5}${offset -27}${top_mem pid 5}${top_mem cpu 5}${top_mem mem 5}$color
+${color #cacaca}${top name 6}${offset -27}${top pid 6}${top cpu 6}${top mem 6}${offset 30}${top_mem name 6}${offset -27}${top_mem pid 6}${top_mem cpu 6}${top_mem mem 6}$color
+${color #dadada}${top name 7}${offset -27}${top pid 7}${top cpu 7}${top mem 7}${offset 30}${top_mem name 7}${offset -27}${top_mem pid 7}${top_mem cpu 7}${top_mem mem 7}$color
+${color #eaeaea}${top name 8}${offset -27}${top pid 8}${top cpu 8}${top mem 8}${offset 30}${top_mem name 8}${offset -27}${top_mem pid 8}${top_mem cpu 8}${top_mem mem 8}$color
+${color #fafafa}${top name 9}${offset -27}${top pid 9}${top cpu 9}${top mem 9}${offset 30}${top_mem name 9}${offset -27}${top_mem pid 9}${top_mem cpu 9}${top_mem mem 9}$color
+$stippled_hr
+${color lightgrey}MPD ${color #dc833c}$mpd_status${color}${alignr}Power ${color red}${mpd_vol}%$color  Repeat $mpd_repeat  Random $mpd_random  ${mpd_elapsed}/${mpd_length}
+${font "-b&h-luxi mono-medium-r-*-*-*-*-*-*-*-*-*-*"}${color #61ab80}$mpd_smart$font
+${color #585f46}$mpd_bar
+$color$stippled_hr
+${color lightgrey}/     $color${fs_free /}/${fs_size /} ${fs_bar /}
+${color lightgrey}db_01 $color${fs_free /mnt/db_01}/${fs_size /mnt/db_01} ${fs_bar /mnt/db_01}
+${color lightgrey}db_02 $color${fs_free /mnt/db_02}/${fs_size /mnt/db_02} ${fs_bar /mnt/db_02}
+${color lightgrey}db_03 $color${fs_free /mnt/db_03}/${fs_size /mnt/db_03} ${fs_bar /mnt/db_03}
+${color lightgrey}FS_read: ${color #99aaff}${diskio_read}  ${color lightgrey}FS_write: ${color #ffaa99}${diskio_write}
+${color #7a4f4f}${diskiograph 0000ff 00ff00}
+$color$stippled_hr
+ Net_leech:${color #aa3333} ${downspeed eth0} k/s${alignr}${color lightgrey}Net_seed:${color #3333aa} ${upspeed eth0} k/s
+${color #aa4444}${downspeedgraph eth0 30,190 aa3333 3333aa}${alignr}${color #4444aa}${upspeedgraph eth0 30,190 3333aa aa3333}
+${color #ddaa00}Portz${alignr}Konnektionz
+ ${color grey} Inbound: ${color #2266cc}${tcp_portmon 1 32767 count} ${color grey} Outbound: ${color #cc6622}${tcp_portmon 32768 61000 count}${alignr}${color grey}ALL: ${color #22cc22}${tcp_portmon 1 65535 count}
+${color #ddaa00}Inbound Connection ${alignr} Local Service/Port$color
+ ${tcp_portmon 1 32767 rhost 0} ${alignr} ${tcp_portmon 1 32767 lservice 0}
+ ${tcp_portmon 1 32767 rhost 1} ${alignr} ${tcp_portmon 1 32767 lservice 1}
+ ${tcp_portmon 1 32767 rhost 2} ${alignr} ${tcp_portmon 1 32767 lservice 2}
+ ${tcp_portmon 1 32767 rhost 3} ${alignr} ${tcp_portmon 1 32767 lservice 3}
+ ${tcp_portmon 1 32767 rhost 4} ${alignr} ${tcp_portmon 1 32767 lservice 4}
+ ${tcp_portmon 1 32767 rhost 5} ${alignr} ${tcp_portmon 1 32767 lservice 5}
+ ${tcp_portmon 1 32767 rhost 5} ${alignr} ${tcp_portmon 1 32767 lservice 5}
+ ${tcp_portmon 1 32767 rhost 6} ${alignr} ${tcp_portmon 1 32767 lservice 6}
+ ${tcp_portmon 1 32767 rhost 7} ${alignr} ${tcp_portmon 1 32767 lservice 7}
+ ${tcp_portmon 1 32767 rhost 8} ${alignr} ${tcp_portmon 1 32767 lservice 8}
+ ${tcp_portmon 1 32767 rhost 9} ${alignr} ${tcp_portmon 1 32767 lservice 9}
+ ${tcp_portmon 1 32767 rhost 10} ${alignr} ${tcp_portmon 1 32767 lservice 10}
+ ${tcp_portmon 1 32767 rhost 11} ${alignr} ${tcp_portmon 1 32767 lservice 11}
+${color #ddaa00}Outbound Connection ${alignr} Remote Service/Port$color
+ ${tcp_portmon 32768 61000 rhost 0} ${alignr} ${tcp_portmon 32768 61000 rservice 0}
+ ${tcp_portmon 32768 61000 rhost 1} ${alignr} ${tcp_portmon 32768 61000 rservice 1}
+ ${tcp_portmon 32768 61000 rhost 2} ${alignr} ${tcp_portmon 32768 61000 rservice 2}
+ ${tcp_portmon 32768 61000 rhost 3} ${alignr} ${tcp_portmon 32768 61000 rservice 3}
+ ${tcp_portmon 32768 61000 rhost 4} ${alignr} ${tcp_portmon 32768 61000 rservice 4}
+ ${tcp_portmon 32768 61000 rhost 5} ${alignr} ${tcp_portmon 32768 61000 rservice 5}
+ ${tcp_portmon 32768 61000 rhost 6} ${alignr} ${tcp_portmon 32768 61000 rservice 6}
+ ${tcp_portmon 32768 61000 rhost 7} ${alignr} ${tcp_portmon 32768 61000 rservice 7}
+ ${tcp_portmon 32768 61000 rhost 8} ${alignr} ${tcp_portmon 32768 61000 rservice 8}
+ ${tcp_portmon 32768 61000 rhost 9} ${alignr} ${tcp_portmon 32768 61000 rservice 9}
+ ${tcp_portmon 32768 61000 rhost 10} ${alignr} ${tcp_portmon 32768 61000 rservice 10}
+ ${tcp_portmon 32768 61000 rhost 11} ${alignr} ${tcp_portmon 32768 61000 rservice 11}
+ ${tcp_portmon 32768 61000 rhost 12} ${alignr} ${tcp_portmon 32768 61000 rservice 12}
+ ${tcp_portmon 32768 61000 rhost 13} ${alignr} ${tcp_portmon 32768 61000 rservice 13}
+ ${tcp_portmon 32768 61000 rhost 14} ${alignr} ${tcp_portmon 32768 61000 rservice 14}
+ ${tcp_portmon 32768 61000 rhost 15} ${alignr} ${tcp_portmon 32768 61000 rservice 15}
