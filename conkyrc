@@ -157,15 +157,17 @@ ${color red}${cpugraph 0000ff 00ff00}
 $color$stippled_hr
 ${color}---=={ CPU${alignr}RAM }==---
 ${color #ab1c00}${top name 1}${offset -30}${tab 40}${top pid 1}${tab 20}${top cpu 1}${tab 20}${top mem 1}${tab 100}${top_mem name 1}${offset -30}${tab 145}${top_mem pid 1}${tab 165}${top_mem cpu 1}${tab 185}${top_mem mem 1}
-${color #af442f}${top name 2}${offset -30}${tab 40}${top pid 2}${tab 20}${top cpu 2}${tab 20}${top mem 2}${tab 100}${top_mem name 2}${offset -30}${tab 145}${top_mem pid 2}${tab 165}${top_mem cpu 1}${tab 185}${top_mem mem 2}
-${color #cf8171}${top name 3}${offset -30}${tab 40}${top pid 3}${tab 20}${top cpu 3}${tab 20}${top mem 3}${tab 100}${top_mem name 3}${offset -30}${tab 145}${top_mem pid 3}${tab 165}${top_mem cpu 1}${tab 185}${top_mem mem 3}
-${color #af9792}${top name 4}${offset -30}${tab 40}${top pid 4}${tab 20}${top cpu 4}${tab 20}${top mem 4}${tab 100}${top_mem name 4}${offset -30}${tab 145}${top_mem pid 4}${tab 165}${top_mem cpu 1}${tab 185}${top_mem mem 4}
-${color #bababa}${top name 5}${offset -30}${tab 40}${top pid 5}${tab 20}${top cpu 5}${tab 20}${top mem 5}${tab 100}${top_mem name 5}${offset -30}${tab 145}${top_mem pid 5}${tab 165}${top_mem cpu 1}${tab 185}${top_mem mem 5}
+${color #af442f}${top name 2}${offset -30}${tab 40}${top pid 2}${tab 20}${top cpu 2}${tab 20}${top mem 2}${tab 100}${top_mem name 2}${offset -30}${tab 145}${top_mem pid 2}${tab 165}${top_mem cpu 2}${tab 185}${top_mem mem 2}
+${color #cf8171}${top name 3}${offset -30}${tab 40}${top pid 3}${tab 20}${top cpu 3}${tab 20}${top mem 3}${tab 100}${top_mem name 3}${offset -30}${tab 145}${top_mem pid 3}${tab 165}${top_mem cpu 3}${tab 185}${top_mem mem 3}
+${color #af9792}${top name 4}${offset -30}${tab 40}${top pid 4}${tab 20}${top cpu 4}${tab 20}${top mem 4}${tab 100}${top_mem name 4}${offset -30}${tab 145}${top_mem pid 4}${tab 165}${top_mem cpu 4}${tab 185}${top_mem mem 4}
+${color #bababa}${top name 5}${offset -30}${tab 40}${top pid 5}${tab 20}${top cpu 5}${tab 20}${top mem 5}${tab 100}${top_mem name 5}${offset -30}${tab 145}${top_mem pid 5}${tab 165}${top_mem cpu 5}${tab 185}${top_mem mem 5}
 $stippled_hr
 ${color lightgrey}/${tab 20}$color${fs_free /}/${fs_size /}${tab 90}${fs_bar /}
 ${color lightgrey}crypt${tab 20}$color${fs_free /mnt/crypt}/${fs_size /mnt/crypt}${tab 90}${fs_bar /mnt/crypt}
 ${color lightgrey}FS_read: ${color #99aaff}${diskio_read}  ${color lightgrey}FS_write: ${color #ffaa99}${diskio_write}
-${color #7a4f4f}${diskiograph 0000ff 00ff00}
+$color$stippled_hr
+${color #2dc88a}$audacious_title
+${color #079c4a}$audacious_bar
 $color$stippled_hr
 ${color lightgrey}Net_leech:${color #aa3333} ${downspeed eth0} / ${downspeed ath0} k/s${alignr}${color lightgrey}Net_seed:${color #3333aa} ${upspeed eth0} / ${upspeed ath0} k/s
 ${color #aa4444}${downspeedgraph eth0 15,190 aa3333 3333aa}${alignr}${color #4444aa}${upspeedgraph eth0 15,190 3333aa aa3333}
