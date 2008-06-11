@@ -26,7 +26,7 @@ xftfont Luxi Sans:size=8
 xftalpha 1
 
 # Print everything to stdout?
-# out_to_console no
+# out_to_console yes
 
 # MPD host/port
 #mpd_host localhost
@@ -101,13 +101,13 @@ default_outline_color black
 # Text alignment, other possible values are commented
 #alignment top_left
 #alignment top_right
-#alignment bottom_left
-alignment bottom_right
+alignment bottom_left
+#alignment bottom_right
 #alignment none
 
 # Gap between borders of screen and text
 # same thing as passing -x at command line
-gap_x 80
+gap_x 20
 gap_y 20
 
 # Subtract file system buffers from used memory?
