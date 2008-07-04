@@ -153,7 +153,7 @@ ${color lightgrey}CPUz${tab 20}$color$cpu%${tab 120}${color #cc2222}${cpubar}
 ${color lightgrey}RAM${tab 20}$color$mem/$memmax - $memperc%${tab 120}${color #cc5d5b}${membar}
 ${color lightgrey}Swap${tab 20}$color$swap/$swapmax - $swapperc%${tab 120}${color #b78b8b}${swapbar}
 ${color lightgrey}Processes:$color $processes  ${color lightgrey}Running:$color $running_processes${alignr}${color lightgrey}Heat:$color $acpitemp  ${color lightgrey}Power:$color $battery_percent% ($battery_time)
-${color red}${cpugraph 0000ff 00ff00}
+${color red}${cpugraph cpu0 20,400 0000ff 00ff00}
 $color$stippled_hr
 ${color}---=={ CPU${alignr}RAM }==---
 ${color #ab1c00}${top name 1}${offset -30}${tab 40}${top pid 1}${tab 20}${top cpu 1}${tab 20}${top mem 1}${tab 100}${top_mem name 1}${offset -30}${tab 145}${top_mem pid 1}${tab 165}${top_mem cpu 1}${tab 185}${top_mem mem 1}
