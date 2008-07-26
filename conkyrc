@@ -37,7 +37,7 @@ xftalpha 1
 mail_spool $MAIL
 
 # Update interval in seconds
-update_interval 2.0
+update_interval 4.0
 
 # This is the number of times Conky will update before quitting.
 # Set to zero to run forever.
@@ -146,7 +146,8 @@ use_spacer none
 # stuff after 'TEXT' will be formatted on screen
 
 TEXT
-$nodename - $sysname $kernel on $machine
+${color #a2b4a0}${exec ddate}
+$color$nodename - $sysname $kernel on $machine
 ${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg
 $stippled_hr
 ${color lightgrey}CPUz${tab 20}$color$cpu%${tab 120}${color #cc2222}${cpubar}
