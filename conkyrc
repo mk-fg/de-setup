@@ -159,6 +159,8 @@ ${color #bababa}${top name 5}${offset -30}${tab 40}${top pid 5}${tab 20}${top cp
 $stippled_hr
 ${color lightgrey}/${tab 20}$color${fs_free /}/${fs_size /}${tab 90}${fs_bar /}
 ${color lightgrey}crypt${tab 20}$color${fs_free /mnt/crypt}/${fs_size /mnt/crypt}${tab 90}${fs_bar /mnt/crypt}
+${color lightgrey}wine${tab 20}$color${fs_free /mnt/wine}/${fs_size /mnt/wine}${tab 90}${fs_bar /mnt/wine}
+${color lightgrey}extent${tab 20}$color${fs_free /mnt/extent}/${fs_size /mnt/extent}${tab 90}${fs_bar /mnt/extent}
 ${color lightgrey}FS_read: ${color #99aaff}${diskio_read}  ${color lightgrey}FS_write: ${color #ffaa99}${diskio_write}
 $color$stippled_hr
 ${color #2dc88a}$audacious_title
