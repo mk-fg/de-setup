@@ -157,10 +157,12 @@ ${color #cf8171}${top name 3}${offset -30}${tab 40}${top pid 3}${tab 20}${top cp
 ${color #af9792}${top name 4}${offset -30}${tab 40}${top pid 4}${tab 20}${top cpu 4}${tab 20}${top mem 4}${tab 100}${top_mem name 4}${offset -30}${tab 145}${top_mem pid 4}${tab 165}${top_mem cpu 4}${tab 185}${top_mem mem 4}
 ${color #bababa}${top name 5}${offset -30}${tab 40}${top pid 5}${tab 20}${top cpu 5}${tab 20}${top mem 5}${tab 100}${top_mem name 5}${offset -30}${tab 145}${top_mem pid 5}${tab 165}${top_mem cpu 5}${tab 185}${top_mem mem 5}
 $stippled_hr
-${color lightgrey}/${tab 20}$color${fs_free /}/${fs_size /}${tab 90}${fs_bar /}
-${color lightgrey}crypt${tab 20}$color${fs_free /mnt/crypt}/${fs_size /mnt/crypt}${tab 90}${fs_bar /mnt/crypt}
-${color lightgrey}wine${tab 20}$color${fs_free /mnt/wine}/${fs_size /mnt/wine}${tab 90}${fs_bar /mnt/wine}
-${color lightgrey}extent${tab 20}$color${fs_free /mnt/extent}/${fs_size /mnt/extent}${tab 90}${fs_bar /mnt/extent}
+${color lightgrey}/${tab 60 1}$color${fs_free /}/${fs_size /}${tab 90}${fs_bar /}
+${color lightgrey}home${tab 60 1}$color${fs_free /home}/${fs_size /home}${tab 90}${fs_bar /home}
+${color lightgrey}var${tab 60 1}$color${fs_free /var}/${fs_size /var}${tab 90}${fs_bar /var}
+${color lightgrey}portage${tab 60 1}$color${fs_free /usr/portage}/${fs_size /usr/portage}${tab 90}${fs_bar /usr/portage}
+${color lightgrey}extent${tab 60 1}$color${fs_free /mnt/extent}/${fs_size /mnt/extent}${tab 90}${fs_bar /mnt/extent}
+${color lightgrey}crypt${tab 60 1}$color${fs_free /mnt/crypt}/${fs_size /mnt/crypt}${tab 90}${fs_bar /mnt/crypt}
 ${color lightgrey}FS_read: ${color #99aaff}${diskio_read}  ${color lightgrey}FS_write: ${color #ffaa99}${diskio_write}
 $color$stippled_hr
 ${color #2dc88a}$audacious_title
