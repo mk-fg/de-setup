@@ -168,7 +168,7 @@ $color$stippled_hr
 ${color #2dc88a}$audacious_title
 ${color #079c4a}$audacious_bar
 $color$stippled_hr
-${color lightgrey}Net_leech:${color #aa3333} ${downspeed eth0} / ${downspeed ath0} k/s${alignr}${color lightgrey}Net_seed:${color #3333aa} ${upspeed eth0} / ${upspeed ath0} k/s
+${color lightgrey}Net_leech:${color #aa3333} ${downspeed eth0} / ${downspeed ath0}${alignr}${color lightgrey}Net_seed:${color #3333aa} ${upspeed eth0} / ${upspeed ath0}
 ${color #aa4444}${downspeedgraph eth0 15,190 aa3333 3333aa}${alignr}${color #4444aa}${upspeedgraph eth0 15,190 3333aa aa3333}
 ${color #aa4444}${downspeedgraph ath0 15,190 aa3333 3333aa}${alignr}${color #4444aa}${upspeedgraph ath0 15,190 3333aa aa3333}
 ${voffset 10}${color lightgrey}IPz: ${color darkred}${addr eth0} / ${addr ath0}${alignr}${color lightgrey}Signal:$color ${wireless_link_qual_perc ath0}% (${wireless_essid ath0}, ${wireless_bitrate ath0})
