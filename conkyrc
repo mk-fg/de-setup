@@ -1,5 +1,5 @@
 # set to yes if you want Conky to be forked in the background
-background yes
+background no
 
 # X font when Xft is disabled, you can pick one with program xfontsel
 #font 5x7
@@ -38,7 +38,7 @@ update_interval 4.0
 total_run_times 0
 
 # Create own window instead of using desktop (required in nautilus)
-own_window yes
+own_window no
 
 # If own_window is yes, you may use type normal, desktop or override
 own_window_type desktop
@@ -161,16 +161,15 @@ ${color lightgrey}home${tab 60 1}$color${fs_free /home}/${fs_size /home}${tab 90
 ${color lightgrey}var${tab 60 1}$color${fs_free /var}/${fs_size /var}${tab 90}${fs_bar /var}
 ${color lightgrey}portage${tab 60 1}$color${fs_free /usr/portage}/${fs_size /usr/portage}${tab 90}${fs_bar /usr/portage}
 ${color lightgrey}extent${tab 60 1}$color${fs_free /mnt/extent}/${fs_size /mnt/extent}${tab 90}${fs_bar /mnt/extent}
-${color lightgrey}crypt${tab 60 1}$color${fs_free /mnt/crypt}/${fs_size /mnt/crypt}${tab 90}${fs_bar /mnt/crypt}
 ${color lightgrey}FS_read: ${color #99aaff}${diskio_read}  ${color lightgrey}FS_write: ${color #ffaa99}${diskio_write}
 $color$stippled_hr
 ${color #2dc88a}$audacious_title
 ${color #079c4a}$audacious_bar
 $color$stippled_hr
-${color lightgrey}Net_leech:${color #aa3333} ${downspeed eth0} / ${downspeed ath0}${alignr}${color lightgrey}Net_seed:${color #3333aa} ${upspeed eth0} / ${upspeed ath0}
+${color lightgrey}Net_leech:${color #aa3333} ${downspeed eth0} / ${downspeed wlan0}${alignr}${color lightgrey}Net_seed:${color #3333aa} ${upspeed eth0} / ${upspeed wlan0}
 ${color #aa4444}${downspeedgraph eth0 15,190 aa3333 3333aa}${alignr}${color #4444aa}${upspeedgraph eth0 15,190 3333aa aa3333}
-${color #aa4444}${downspeedgraph ath0 15,190 aa3333 3333aa}${alignr}${color #4444aa}${upspeedgraph ath0 15,190 3333aa aa3333}
-${voffset 10}${color lightgrey}IPz: ${color darkred}${addr eth0} / ${addr ath0}${alignr}${color lightgrey}Signal:$color ${wireless_link_qual_perc ath0}% (${wireless_essid ath0}, ${wireless_bitrate ath0})
+${color #aa4444}${downspeedgraph wlan0 15,190 aa3333 3333aa}${alignr}${color #4444aa}${upspeedgraph wlan0 15,190 3333aa aa3333}
+${voffset 10}${color lightgrey}IPz: ${color darkred}${addr eth0} / ${addr wlan0}${alignr}${color lightgrey}Signal:$color ${wireless_link_qual_perc wlan0}% (${wireless_essid wlan0}, ${wireless_bitrate wlan0})
 $color$stippled_hr
 ${color #ddaa00}Portz${alignr}Konnektionz
  ${color grey} Inbound: ${color #2266cc}${tcp_portmon 1 32767 count} ${color grey} Outbound: ${color #cc6622}${tcp_portmon 32768 61000 count}${alignr}${color grey}ALL: ${color #22cc22}${tcp_portmon 1 65535 count}
