@@ -143,9 +143,10 @@ TEXT
 $color$nodename - $sysname $kernel on $machine
 ${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg
 $stippled_hr
-${color lightgrey}CPUz${tab 20}$color$cpu%${tab 120}${color #cc2222}${cpubar}
-${color lightgrey}RAM${tab 20}$color$mem/$memmax - $memperc%${tab 120}${color #cc5d5b}${membar}
-${color lightgrey}Swap${tab 20}$color$swap/$swapmax - $swapperc%${tab 120}${color #b78b8b}${swapbar}
+${color lightgrey}CPUz${tab 20}$color$cpu%${tab 40}${color #cc2222}${cpubar}
+${cpubar cpu1 3,190}${alignr}${cpubar cpu2 3,190}
+${color lightgrey}RAM${tab 20}$color$mem/$memmax - $memperc%${tab 100}${color #cc5d5b}${membar}
+${color lightgrey}Swap${tab 20}$color$swap/$swapmax - $swapperc%${tab 100}${color #b78b8b}${swapbar}
 ${color lightgrey}Processes:$color $processes  ${color lightgrey}Running:$color $running_processes${alignr}${color lightgrey}Heat:$color $acpitemp  ${color lightgrey}Power:$color $battery_percent% ($battery_time)
 ${color red}${cpugraph cpu0 20,400 0000ff 00ff00}
 $color$stippled_hr
