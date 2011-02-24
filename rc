@@ -1,0 +1,165 @@
+;;;; Deps
+(load "fg_core")
+
+(require 'fg_wm)
+(require 'fg_focus-by-direction)
+
+(require 'debug-utils)
+
+(require 'sawfish.wm.state.maximize)
+(require 'sawfish.wm.commands.move-resize)
+(require 'sawfish.wm.commands.slide-window)
+(require 'sawfish.wm.ext.match-window)
+(require 'sawfish.wm.ext.auto-raise)
+
+
+;;;; Key bindings
+
+;; Workspace management
+;; TODO: send-to-workspace should be TakeToWorkspace
+
+(do ((n 1 (1+ n))) ((> n 8))
+	(bind-keys global-keymap
+		(sprintf "W-F%d" n) (list 'activate-workspace n)
+		(sprintf "W-XF86Switch_VT_%d" n) (list 'send-to-workspace n)))
+
+;; Misc bindings
+
+(defmacro notification-setup (method #!rest data)
+	`(fg-subprocess "dbus-send" "--type=method_call"
+		"--dest=org.freedesktop.Notifications" "/org/freedesktop/Notifications"
+		,(concat "org.freedesktop.Notifications." method) ,@data))
+
+(bind-keys global-keymap
+
+	"W-1" '(fg-subprocess "setxkbmap us")
+	"W-2" '(fg-subprocess "setxkbmap ru")
+
+	"W-TAB" 'cycle-windows
+	"W-ISO_Left_Tab" 'cycle-windows-backwards
+
+	;; TODO: native support for x-set-selection
+	"W-v" '(fg-subprocess "xclipc --nostrip")
+	"W-V" '(fg-subprocess "xclipc")
+	"W-M-v" '(fg-subprocess "xclipc --slashes-to-dots")
+	"W-C-v" 'fg-blip-selection
+
+	"W-x" (lambda () (sleep-for 0 200) (fg-subprocess "xkill")) ;; issues with pointer grab
+	"W-`" '(fg-subprocess "fgrun")
+
+	"W-Print" (lambda () (sleep-for 1) (fg-subprocess "xset dpms force off"))
+	"W-M-Print" '(fg-subprocess "gimp"
+			(fg-string-strip (fg-subprocess-output "shot")))
+
+	"W-F11" '(fg-subprocess "fgsheep")
+	"W-M-F11" '(fg-subprocess "fgcompmgr")
+	"W-F12" '(fg-subprocess "xlock -mode blank -nice 10")
+
+	;; EMMS remote control
+	"W-;" '(fg-subprocess "emacsclient -e" "(emms-previous)")
+	"W-'" '(fg-subprocess "emacsclient -e" "(emms-next)")
+	"W-:" '(fg-subprocess "emacsclient -e" "(emms-stop)")
+	"W-\"" '(fg-subprocess "emacsclient -e" "(emms-pause)")
+	"W-/" '(fg-subprocess "emacsclient -e" "(fg-emms-notify)")
+
+	;; Notification-proxy control
+	;; TODO: native dbus
+	"Print" '(notification-setup "Set" "dict:string:boolean:plug_toggle,true")
+	"Sys_Req" '(notification-setup "Set" "dict:string:boolean:cleanup_toggle,true")
+	"Pause" '(notification-setup "CloseNotification" "uint32:0")
+	"Break" '(notification-setup "Flush")
+
+	;; App launch keys
+	;; TODO: jump-or-exec
+	"W-M-RET" '(fg-subprocess "emacs")
+	"W-RET" '(fg-subprocess "fgterm")
+
+	"W-f" '(fg-subprocess "firefox")
+	"W-o" '(fg-subprocess "opera")
+	"W-g" '(fg-subprocess "claws-mail")
+	"W-h" '(fg-subprocess "rssowl")
+	"W-p" '(fg-subprocess "pgadmin3")
+
+	"W-l" '(fg-subprocess "springlobby")
+
+	"W-ESC" '(load "~/.sawfish/rc" nil t t)
+	"W-C-ESC" 'quit)
+
+
+(bind-keys window-keymap
+	"W-e" 'window-snooper
+
+	"W-s" 'maximize-window-toggle
+	"W-S" 'maximize-window-vertically-toggle
+	"W-M-s" 'maximize-window-horizontally-toggle
+	"W-M-S" 'maximize-window-fullscreen-toggle
+
+	;; TODO: focus-shift, tab-focus-shift
+
+	;; "W-M-Tab" NextTab
+	;; "W-M-ISO_Left_Tab" PrevTab
+	;; "W-M-Left" NextTab
+	;; "W-M-Right" PrevTab
+	;; "W-M-S-Left" MoveTabRight
+	;; "W-M-S-Right" MoveTabLeft
+
+	"W-Left" 'fg-wx-focus-left
+	"W-Right" 'fg-wx-focus-right
+	"W-Up" 'fg-wx-focus-up
+	"W-Down" 'fg-wx-focus-down
+
+	"W-S-Up" 'slide-window-up
+	"W-S-Down" 'slide-window-down
+	"W-S-Left" 'slide-window-left
+	"W-S-Right" 'slide-window-right
+
+	;; "W-z" 'minimize-window ;; TODO: find out what for :P
+
+	;; "W-M-z" DetachClient
+	;; "W-C-z" MacroCmd {MoveTo -1 -15} {ResizeTo 1280 817}
+	;; "W-Z" MoveTo -1 -15
+
+	;; Mod4 d :ToggleCmd {ShowDesktop} {Deiconify all originquiet}
+
+	"W-c" 'fg-wx-to-right-half
+	"W-C" 'fg-wx-to-left-half
+
+	"W-X" 'destroy-window
+	"W-M-x" 'kill-client
+
+	"W-Button1-Move" 'move-window-interactively
+	"W-Button2-Click" 'popup-window-ops-menu
+	"W-Button3-Click" 'raise-lower-window
+	"W-Button3-Move" 'resize-window-interactively)
+
+
+;;;; Configurable UI settings
+(fg-custom-setq-multi
+	frame-style default-frame-style get-S-tabbed
+	font default-font ("Pango" . "Luxi Sans 7")
+
+	string xterm "fgterm"
+	modifier-list wm-modifier-value (super)
+
+	boolean raise-windows-on-focus t
+	boolean disable-auto-raise nil)
+
+
+;;;; Window matchers
+(fg-wx-add-window-matchers
+	(WM_CLASS . "^Firefox/") (workspace . 2)
+	(WM_CLASS . "^Firefox/Navigator$") (maximized . all)
+	(WM_CLASS . "^Opera/") (workspace . 2)
+	(WM_CLASS . "^Opera/opera$") (maximized . all)
+
+	(WM_CLASS . "^Emacs/") (workspace . 3)
+
+	(WM_CLASS . "^Claws-mail/") (workspace . 4)
+	(WM_CLASS . "^RSSOwl/") (workspace . 4)
+
+	(WM_CLASS . "^Pgadmin3/") (workspace . 5)
+	(WM_CLASS . "^Springlobby/") (workspace . 5))
+
+
+;;;; As an indication of success
+(fg-blip "Configuration (re)loaded successfully" 1)
