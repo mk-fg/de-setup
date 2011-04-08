@@ -82,6 +82,9 @@
 
 	"W-l" '(fg-subprocess "springlobby")
 
+	;; Machine-specific stuff
+	"W-b" '(fg-subprocess "xclip_passwd mkfg")
+
 	"W-ESC" '(load "~/.sawfish/rc" nil t t)
 	"W-C-ESC" 'quit)
 
