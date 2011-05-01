@@ -32,6 +32,7 @@
 
 (bind-keys global-keymap
 
+	"Menu" '(fg-subprocess "xdotool click 2")
 	"W-1" '(fg-subprocess "setxkbmap us")
 	"W-2" '(fg-subprocess "setxkbmap ru")
 
