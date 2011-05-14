@@ -51,8 +51,8 @@ color2 4444cc
 template0 ${color \1}${top name \2}${offset -30}${tab 40}${top pid \2}${tab 20}${top cpu \2}${tab 20}${top mem \2}${tab 100}${top_mem name \2}${offset -30}${tab 145}${top_mem pid \2}${tab 165}${top_mem cpu \2}${tab 185}${top_mem mem \2}$color
 template1 ${if_mounted \2}${color lightgrey}\1${tab 60 1}$color${if_match ${fs_free_perc \2} <= \3}${color red}${endif}${fs_free \2} (${fs_free_perc \2}%)${if_match ${fs_free_perc \2} <= \3}${blink !!!!!}${endif}${tab 90}${fs_bar \2}$color${endif}
 template2 $color ${tcp_portmon \1 \2 rhost \3} ${alignr} ${tcp_portmon \1 \2 \4 \3} $color
-template3 ${color lightgrey}${if_match $battery_percent <= \1}${color red}${endif}Power:$color ${if_match $battery_percent <= \1}${color red}-- CRITICAL -- ${endif}$battery_percent% ($battery_time)
-template4 ${color lightgrey}${if_match $memperc >= \1}${color red}${endif}RAM${tab 20}$color${if_match $memperc >= \1}${color red}${endif}$mem/$memmax - $memperc%${tab 100}${color light slate gray}${if_match $memperc >= \2}${color maroon}${endif}${if_match $memperc >= \1}${color red}${endif}${membar}
+template3 ${color lightgrey}${if_match $battery_percent <= \1}${color red}${endif}Power:$color ${if_match $battery_percent <= \1}${color red}-- CRITICAL -- ${endif}$battery_percent% ($battery_time${if_match $laptop_mode != 0}, mobile${endif})
+template4 ${color lightgrey}${if_match $memperc >= \1}${color red}${endif}RAM${tab 20}$color${if_match $memperc >= \1}${color red}${endif}$mem/$memmax - $memperc%${tab 55}${color light slate gray}${if_match $memperc >= \2}${color maroon}${endif}${if_match $memperc >= \1}${color red}${endif}${membar}
 template5 ${color darkred}${if_up \1}${color\2}${endif}${addr \1}${color lightgrey}
 template6 ${color\2}${downspeedgraph \1 30,190 aa3333 3333aa 0 -t -l}${alignr}${color\2}${upspeedgraph \1 30,190 3333aa aa3333 0 -t -l}
 template7 ${color\2}${downspeed \1}${color lightgrey}
@@ -66,7 +66,7 @@ ${alignr}${time %a, %d %b, %H:%M}
 ${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg
 \
 $stippled_hr
-${color lightgrey}CPUz${tab 20}$color$cpu%${tab 40}${color light slate gray}${cpubar}
+${color lightgrey}CPUz${tab 20}$color$cpu% (${freq_g 1}/${freq_g 2})${tab 60}${color light slate gray}${cpubar}
 ${template4 90 60}
 ${color lightgrey}Processes:$color $processes  \
 ${color lightgrey}Running:$color $running_processes${alignr}${color lightgrey}\
