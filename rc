@@ -139,7 +139,6 @@
 
 ;;;; Configurable UI settings
 (fg-custom-setq-multi
-	frame-style default-frame-style microGUI
 	font default-font ("Pango" . "Luxi Sans 7")
 
 	string xterm "fgterm"
@@ -147,6 +146,40 @@
 
 	boolean raise-windows-on-focus t
 	boolean disable-auto-raise nil)
+
+;;;; Theme
+(fg-custom-setq-multi
+	frame-style default-frame-style mxflat
+	boolean reload-themes-when-changed t
+
+	;; mxflat
+	symbol mxflat:decoration-mode normal
+
+	boolean mxflat:show-corners t
+	symbol mxflat:corner-direction outside
+	(number 0 100) mxflat:corner-width-adjustment 1
+	(number -1 100) mxflat:corner-length-adjustment 25
+	(number -1000 1000) mxflat:border-offset 0
+	(number 0 1000) mxflat:border-width-focused 0
+	(number 0 1000) mxflat:border-width-maximized 0
+	(number 0 1000) mxflat:border-width-unmaximized 1
+	(number 0 1000) mxflat:border-width-titlebar-contents 1
+
+	boolean mxflat:customize-button-size t
+	symbol mxflat:button-icon-set square-6
+	(number 1 1000) mxflat:button-size 12
+
+	(number 9 1000) mxflat:title-height 12
+	boolean mxflat:customize-title-position t
+	symbol mxflat:title-y-justify center
+	symbol mxflat:title-x-justify left
+	color mxflat:text-color-unfocused "#c500cc00c800"
+	color mxflat:text-color-focused "#00002d000b00"
+	boolean mxflat:title-gradient t
+	symbol mxflat:titlebar-gradient-color-mode custom
+	symbol mxflat:gradient-direction horizontal
+	(list color "titlebar background colors")
+		mxflat:titlebar-gradient-bgcolors ("#a100a100a100" "#c100a500a500"))
 
 
 ;;;; Window matchers
