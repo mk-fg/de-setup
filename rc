@@ -139,7 +139,7 @@
 
 ;;;; Configurable UI settings
 (fg-custom-setq-multi
-	frame-style default-frame-style get-S-tabbed
+	frame-style default-frame-style microGUI
 	font default-font ("Pango" . "Luxi Sans 7")
 
 	string xterm "fgterm"
