@@ -155,10 +155,7 @@
 	;; mxflat
 	symbol mxflat:decoration-mode normal
 
-	boolean mxflat:show-corners t
-	symbol mxflat:corner-direction outside
-	(number 0 100) mxflat:corner-width-adjustment 1
-	(number -1 100) mxflat:corner-length-adjustment 25
+	boolean mxflat:show-corners nil
 	(number -1000 1000) mxflat:border-offset 0
 	(number 0 1000) mxflat:border-width-focused 0
 	(number 0 1000) mxflat:border-width-maximized 0
