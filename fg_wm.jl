@@ -74,29 +74,3 @@ Example:
 ;;  preceding "click" event might've lowered it, causes a minor winch though
 (require 'sawfish.wm.commands.move-resize)
 (add-hook 'before-resize-hook (lambda (win) (raise-window win)))
-
-
-;; Focus *any* window in current ws if focused window is destroyed or on ws switch
-(require 'sawfish.wm.util.window-order)
-
-(defun fg-wx-win-focusable-p (win)
-	"Is window focusable?"
-	(and win
-		(window-visible-p win)
-		(window-mapped-p win)
-		(window-in-cycle-p win)
-		(not (window-get win 'ignored))))
-
-(defun fg-wx-win-focus-any (ws)
-	(let ((win-list (workspace-windows)))
-		(unless (memq (window-order-focus-most-recent) win-list)
-			(do ((win nil)) ((not win-list) nil)
-				(setq
-					win (car win-list)
-					win-list (cdr win-list))
-				(when (fg-wx-win-focusable-p win)
-					(set-input-focus win)
-					(setq win-list nil))))))
-
-(add-hook 'remove-window-hook fg-wx-win-focus-any)
-(add-hook 'enter-workspace-hook fg-wx-win-focus-any)
