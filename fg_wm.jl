@@ -74,3 +74,14 @@ Example:
 ;;  preceding "click" event might've lowered it, causes a minor winch though
 (require 'sawfish.wm.commands.move-resize)
 (add-hook 'before-resize-hook (lambda (win) (raise-window win)))
+
+;; Focus *any* window in current ws if focused window is destroyed or on ws switch
+(require 'sawfish.wm.util.window-order)
+
+(defun fg-wx-win-focusable-p (win)
+	"Is window focusable?"
+	(and win
+		(window-visible-p win)
+		(window-mapped-p win)
+		(window-in-cycle-p win)
+		(not (window-get win 'ignored))))
