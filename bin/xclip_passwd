@@ -1,0 +1,58 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import unicode_literals, print_function
+
+import argparse
+parser = argparse.ArgumentParser(description='xclip password for a specified account.')
+parser.add_argument('user', nargs=1, help='User to copy password for.')
+argz = parser.parse_args()
+argz.user = argz.user[0]
+
+import itertools as it, operator as op, functools as ft
+from subprocess import Popen, PIPE
+import os, sys, types
+
+host_lists_ext = os.path.expanduser('~/.cFG/host_list.ext')
+
+for line in open(host_lists_ext):
+	line = line.strip().split('\t')
+	if not filter(None, line): continue
+	src = os.path.expanduser(line[0])
+
+	if src.endswith('.gpg'):
+		proc = Popen(['gpg', '--no-tty', '-qd'], stdin=open(src, 'rb'), stdout=PIPE)
+		ext, src = proc.stdout.read(), src[:-4]
+		if proc.wait(): raise RuntimeError('GPG subprocess failed')
+	else: ext = open(src).read()
+
+	while True:
+		if src.endswith('.yaml'):
+			import yaml
+			ext, src = yaml.load(ext), src[:-5]
+		elif src.endswith('.json'):
+			import json
+			ext, src = json.loads(ext), src[:-5]
+		elif src.endswith('.pickle'):
+			import pickle
+			ext, src = pickle.loads(ext), src[:-6]
+		elif isinstance(ext, types.StringTypes):
+			ext = dict(l.strip().split() for l in ext.splitlines())
+			break
+		else: break
+
+	try:
+		if len(line) > 3 and line[3]:
+			for k in line[3].split('.'): ext = ext[k]
+
+		passwd = ext[argz.user]
+		if not isinstance(passwd, types.StringTypes):
+			passwd = passwd['password']
+	except KeyError: continue
+
+	for sel in 'primary', 'clipboard':
+		proc = Popen(['xclip', '-in', '-selection', sel], stdin=PIPE)
+		proc.stdin.write(passwd)
+		proc.stdin.close()
+		proc.wait()
+	break
+

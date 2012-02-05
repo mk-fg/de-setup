@@ -1,0 +1,24 @@
+#!/bin/sh
+
+exe=$(
+	( tac ~/.dmenu_history 2>/dev/null; dmenu_path )\
+		| awk '{if (!a[$0]) { a[$0]=1; print; }}'\
+		| dmenu -p 'Run:' -i -fn 'Luxi Sans-8:normal' )
+[[ -z "$exe" ]] && exit 0
+
+echo "$exe" >> ~/.dmenu_history
+
+if [[ $(stat --format=%s ~/.dmenu_history) -gt 3000 ]]; then
+	## First, remove the duplicate entries
+	awk '{if (!a[$0]) { a[$0]=1; print; }}'\
+		~/.dmenu_history >~/.dmenu_history.clean
+	mv .dmenu_history{.clean,}
+	if [[ $(stat --format=%s ~/.dmenu_history) -gt 1500 ]]; then
+		## Second, if it's still too large, trim it
+		tac ~/.dmenu_history\
+			| sed -n '1,100p' | tac >~/.dmenu_history.clean
+		mv .dmenu_history{.clean,}
+	fi
+fi
+
+exec "$exe" "$@"

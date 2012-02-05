@@ -1,0 +1,6 @@
+#!/bin/sh
+pkill electricsheep
+if [[ $? > 0 ]]
+then exec electricsheep --root 1 --zoom 1 --max-megabytes 10000 --nick FraGGod
+else exec fbsetbg -l
+fi

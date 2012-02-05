@@ -1,0 +1,17 @@
+#!/bin/sh
+
+case "$1" in
+	--nostrip)
+		xclip -out -selection primary | xclip -in -selection clipboard
+		exit $? ;;
+	--slashes-to-dots)
+		DATA=$(xclip -out -selection primary)
+		DATA="${DATA//\//.}" ;;
+	*) DATA=$(xclip -out -selection primary) ;;
+esac
+
+shopt -s extglob
+DATA="${DATA/#+([[:space:]])}"
+DATA="${DATA/%+([[:space:]])}"
+echo -n "$DATA" | xclip -in -selection primary
+echo -n "$DATA" | xclip -in -selection clipboard

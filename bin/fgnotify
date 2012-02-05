@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Auto-set some title
+if [[ $# -lt 2 ]]
+then title="Event ($(ps -o user=,tty=,cmd= $PPID))"
+else title=$1; shift
+fi
+
+exec notify-send\
+	-i ~/media/appz/icons/biohazard_48x.png\
+	-u critical "$title" "$@"

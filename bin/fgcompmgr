@@ -1,0 +1,6 @@
+#!/bin/sh
+if [[ `pgrep xcompmgr` ]]; then
+ exec pkill xcompmgr
+else
+ exec xcompmgr -cCfF -r7 -o.65 -l-10 -t-8 -D7 &
+fi
