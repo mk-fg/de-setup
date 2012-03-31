@@ -4,6 +4,12 @@ xmodmap ~/.xmodmaprc
 xset r rate 250 40
 setxkbmap -rules evdev -layout 'us,ru' -option 'grp:switch,grp:caps_toggle,grp_led:caps'
 
+dev='PS/2 Logitech Wheel Mouse'
+xinput list "$dev" &>/dev/null && {
+	xinput set-prop "$dev" --type=float 257 9999999
+	xinput set-prop "$dev" --type=float 256 50
+}
+
 xsetroot -solid black
 aura -n || aura -d /mnt/volatiles/images ~/media/bgz
 
