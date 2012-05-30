@@ -30,11 +30,12 @@ aura -n || aura -d /mnt/volatiles/images ~/media/bgz
 
 logtail_notify_lock="$XDG_RUNTIME_DIR"/logtail_notify.lock
 touch "$logtail_notify_lock"
-flock -n "$logtail_notify_lock" || pkill -F "$logtail_notify_lock"
-flock "$logtail_notify_lock" -c 'logtail_notify
-	-i ~/media/appz/icons/biohazard_48x.png
-	-x "$XDG_RUNTIME_DIR"/logtail_notify.db
-	/var/log/syslog/stripped.log' &
+flock -n 0 <"$logtail_notify_lock" || pkill -g $(cat "$logtail_notify_lock")
+setsid flock "$logtail_notify_lock"\
+	-c 'logtail_notify\
+		-i ~/media/appz/icons/biohazard_48x.png\
+		-x "$XDG_RUNTIME_DIR"/logtail_notify.db\
+		/var/log/syslog/stripped.log' &
 echo $! >"$logtail_notify_lock"
 
 # Initial eye-candy
