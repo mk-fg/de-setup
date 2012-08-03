@@ -62,8 +62,9 @@ template9 ${color light slate gray}${if_match ${cpu cpu\1} >= 85}${color red}${e
 
 TEXT
 $color${pre_exec id -un}@$nodename - $sysname $kernel on $machine\
-${alignr}${time %a, %d %b, %H:%M}
-${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg
+${alignr}${time %a, %d %b, %H:%M (%Z)}
+${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg\
+${alignr}Morning (UGT)
 \
 $stippled_hr
 ${color lightgrey}CPUz${tab 20}$color$cpu% (${freq_g})${tab 60}${color light slate gray}${cpubar}
