@@ -1,0 +1,14 @@
+! caps_lock is used to switch langs
+clear Lock
+
+! menu = mouse middle
+keycode 135 = Pointer_Button2 Pointer_Drag2
+! KP_ +/- = mouse wheel
+keycode 86 = Pointer_Button4
+keycode 82 = Pointer_Button5
+
+! for some wine games, these are being remapped
+keycode 100 = Left
+keycode 102 = Right
+keycode 98 = Up
+keycode 104 = Down

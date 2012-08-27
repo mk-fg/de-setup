@@ -1,0 +1,50 @@
+XTerm*color0: #000000
+XTerm*color1: #b21818
+XTerm*color2: #106400
+XTerm*color3: #BE5F00
+XTerm*color4: #6D85BA
+XTerm*color5: #b218b2
+XTerm*color6: #18b2b2
+XTerm*color7: #b2b2b2
+XTerm*color8: #686868
+XTerm*color9: #FF5454
+XTerm*color10: #54FF54
+XTerm*color11: #FFFF54
+XTerm*color12: #73A5FF
+XTerm*color13: #FF54FF
+XTerm*color14: #54FFFF
+XTerm*color15: #FFFFFF
+XTerm*background: #001800
+XTerm*foreground: #6ad468
+
+XTerm*allowSendEvents: false
+XTerm*allowTcapOps: true
+XTerm*allowTitleOps: true
+XTerm*allowWindowOps: false
+
+XTerm*toolBar: false
+XTerm*scrollBar: false
+XTerm*internalBorder: 0
+XTerm*borderWidth: 0
+XTerm*utf8Title: true
+
+XTerm*multiScroll: true
+XTerm*jumpScroll: true
+XTerm*saveLines: 65535
+XTerm*waitForMap: true
+
+XTerm*loginShell: false
+
+XTerm*visualBell: false
+XTerm*showMissingGlyphs: true
+XTerm*metaSendsEscape: true
+
+
+yeahconsole*restart: 0
+yeahconsole*consoleHeight: 30
+yeahconsole*aniDelay: 20
+yeahconsole*stepSize: 20
+yeahconsole*toggleKey: Control+grave
+yeahconsole*keySmaller: ControlAltWin+F2
+yeahconsole*keyBigger: ControlAltWin+F2
+yeahconsole*keyFull: ControlAltWin+F2
