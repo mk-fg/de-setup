@@ -1,2 +1,3 @@
 #!/bin/sh
-vt=$(fgconsole) && exec X -nolisten tcp "vt$vt" "$@"
+vt=$(fgconsole)
+exec X -nolisten tcp ${vt:+vt$vt} "$@"
