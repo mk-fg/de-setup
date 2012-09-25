@@ -2,6 +2,7 @@
 xrdb ~/.Xresources
 xsetroot -solid black
 xinitrc.input
+export XDG_DATA_DIRS=$HOME/.xdg:$XDG_DATA_DIRS
 
 # DBus session bus
 [ -z "$DBUS_SESSION_BUS_ADDRESS" ] &&\
