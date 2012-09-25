@@ -1,14 +1,7 @@
 # Basic X setup
 xrdb ~/.Xresources
-xmodmap ~/.xmodmaprc
-xset r rate 250 40
-setxkbmap -rules evdev -layout 'us,ru' -option 'grp:switch,grp:caps_toggle,grp_led:caps'
-
-dev='PS/2 Logitech Wheel Mouse'
-xinput list "$dev" &>/dev/null && {
-	xinput set-prop "$dev" --type=float 257 9999999
-	xinput set-prop "$dev" --type=float 256 50
-}
+xsetroot -solid black
+xinitrc.input
 
 # DBus session bus
 [ -z "$DBUS_SESSION_BUS_ADDRESS" ] &&\
@@ -25,7 +18,6 @@ ssh-agent | grep -v '^echo' >>/dev/shm/zenv_agents
 source /dev/shm/zenv_agents
 
 # User daemons
-xsetroot -solid black
 aura -n || aura -d /mnt/volatiles/images ~/media/bgz
 
 logtail_notify_lock="$XDG_RUNTIME_DIR"/logtail_notify.lock
@@ -48,4 +40,5 @@ fifo=/tmp/.wm.fifo
 rm -f  "$fifo"
 mkfifo "$fifo" || exit
 logger -p user.info -t wm <"$fifo" &
-ck-launch-session sawfish 2>&1 | tee "$fifo"
+
+exec ck-launch-session sawfish 2>&1 | tee "$fifo"
