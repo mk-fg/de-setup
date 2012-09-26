@@ -21,7 +21,7 @@ alignment bottom_left
 # alignment none
 
 use_xft yes
-xftfont Luxi Sans:size=10
+xftfont Luxi Sans:size=8
 xftalpha 1
 override_utf8_locale yes
 
