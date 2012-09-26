@@ -23,4 +23,4 @@ ssh-agent | grep -v '^echo' >>/dev/shm/zenv_agents
 source /dev/shm/zenv_agents
 
 # WM
-exec systemd-inhibit ck-launch-session enlightenment_start
+exec ck-launch-session enlightenment_start
