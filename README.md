@@ -1,5 +1,11 @@
-sawfish-setup: my configuration for [sawfish wm](http://sawfish.wikia.com/)
+My Desktop Environment Setup
 --------------------
+
+My configuration and customization bits for WM/DEs I use.
+Currently includes stuff for following setups:
+
+ * [Sawfish](http://sawfish.wikia.com)
+ * [Enlightenment E17](http://enlightenment.org)
 
 It's not a tiling setup, because I prefer (and use) fullscreen windows on
 "virtual desktops" anyway. And where I don't (floating skype, terminals), I just
