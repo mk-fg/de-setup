@@ -39,7 +39,6 @@ XTerm*visualBell: false
 XTerm*showMissingGlyphs: true
 XTerm*metaSendsEscape: true
 
-
 yeahconsole*restart: 0
 yeahconsole*consoleHeight: 30
 yeahconsole*aniDelay: 20
@@ -48,3 +47,5 @@ yeahconsole*toggleKey: Control+grave
 yeahconsole*keySmaller: ControlAltWin+F2
 yeahconsole*keyBigger: ControlAltWin+F2
 yeahconsole*keyFull: ControlAltWin+F2
+
+Xft.dpi: 75
