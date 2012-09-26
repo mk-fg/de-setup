@@ -47,5 +47,3 @@ yeahconsole*toggleKey: Control+grave
 yeahconsole*keySmaller: ControlAltWin+F2
 yeahconsole*keyBigger: ControlAltWin+F2
 yeahconsole*keyFull: ControlAltWin+F2
-
-Xft.dpi: 75
