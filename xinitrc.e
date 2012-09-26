@@ -6,7 +6,7 @@ exec 1>~/.e/lastrun.log 2>&1
 
 # Basic X setup
 xrdb ~/.Xresources
-export XDG_DATA_DIRS=$HOME/.xdg:$XDG_DATA_DIRS
+export XDG_DATA_DIRS=$HOME/.xdg:/usr/share/enlightenment:/usr/share
 
 # DBus session bus
 [ -z "$DBUS_SESSION_BUS_ADDRESS" ] &&\

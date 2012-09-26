@@ -4,8 +4,6 @@ redshift -m randr -l 56.8:60.6 -t 6500:4000 &
 yeahconsole &
 conky &
 
-notification-thing &
-
 aura -k
 sleep 3
 aura -d /mnt/volatiles/images ~/media/bgz
