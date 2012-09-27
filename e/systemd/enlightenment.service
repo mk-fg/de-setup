@@ -3,3 +3,4 @@ Before=aura-oneshot.service xinput.service
 
 [Service]
 ExecStart=/usr/bin/enlightenment_start
+ExecStartPost=-/usr/bin/systemctl --fail --no-block --user exit
