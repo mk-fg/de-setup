@@ -1,3 +1,6 @@
+[Unit]
+StopWhenUnneeded=true
+
 [Service]
 Type=dbus
 BusName=org.PulseAudio1
