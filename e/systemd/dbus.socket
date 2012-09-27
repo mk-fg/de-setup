@@ -1,0 +1,2 @@
+[Socket]
+ListenStream=/run/user/1000/session_bus_socket
