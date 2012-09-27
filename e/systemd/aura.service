@@ -1,0 +1,5 @@
+[Unit]
+After=aura-oneshot.service
+
+[Service]
+ExecStart=/usr/bin/env aura -d --no-fork --no-init /mnt/volatiles/images ${HOME}/media/bgz
