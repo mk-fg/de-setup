@@ -1,6 +1,0 @@
-[Service]
-ExecStart=/usr/bin/env xinitrc.input
-
-# For some reason, it jams X for a second,
-#  which breaks E startup in some cases
-ExecStartPre=/bin/sleep 10
