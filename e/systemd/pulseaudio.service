@@ -1,4 +1,5 @@
 [Service]
+SyslogIdentifier=%p
 ExecStart=/usr/bin/env pulseaudio --exit-idle-time=0
 
 Restart=always

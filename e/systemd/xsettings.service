@@ -1,5 +1,6 @@
 [Service]
 Type=oneshot
+SyslogIdentifier=%p
 ExecStart=/usr/bin/env xinitrc.input
 ExecStart=/usr/bin/env xinitrc.misc
 

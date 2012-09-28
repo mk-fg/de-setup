@@ -1,3 +1,4 @@
 [Service]
 Type=oneshot
+SyslogIdentifier=%p
 ExecStart=/usr/bin/env aura /mnt/volatiles/images ${HOME}/media/bgz

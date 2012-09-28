@@ -2,4 +2,5 @@
 After=aura-oneshot.service
 
 [Service]
+SyslogIdentifier=%p
 ExecStart=/usr/bin/env aura -d --no-fork --no-init /mnt/volatiles/images ${HOME}/media/bgz

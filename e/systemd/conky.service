@@ -2,5 +2,5 @@
 After=aura-oneshot.service
 
 [Service]
-ExecStartPre=/bin/sleep 1
-ExecStart=/usr/bin/env conky
+SyslogIdentifier=%p
+ExecStart=/usr/bin/env conky -q
