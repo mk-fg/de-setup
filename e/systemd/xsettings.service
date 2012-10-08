@@ -6,4 +6,4 @@ ExecStart=/usr/bin/env xinitrc.misc
 
 # For some reason, xinput overrides jam X
 #  for a second, which breaks E startup in some cases
-ExecStartPre=/bin/sleep 10
+ExecStartPre=/bin/sleep 20
