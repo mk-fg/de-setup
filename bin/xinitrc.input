@@ -2,7 +2,8 @@
 
 xmodmap ~/.xmodmaprc
 xset r rate 250 40
-setxkbmap -rules evdev -layout 'us,ru' -option 'grp:switch,grp:caps_toggle,grp_led:caps'
+setxkbmap -model acer_laptop -rules evdev\
+	-layout 'us,ru' -option 'grp:switch,grp:caps_toggle,grp_led:caps'
 
 dev='PS/2 Logitech Wheel Mouse'
 xinput list "$dev" &>/dev/null && {
