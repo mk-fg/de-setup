@@ -1,0 +1,6 @@
+[Service]
+Type=oneshot
+SyslogIdentifier=%p
+Environment=XAUTHORITY=/home/odesk/.Xauthority
+ExecStart=/usr/bin/install -m644 /home/fraggod/.Xauthority /home/odesk/
+ExecStart=/usr/bin/sudo -u odesk -g odesk /opt/bin/odeskteam-qt4
