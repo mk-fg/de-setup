@@ -3,7 +3,7 @@
 exe=$(
 	( tac ~/.dmenu_history 2>/dev/null
 		echo $PATH | awk -F: '{for (i=1;i<=NF;i++) print $i}' |
-			xargs -I{} find {} -type f -executable -printf '%f\n' )\
+			xargs -I{} find {}/ -type f -executable -printf '%f\n' )\
 		| awk '{if (!a[$0]) { a[$0]=1; print; }}'\
 		| dmenu -p 'Run:' -i -fn 'Luxi Sans-8:normal' )
 [[ -z "$exe" ]] && exit 0
