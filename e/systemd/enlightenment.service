@@ -3,5 +3,5 @@ Before=aura-oneshot.service xsettings.service
 
 [Service]
 SyslogIdentifier=%p
+KillMode=none
 ExecStart=/usr/bin/env enlightenment_start
-ExecStopPost=-/usr/bin/env pkill -INT -U 1000 -x systemd
