@@ -38,6 +38,8 @@ XTerm*loginShell: false
 XTerm*visualBell: false
 XTerm*showMissingGlyphs: true
 XTerm*metaSendsEscape: true
+XTerm*formatOtherKeys: 0
+XTerm*modifyOtherKeys: 1
 
 yeahconsole*restart: 0
 yeahconsole*consoleHeight: 30
