@@ -1,5 +1,7 @@
 [Unit]
 After=X.target
+Wants=background.target
+Before=background.target
 
 [Service]
 Type=oneshot

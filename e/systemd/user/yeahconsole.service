@@ -1,5 +1,5 @@
 [Unit]
-After=X.target
+After=X.target background.target
 
 [Service]
 SyslogIdentifier=%p
