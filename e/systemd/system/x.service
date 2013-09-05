@@ -1,0 +1,12 @@
+[Unit]
+After=systemd-user-sessions.service
+
+[Service]
+Type=notify
+NotifyAccess=all
+PAMName=systemd-shared
+Slice=user-fraggod.slice
+
+User=fraggod
+Environment=DISPLAY=:1
+ExecStart=-/bin/sh %h/.xinitrc

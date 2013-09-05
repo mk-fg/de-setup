@@ -1,3 +1,6 @@
+[Unit]
+After=X.target
+
 [Service]
 SyslogIdentifier=%p
 ExecStart=/usr/bin/env redshift -m randr -l 56.8:60.6 -t 6500:4000

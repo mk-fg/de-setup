@@ -1,0 +1,4 @@
+[Unit]
+# Not default.target because systemd starts default.target
+#  along with user@1000 randomly early on boot, not sure why.
+Description=startx-like custom session

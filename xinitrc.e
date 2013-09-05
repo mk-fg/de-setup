@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# For proper PATH and such
+source /etc/profile
+
 # Basic X setup
 xrdb ~/.Xresources
 
@@ -25,6 +28,6 @@ export ELM_THEME=elm-efenniht
 # systemd/e17 session
 export XDG_DATA_DIRS="${HOME}/.xdg:/usr/share/enlightenment:/usr/share"
 export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/session_bus_socket"
-ck-launch-session /usr/lib/systemd/systemd --user
+ck-launch-session /usr/lib/systemd/systemd --user --unit=startx.target
 
-sync
+exec sync

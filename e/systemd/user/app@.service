@@ -1,3 +1,6 @@
+[Unit]
+After=X.target
+
 [Service]
 SyslogIdentifier=%i
 ExecStart=/usr/bin/env %i
