@@ -3,9 +3,6 @@
 # For proper PATH and such
 source /etc/profile
 
-# Basic X setup
-xrdb ~/.Xresources
-
 # Agents
 create_zenv_file() {
 	touch /dev/shm/zenv_agents

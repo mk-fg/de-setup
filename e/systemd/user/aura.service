@@ -1,5 +1,5 @@
 [Unit]
-After=aura-oneshot.service
+After=background.target
 
 [Service]
 SyslogIdentifier=%p

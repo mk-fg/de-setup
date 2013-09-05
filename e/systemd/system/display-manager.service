@@ -1,5 +1,6 @@
 [Unit]
 After=systemd-user-sessions.service
+After=multi-user.target
 
 [Service]
 Type=notify
@@ -10,3 +11,6 @@ Slice=user-fraggod.slice
 User=fraggod
 Environment=DISPLAY=:1
 ExecStart=-/bin/sh %h/.xinitrc
+
+[Install]
+WantedBy=graphical.target
