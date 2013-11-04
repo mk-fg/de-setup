@@ -1,6 +1,5 @@
 [Unit]
 After=systemd-user-sessions.service
-After=multi-user.target
 
 [Service]
 Type=notify
