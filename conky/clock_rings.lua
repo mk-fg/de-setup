@@ -28,7 +28,7 @@
 -- + v1.0 -- Original release (30.09.2009)
 
 
-rings_ox=200
+rings_ox=130
 rings_oy=155
 
 settings_table = {
@@ -244,28 +244,52 @@ settings_table = {
 	},
 }
 
--- Use these settings to define the origin and extent of your clock.
 
-clock_r=40
+-- Clock settings
 
--- "clock_x" and "clock_y" are the coordinates of the centre of the clock, in pixels, from the top left of the Conky window.
+clock_r = 40
+clock_x = rings_ox
+clock_y = rings_oy
 
-clock_x=rings_ox
-clock_y=rings_oy
+clock_colour = 0xffffff
+clock_alpha = 0.5
 
--- Colour & alpha of the clock hands
+clock_show_seconds = true
 
-clock_colour=0xffffff
-clock_alpha=0.5
+-- BG settings
 
--- Do you want to show the seconds hand?
+bg_x = rings_ox
+bg_y = rings_oy - 10
+bg_w = 250
+bg_h = 230
+bg_aspect = 1.0
+bg_corner_radius = bg_h / 10
 
-show_seconds=true
 
 require 'cairo'
 
 function rgb_to_r_g_b(colour,alpha)
 	return ((colour / 0x10000) % 0x100) / 255., ((colour / 0x100) % 0x100) / 255., (colour % 0x100) / 255., alpha
+end
+
+function draw_bg(cr,t,pt)
+	local radius = bg_corner_radius / bg_aspect
+	local degrees = math.pi / 180.0
+	local x = bg_x - bg_w / 2
+	local y = bg_y - bg_h / 2
+
+	cairo_new_sub_path(cr)
+	cairo_arc(cr, x + bg_w - radius, y + radius, radius, -90 * degrees, 0 * degrees)
+	cairo_arc(cr, x + bg_w - radius, y + bg_h - radius, radius, 0 * degrees, 90 * degrees)
+	cairo_arc(cr, x + radius, y + bg_h - radius, radius, 90 * degrees, 180 * degrees)
+	cairo_arc(cr, x + radius, y + radius, radius, 180 * degrees, 270 * degrees)
+	cairo_close_path(cr)
+
+	cairo_set_source_rgba(cr, 0.1, 0.2, 0.1, 0.1)
+	cairo_fill_preserve(cr)
+	cairo_set_source_rgba(cr, 0, 0, 0, 0.1)
+	cairo_set_line_width(cr, 2.0)
+	cairo_stroke(cr)
 end
 
 function draw_ring(cr,t,pt)
@@ -328,7 +352,7 @@ function draw_clock_hands(cr,xc,yc)
 
 	-- Draw seconds hand
 
-	if show_seconds then
+	if clock_show_seconds then
 		xs=xc+clock_r*math.sin(secs_arc)
 		ys=yc-clock_r*math.cos(secs_arc)
 		cairo_move_to(cr,xc,yc)
@@ -368,11 +392,13 @@ function conky_clock_rings()
 	local updates=conky_parse('${updates}')
 	update_num=tonumber(updates)
 
-	if update_num>5 then
+	draw_bg(cr)
+
+	-- if update_num>5 then
 		for i in pairs(settings_table) do
 			setup_rings(cr,settings_table[i])
 		end
-	end
+	-- end
 
 	draw_clock_hands(cr,clock_x,clock_y)
 end

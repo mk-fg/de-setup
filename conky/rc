@@ -65,7 +65,7 @@ lua_draw_hook_pre clock_rings
 
 
 TEXT
-${voffset 250}
+${voffset 240}
 
 $color${pre_exec id -un}@$nodename - $sysname $kernel\
 ${alignr}${time %a, %d %b, %H:%M (%Z)}
