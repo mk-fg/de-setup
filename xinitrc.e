@@ -21,10 +21,8 @@ source /dev/shm/zenv_agents
 
 # Misc env
 export ELM_THEME=elm-efenniht
-
-# systemd/e17 session
 export XDG_DATA_DIRS="${HOME}/.xdg:/usr/share/enlightenment:/usr/share"
-export DBUS_SESSION_BUS_ADDRESS="unix:path=${XDG_RUNTIME_DIR}/session_bus_socket"
-ck-launch-session /usr/lib/systemd/systemd --user --unit=startx.target
+export XDG_RUNTIME_DIR=/run/user/fraggod
+mkdir -p "$(dirname "$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2)")"
 
-exec sync
+exec /usr/lib/systemd/systemd --user --unit=startx.target

@@ -5,12 +5,19 @@ After=multi-user.target
 [Service]
 Type=notify
 NotifyAccess=all
-PAMName=systemd-shared
+PAMName=systemd-user
 Slice=user-fraggod.slice
 
 User=fraggod
 Environment=DISPLAY=:1
+Environment=SHELL=%s
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/fraggod/dbus/user_bus_socket
+
+PermissionsStartOnly=true
+ExecStartPre=-/bin/mkdir -p -m700 /run/user/fraggod
+ExecStartPre=-/bin/chown fraggod: /run/user/fraggod
 ExecStart=-/bin/sh %h/.xinitrc
+ExecStopPost=-/bin/sync
 
 [Install]
 WantedBy=graphical.target

@@ -1,2 +1,2 @@
 [Socket]
-ListenStream=/run/user/1000/session_bus_socket
+ListenStream=/run/user/fraggod/dbus/user_bus_socket

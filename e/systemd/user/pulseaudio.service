@@ -3,7 +3,7 @@ After=X.target sockets.target
 
 [Service]
 SyslogIdentifier=%p
-ExecStart=/usr/bin/env pulseaudio
+ExecStart=/usr/bin/env pulseaudio --exit-idle-time=999999
 
 Restart=always
 RestartPreventExitStatus=SIGTERM SIGINT SIGABRT SIGKILL
