@@ -1,45 +1,26 @@
 -- Clock Rings by londonali1010 (2009) - edited by h0zza (2012)
 -- [http://blog.hozzamedia.com/software/conky-resource-dialrings/]
 
--- This script draws percentage meters as rings, and also draws clock hands if
--- you want! It is fully customisable; all options are described in the
--- script. This script is based off a combination of my clock.lua script and my
--- rings.lua script.
 
--- IMPORTANT: if you are using the 'cpu' function, it will cause a segmentation
--- fault if it tries to draw a ring straight away. The if statement near the end
--- of the script uses a delay to make sure that this doesn't happen. It
--- calculates the length of the delay by the number of updates since Conky
--- started. Generally, a value of 5s is long enough, so if you update Conky
--- every 1s, use update_num > 5 in that if statement (the default). If you only
--- update Conky every 2s, you should change it to update_num > 3; conversely if
--- you update Conky every 0.5s, you should use update_num > 10. ALSO, if you
--- change your Conky, is it best to use "killall conky; conky" to update it,
--- otherwise the update_num will not be reset and you will get an error.
-
--- To call this script in Conky, use the following (assuming that you save this script to ~/scripts/rings.lua):
---     lua_load ~/scripts/clock_rings-v1.1.1.lua
---     lua_draw_hook_pre clock_rings
-
--- Changelog:
--- + v1.1.2 -- Added some things, changed some stuff. (2012-12-12)
--- + v1.1.1 -- Fixed minor bug that caused the script to crash if conky_parse() returns a nil value (20.10.2009)
--- + v1.1 -- Added colour option for clock hands (07.10.2009)
--- + v1.0 -- Original release (30.09.2009)
-
+-- Center of drawn widget
 
 rings_ox=130
 rings_oy=155
 
+
 settings_table = {
 	{
-		-- Edit this table to customise your rings.
-		-- You can create more rings simply by adding more elements to settings_table.
-		-- "name" is the type of stat to display; you can choose from 'cpu', 'memperc', 'fs_used_perc', 'battery_used_perc'.
+		-- Edit this table to customise your rings.  You can create more rings
+		-- simply by adding more elements to settings_table.  "name" is the type of
+		-- stat to display; you can choose from 'cpu', 'memperc', 'fs_used_perc',
+		-- 'battery_used_perc'.
 		name='time',
-		-- "arg" is the argument to the stat type, e.g. if in Conky you would write ${cpu cpu0}, 'cpu0' would be the argument. If you would not use an argument in the Conky variable, use ''.
+		-- "arg" is the argument to the stat type, e.g. if in Conky you would write
+		-- ${cpu cpu0}, 'cpu0' would be the argument. If you would not use an
+		-- argument in the Conky variable, use ''.
 		arg='%I.%M',
-		-- "max" is the maximum value of the ring. If the Conky variable outputs a percentage, use 100.
+		-- "max" is the maximum value of the ring. If the Conky variable outputs a
+		-- percentage, use 100.
 		max=12,
 		-- "bg_colour" is the colour of the base ring.
 		bg_colour=0xffffff,
@@ -49,15 +30,19 @@ settings_table = {
 		fg_colour=0xffffff,
 		-- "fg_alpha" is the alpha value of the indicator part of the ring.
 		fg_alpha=0.2,
-		-- "x" and "y" are the x and y coordinates of the centre of the ring, relative to the top left corner of the Conky window.
+		-- "x" and "y" are the x and y coordinates of the centre of the ring,
+		-- relative to the top left corner of the Conky window.
 		x=rings_ox, y=rings_oy,
 		-- "radius" is the radius of the ring.
 		radius=50,
 		-- "thickness" is the thickness of the ring, centred around the radius.
 		thickness=5,
-		-- "start_angle" is the starting angle of the ring, in degrees, clockwise from top. Value can be either positive or negative.
+		-- "start_angle" is the starting angle of the ring, in degrees, clockwise
+		-- from top. Value can be either positive or negative.
 		start_angle=0,
-		-- "end_angle" is the ending angle of the ring, in degrees, clockwise from top. Value can be either positive or negative, but must be larger than start_angle.
+		-- "end_angle" is the ending angle of the ring, in degrees, clockwise from
+		-- top. Value can be either positive or negative, but must be larger than
+		-- start_angle.
 		end_angle=360
 	},
 	{
@@ -389,16 +374,17 @@ function conky_clock_rings()
 
 	local cr=cairo_create(cs)
 
+	draw_bg(cr)
+
 	local updates=conky_parse('${updates}')
 	update_num=tonumber(updates)
 
-	draw_bg(cr)
-
-	-- if update_num>5 then
+	-- First update(s) can produce really weird numbers and segfault
+	if update_num>5 then
 		for i in pairs(settings_table) do
 			setup_rings(cr,settings_table[i])
 		end
-	-- end
+	end
 
 	draw_clock_hands(cr,clock_x,clock_y)
 end
