@@ -60,8 +60,13 @@ template7 ${color\2}${downspeed \1}${color lightgrey}
 template8 ${color\2}${upspeed \1}${color lightgrey}
 template9 ${color light slate gray}${if_match ${cpu cpu\1} >= 85}${color red}${endif}${tab 10}${cpubar cpu\1 5,90}
 
+lua_load ~/.conkyrc.rings.lua
+lua_draw_hook_pre clock_rings
+
 
 TEXT
+${voffset 250}
+
 $color${pre_exec id -un}@$nodename - $sysname $kernel\
 ${alignr}${time %a, %d %b, %H:%M (%Z)}
 ${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg\
@@ -75,7 +80,7 @@ ${template4 90 70 mem RAM}
 ${template4 80 60 swap Swap}
 ${color lightgrey}Processes:$color $processes  \
 ${color lightgrey}Running:$color $running_processes${alignr}${color lightgrey}\
-${color lightgrey}Not mobile
+${color lightgrey}desktop
 ${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00}
 \
 $color$stippled_hr
@@ -85,12 +90,17 @@ ${template0 #af442f 2}
 ${template0 #cf8171 3}
 ${template0 #af9792 4}
 ${template0 #bababa 5}
+${template0 gray 6}
+${template0 gray 7}
+${template0 gray 8}
+${template0 gray 9}
+${template0 gray 10}
 \
 $stippled_hr
 ${template1 / / 20}
 ${template1 home /home 20}
-${template1 var /var 20}
 ${template1 volatiles /var/volatiles 10}
+${template1 dump /mnt/volatiles 10}
 ${template1 build /var/tmp/paludis 30}
 ${template1 tmp /tmp 30}
 ${color lightgrey}FS_read: ${color #99aaff}${diskio_read}\
@@ -113,4 +123,5 @@ ${if_up wlan0}${alignr}${color lightgrey}Signal:$color ${wireless_link_qual_perc
 \
 $color$stippled_hr
 ${color #ddaa00}Portz${alignr}Konnektionz
-$color ${color grey} Inbound: ${color #2266cc}${tcp_portmon 1 32767 count} ${color grey} Outbound: ${color #cc6622}${tcp_portmon 32768 61000 count}${alignr}${color grey}ALL: ${color #22cc22}${tcp_portmon 1 65535 count} $color
+$color ${color grey} Inbound: ${color #2266cc}${tcp_portmon 1 32767 count} ${color grey} Outbound: ${color #cc6622}${tcp_portmon 32768 65535 count}${alignr}${color grey}ALL: ${color #22cc22}${tcp_portmon 1 65535 count} $color
+$color$stippled_hr
