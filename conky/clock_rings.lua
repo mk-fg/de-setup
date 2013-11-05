@@ -247,7 +247,9 @@ clock = {
 }
 
 clock_bin = {
-	offset=10, pad=20,
+	-- h=bg['h'], drawn to the right of the rings bg
+	w=135, clock_offset=10, pad=20,
+	block_offset=10,
 	fill_color=0xeeaaaa, fill_alpha=0.5,
 	border_color=0xffffff, border_alpha=0.3, border_width=1
 }
@@ -313,8 +315,7 @@ function draw_clock_hands(cr, secs, mins, hours)
 	local mins_arc = (2*math.pi/60)*mins+secs_arc/60
 	local hours_arc = (2*math.pi/12)*hours+mins_arc/12
 
-	-- Draw hour hand
-
+	-- hour hand
 	xh=xc+0.7*r*math.sin(hours_arc)
 	yh=yc-0.7*r*math.cos(hours_arc)
 	cairo_move_to(cr,xc,yc)
@@ -325,8 +326,7 @@ function draw_clock_hands(cr, secs, mins, hours)
 	cairo_set_source_rgba(cr, rgb_to_r_g_b(clock['color'], clock['alpha']))
 	cairo_stroke(cr)
 
-	-- Draw minute hand
-
+	-- minute hand
 	xm=xc+r*math.sin(mins_arc)
 	ym=yc-r*math.cos(mins_arc)
 	cairo_move_to(cr,xc,yc)
@@ -335,8 +335,7 @@ function draw_clock_hands(cr, secs, mins, hours)
 	cairo_set_line_width(cr,3)
 	cairo_stroke(cr)
 
-	-- Draw seconds hand
-
+	-- seconds hand
 	if clock['show_seconds'] then
 		xs=xc+r*math.sin(secs_arc)
 		ys=yc-r*math.cos(secs_arc)
@@ -349,14 +348,16 @@ function draw_clock_hands(cr, secs, mins, hours)
 end
 
 
-function bit_set(x, p) return x % (p + p) >= p end
+function bit_check(x, pos)
+	pos = 2 ^ pos
+	return x % (pos * 2) >= pos
+end
 
 function bit_decode(x, max)
 	local bits, x = {}, tonumber(x)
 	for bit = 0, 7 do
 		if 2 ^ bit > max then break end
-		bits[bit] = bit_set(x, bit)
-		-- print(string.format('Bit %d: %s', bit, tostring(hasbit(secs, bit))))
+		bits[bit] = bit_check(x, bit)
 	end
 	return bits
 end
@@ -367,14 +368,13 @@ function round(val, decimal)
 end
 
 function draw_bin_clock(cr, secs, mins, hours)
-	local bin_bg, w, offset = {}, 135, 10
-
+	local bin_bg = {}
 	for k, v in pairs(bg) do bin_bg[k] = v end
-	bin_bg['x'], bin_bg['w'] = bg['x'] + bg['w'] / 2 + w / 2 + offset, w
+	bin_bg['x'], bin_bg['w'] = bg['x'] + bg['w'] / 2 + clock_bin['w'] / 2 + clock_bin['clock_offset'], clock_bin['w']
 	draw_bg(cr, bin_bg)
 
 	local d, x, y = 6, bin_bg['x'] - bin_bg['w'] / 2, bin_bg['y'] - bin_bg['h'] / 2
-	local offset, pad = clock_bin['offset'], clock_bin['pad']
+	local offset, pad = clock_bin['block_offset'], clock_bin['pad']
 	local h = round((bin_bg['h'] - pad * 2 + offset) / d - offset, 0)
 	local w = h
 
