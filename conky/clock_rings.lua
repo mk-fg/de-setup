@@ -2,16 +2,15 @@
 -- [http://blog.hozzamedia.com/software/conky-resource-dialrings/]
 
 
--- Center of drawn widget
+-- Settings
 
 rings_ox=130
 rings_oy=155
 
-
-settings_table = {
+rings = {
 	{
 		-- Edit this table to customise your rings.  You can create more rings
-		-- simply by adding more elements to settings_table.  "name" is the type of
+		-- simply by adding more elements to this table.  "name" is the type of
 		-- stat to display; you can choose from 'cpu', 'memperc', 'fs_used_perc',
 		-- 'battery_used_perc'.
 		name='time',
@@ -229,26 +228,21 @@ settings_table = {
 	},
 }
 
+clock = {
+	r=40, x=rings_ox, y=rings_oy,
+	color=0xffffff, alpha=0.5,
+	show_seconds=true
+}
 
--- Clock settings
-
-clock_r = 40
-clock_x = rings_ox
-clock_y = rings_oy
-
-clock_colour = 0xffffff
-clock_alpha = 0.5
-
-clock_show_seconds = true
-
--- BG settings
-
-bg_x = rings_ox
-bg_y = rings_oy - 10
-bg_w = 250
-bg_h = 230
-bg_aspect = 1.0
-bg_corner_radius = bg_h / 10
+bg_rings_y_offset = -10 -- shift/scale the thing up/down
+bg_size = 250
+bg = {
+	x=rings_ox, y=rings_oy + bg_rings_y_offset,
+	w=bg_size, h=bg_size + bg_rings_y_offset * 2,
+	aspect=1.0, corner_radius=25,
+	fill_color=0x080a08, fill_alpha=0.1,
+	border_color=0x000000, border_alpha=0.1, border_width=2
+}
 
 
 require 'cairo'
@@ -258,22 +252,21 @@ function rgb_to_r_g_b(colour,alpha)
 end
 
 function draw_bg(cr,t,pt)
-	local radius = bg_corner_radius / bg_aspect
+	local radius = bg['corner_radius'] / bg['aspect']
 	local degrees = math.pi / 180.0
-	local x = bg_x - bg_w / 2
-	local y = bg_y - bg_h / 2
+	local x, y, w, h = bg['x'] - bg['w'] / 2, bg['y'] - bg['h'] / 2, bg['w'], bg['h']
 
 	cairo_new_sub_path(cr)
-	cairo_arc(cr, x + bg_w - radius, y + radius, radius, -90 * degrees, 0 * degrees)
-	cairo_arc(cr, x + bg_w - radius, y + bg_h - radius, radius, 0 * degrees, 90 * degrees)
-	cairo_arc(cr, x + radius, y + bg_h - radius, radius, 90 * degrees, 180 * degrees)
+	cairo_arc(cr, x + w - radius, y + radius, radius, -90 * degrees, 0 * degrees)
+	cairo_arc(cr, x + w - radius, y + h - radius, radius, 0 * degrees, 90 * degrees)
+	cairo_arc(cr, x + radius, y + h - radius, radius, 90 * degrees, 180 * degrees)
 	cairo_arc(cr, x + radius, y + radius, radius, 180 * degrees, 270 * degrees)
 	cairo_close_path(cr)
 
-	cairo_set_source_rgba(cr, 0.1, 0.2, 0.1, 0.1)
+	cairo_set_source_rgba(cr, rgb_to_r_g_b(bg['fill_color'], bg['fill_alpha']))
 	cairo_fill_preserve(cr)
-	cairo_set_source_rgba(cr, 0, 0, 0, 0.1)
-	cairo_set_line_width(cr, 2.0)
+	cairo_set_source_rgba(cr, rgb_to_r_g_b(bg['border_color'], bg['border_alpha']))
+	cairo_set_line_width(cr, bg['border_width'])
 	cairo_stroke(cr)
 end
 
@@ -301,7 +294,8 @@ function draw_ring(cr,t,pt)
 	cairo_stroke(cr)
 end
 
-function draw_clock_hands(cr,xc,yc)
+function draw_clock_hands(cr)
+	local r, xc, yc = clock['r'], clock['x'], clock['y']
 	local secs,mins,hours,secs_arc,mins_arc,hours_arc
 	local xh,yh,xm,ym,xs,ys
 
@@ -315,20 +309,20 @@ function draw_clock_hands(cr,xc,yc)
 
 	-- Draw hour hand
 
-	xh=xc+0.7*clock_r*math.sin(hours_arc)
-	yh=yc-0.7*clock_r*math.cos(hours_arc)
+	xh=xc+0.7*r*math.sin(hours_arc)
+	yh=yc-0.7*r*math.cos(hours_arc)
 	cairo_move_to(cr,xc,yc)
 	cairo_line_to(cr,xh,yh)
 
-	cairo_set_line_cap(cr,CAIRO_LINE_CAP_ROUND)
+	cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND)
 	cairo_set_line_width(cr,5)
-	cairo_set_source_rgba(cr,rgb_to_r_g_b(clock_colour,clock_alpha))
+	cairo_set_source_rgba(cr, rgb_to_r_g_b(clock['color'], clock['alpha']))
 	cairo_stroke(cr)
 
 	-- Draw minute hand
 
-	xm=xc+clock_r*math.sin(mins_arc)
-	ym=yc-clock_r*math.cos(mins_arc)
+	xm=xc+r*math.sin(mins_arc)
+	ym=yc-r*math.cos(mins_arc)
 	cairo_move_to(cr,xc,yc)
 	cairo_line_to(cr,xm,ym)
 
@@ -337,9 +331,9 @@ function draw_clock_hands(cr,xc,yc)
 
 	-- Draw seconds hand
 
-	if clock_show_seconds then
-		xs=xc+clock_r*math.sin(secs_arc)
-		ys=yc-clock_r*math.cos(secs_arc)
+	if clock['show_seconds'] then
+		xs=xc+r*math.sin(secs_arc)
+		ys=yc-r*math.cos(secs_arc)
 		cairo_move_to(cr,xc,yc)
 		cairo_line_to(cr,xs,ys)
 
@@ -381,10 +375,10 @@ function conky_clock_rings()
 
 	-- First update(s) can produce really weird numbers and segfault
 	if update_num>5 then
-		for i in pairs(settings_table) do
-			setup_rings(cr,settings_table[i])
+		for i in pairs(rings) do
+			setup_rings(cr,rings[i])
 		end
 	end
 
-	draw_clock_hands(cr,clock_x,clock_y)
+	draw_clock_hands(cr)
 end
