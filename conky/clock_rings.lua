@@ -1,4 +1,6 @@
--- Clock Rings by londonali1010 (2009) - edited by h0zza (2012)
+-- Clock Rings + Binary Clock
+
+-- Original Clock Rings by londonali1010 (2009) - edited by h0zza (2012)
 -- [http://blog.hozzamedia.com/software/conky-resource-dialrings/]
 
 
@@ -228,12 +230,6 @@ rings = {
 	},
 }
 
-clock = {
-	r=40, x=rings_ox, y=rings_oy,
-	color=0xffffff, alpha=0.5,
-	show_seconds=true
-}
-
 bg_rings_y_offset = -10 -- shift/scale the thing up/down
 bg_size = 250
 bg = {
@@ -244,6 +240,18 @@ bg = {
 	border_color=0x000000, border_alpha=0.1, border_width=2
 }
 
+clock = {
+	r=40, x=rings_ox, y=rings_oy,
+	color=0xffffff, alpha=0.5,
+	show_seconds=true
+}
+
+clock_bin = {
+	offset=10, pad=20,
+	fill_color=0xeeaaaa, fill_alpha=0.5,
+	border_color=0xffffff, border_alpha=0.3, border_width=1
+}
+
 
 require 'cairo'
 
@@ -251,10 +259,11 @@ function rgb_to_r_g_b(colour,alpha)
 	return ((colour / 0x10000) % 0x100) / 255., ((colour / 0x100) % 0x100) / 255., (colour % 0x100) / 255., alpha
 end
 
-function draw_bg(cr,t,pt)
-	local radius = bg['corner_radius'] / bg['aspect']
+
+function draw_bg(cr, t)
+	local radius = t['corner_radius'] / t['aspect']
 	local degrees = math.pi / 180.0
-	local x, y, w, h = bg['x'] - bg['w'] / 2, bg['y'] - bg['h'] / 2, bg['w'], bg['h']
+	local x, y, w, h = t['x'] - t['w'] / 2, t['y'] - t['h'] / 2, t['w'], t['h']
 
 	cairo_new_sub_path(cr)
 	cairo_arc(cr, x + w - radius, y + radius, radius, -90 * degrees, 0 * degrees)
@@ -263,12 +272,13 @@ function draw_bg(cr,t,pt)
 	cairo_arc(cr, x + radius, y + radius, radius, 180 * degrees, 270 * degrees)
 	cairo_close_path(cr)
 
-	cairo_set_source_rgba(cr, rgb_to_r_g_b(bg['fill_color'], bg['fill_alpha']))
+	cairo_set_source_rgba(cr, rgb_to_r_g_b(t['fill_color'], t['fill_alpha']))
 	cairo_fill_preserve(cr)
-	cairo_set_source_rgba(cr, rgb_to_r_g_b(bg['border_color'], bg['border_alpha']))
-	cairo_set_line_width(cr, bg['border_width'])
+	cairo_set_source_rgba(cr, rgb_to_r_g_b(t['border_color'], t['border_alpha']))
+	cairo_set_line_width(cr, t['border_width'])
 	cairo_stroke(cr)
 end
+
 
 function draw_ring(cr,t,pt)
 	local w,h=conky_window.width,conky_window.height
@@ -294,18 +304,14 @@ function draw_ring(cr,t,pt)
 	cairo_stroke(cr)
 end
 
-function draw_clock_hands(cr)
+
+function draw_clock_hands(cr, secs, mins, hours)
 	local r, xc, yc = clock['r'], clock['x'], clock['y']
-	local secs,mins,hours,secs_arc,mins_arc,hours_arc
 	local xh,yh,xm,ym,xs,ys
 
-	secs=os.date("%S")
-	mins=os.date("%M")
-	hours=os.date("%I")
-
-	secs_arc=(2*math.pi/60)*secs
-	mins_arc=(2*math.pi/60)*mins+secs_arc/60
-	hours_arc=(2*math.pi/12)*hours+mins_arc/12
+	local secs_arc = (2*math.pi/60)*secs
+	local mins_arc = (2*math.pi/60)*mins+secs_arc/60
+	local hours_arc = (2*math.pi/12)*hours+mins_arc/12
 
 	-- Draw hour hand
 
@@ -342,6 +348,59 @@ function draw_clock_hands(cr)
 	end
 end
 
+
+function bit_set(x, p) return x % (p + p) >= p end
+
+function bit_decode(x, max)
+	local bits, x = {}, tonumber(x)
+	for bit = 0, 7 do
+		if 2 ^ bit > max then break end
+		bits[bit] = bit_set(x, bit)
+		-- print(string.format('Bit %d: %s', bit, tostring(hasbit(secs, bit))))
+	end
+	return bits
+end
+
+function round(val, decimal)
+	local exp = decimal and 10^decimal or 1
+	return math.ceil(val * exp - 0.5) / exp
+end
+
+function draw_bin_clock(cr, secs, mins, hours)
+	local bin_bg, w, offset = {}, 135, 10
+
+	for k, v in pairs(bg) do bin_bg[k] = v end
+	bin_bg['x'], bin_bg['w'] = bg['x'] + bg['w'] / 2 + w / 2 + offset, w
+	draw_bg(cr, bin_bg)
+
+	local d, x, y = 6, bin_bg['x'] - bin_bg['w'] / 2, bin_bg['y'] - bin_bg['h'] / 2
+	local offset, pad = clock_bin['offset'], clock_bin['pad']
+	local h = round((bin_bg['h'] - pad * 2 + offset) / d - offset, 0)
+	local w = h
+
+	local rgba_fill = {rgb_to_r_g_b(clock_bin['fill_color'], clock_bin['fill_alpha'])}
+	local rgba_border = {rgb_to_r_g_b(clock_bin['border_color'], clock_bin['border_alpha'])}
+	cairo_set_line_width(cr, clock_bin['border_width'])
+
+	local rows = {{secs, 60}, {mins, 60}, {hours, 24}}
+	local row, v, max, bits, bx, by
+
+	for row_n, row in pairs(rows) do
+		bits = bit_decode(unpack(row))
+		for bit, set in pairs(bits) do
+			bx, by = pad + x + (row_n - 1) * (w + offset), pad + y + (h + offset) * bit
+			cairo_rectangle(cr, bx, by, w, h)
+			if set then
+				cairo_set_source_rgba(cr, unpack(rgba_fill))
+				cairo_fill_preserve(cr)
+			end
+			cairo_set_source_rgba(cr, unpack(rgba_border))
+			cairo_stroke(cr)
+		end
+	end
+end
+
+
 function conky_clock_rings()
 	local function setup_rings(cr,pt)
 		local str=''
@@ -359,26 +418,26 @@ function conky_clock_rings()
 
 	-- Check that Conky has been running for at least 5s
 
-	if conky_window==nil then return end
-	local cs=cairo_xlib_surface_create(
+	if conky_window == nil then return end
+	local cs = cairo_xlib_surface_create(
 		conky_window.display,
 		conky_window.drawable,
 		conky_window.visual,
 		conky_window.width, conky_window.height )
 
-	local cr=cairo_create(cs)
+	local cr = cairo_create(cs)
+	local updates = conky_parse('${updates}')
+	local secs, mins, hours = os.date("%S"), os.date("%M"), os.date("%I")
 
-	draw_bg(cr)
+	draw_bg(cr, bg)
 
-	local updates=conky_parse('${updates}')
-	update_num=tonumber(updates)
+	update_num = tonumber(updates)
 
 	-- First update(s) can produce really weird numbers and segfault
-	if update_num>5 then
-		for i in pairs(rings) do
-			setup_rings(cr,rings[i])
-		end
+	if update_num > 5 then
+		for i in pairs(rings) do setup_rings(cr, rings[i]) end
 	end
 
-	draw_clock_hands(cr)
+	draw_clock_hands(cr, secs, mins, hours)
+	draw_bin_clock(cr, secs, mins, hours)
 end
