@@ -1,0 +1,116 @@
+background no
+
+update_interval 4.0
+total_run_times 0
+
+own_window yes
+own_window_type desktop
+own_window_colour black
+own_window_argb_visual yes
+own_window_transparent yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+
+minimum_size 400
+maximum_width 400
+gap_x 10
+gap_y 10
+
+# alignment top_left
+# alignment top_right
+alignment bottom_left
+# alignment bottom_right
+# alignment none
+
+use_xft yes
+xftfont Luxi Sans:size=8
+xftalpha 1
+override_utf8_locale yes
+
+double_buffer yes
+draw_shades yes
+draw_outline no
+draw_borders no
+draw_graph_borders yes
+stippled_borders 8
+border_width 1
+
+default_color white
+default_shade_color black
+default_outline_color black
+
+mail_spool $MAIL
+no_buffers yes
+uppercase no
+cpu_avg_samples 2
+net_avg_samples 2
+use_spacer none
+
+color0 cc4444
+color1 darkgreen
+color2 4444cc
+
+template0 ${color \1}${top name \2}${offset -30}${tab 40}${top pid \2}${tab 20}${top cpu \2}${tab 20}${top mem \2}${tab 100}${top_mem name \2}${offset -30}${tab 145}${top_mem pid \2}${tab 165}${top_mem cpu \2}${tab 185}${top_mem mem \2}$color
+template1 ${if_mounted \2}${color lightgrey}\1${tab 60 1}$color${if_match ${fs_free_perc \2} <= \3}${color red}${endif}${fs_free \2} (${fs_free_perc \2}%)${if_match ${fs_free_perc \2} <= \3}${blink !!!!!}${endif}${tab 90}${fs_bar \2}$color${endif}
+template2 $color ${tcp_portmon \1 \2 rhost \3} ${alignr} ${tcp_portmon \1 \2 \4 \3} $color
+template3 ${color lightgrey}${if_match $battery_percent <= \1}${color red}${endif}Power:$color ${if_match $battery_percent <= \1}${color red}-- CRITICAL -- ${endif}$battery_percent% ($battery_time${if_match $laptop_mode != 0}, mobile${endif})
+template4 ${color lightgrey}${if_match $\3perc >= \1}${color red}${endif}\4${tab 20}$color${if_match $\3perc >= \1}${color red}${endif}$\3/$\3max - $\3perc%${tab 55}${color light slate gray}${if_match $\3perc >= \2}${color maroon}${endif}${if_match $\3perc >= \1}${color red}${endif}${\3bar}
+template5 ${color darkred}${if_up \1}${color\2}${endif}${addr \1}${color lightgrey}
+template6 ${color\2}${downspeedgraph \1 30,190 aa3333 3333aa 0 -t -l}${alignr}${color\2}${upspeedgraph \1 30,190 3333aa aa3333 0 -t -l}
+template7 ${color\2}${downspeed \1}${color lightgrey}
+template8 ${color\2}${upspeed \1}${color lightgrey}
+template9 ${color light slate gray}${if_match ${cpu cpu\1} >= 85}${color red}${endif}${tab 10}${cpubar cpu\1 5,90}
+
+
+TEXT
+$color${pre_exec id -un}@$nodename - $sysname $kernel on $machine\
+${alignr}${time %a, %d %b, %H:%M (%Z)}
+${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg\
+${alignr}Morning (UGT)
+\
+$stippled_hr
+${color lightgrey}CPUz${tab 20}$color$cpu% (${freq_g})${tab 60}${color light slate gray}${cpubar}
+${template9 1}${template9 2}${template9 3}${template9 4}
+\
+${template4 90 70 mem RAM}
+${template4 80 60 swap Swap}
+${color lightgrey}Processes:$color $processes  \
+${color lightgrey}Running:$color $running_processes${alignr}${color lightgrey}\
+${template3 10}
+${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00}
+\
+$color$stippled_hr
+${color}---=={ CPU${alignr}RAM }==---
+${template0 #ab1c00 1}
+${template0 #af442f 2}
+${template0 #cf8171 3}
+${template0 #af9792 4}
+${template0 #bababa 5}
+\
+$stippled_hr
+${template1 / / 20}
+${template1 home /home 20}
+${template1 var /var 20}
+${template1 volatiles /var/volatiles 10}
+${template1 build /var/tmp/paludis 30}
+${template1 tmp /tmp 30}
+${color lightgrey}FS_read: ${color #99aaff}${diskio_read}\
+  ${color lightgrey}FS_write: ${color #ffaa99}${diskio_write}\
+${alignr}${color light slate gray}${top_io pid 1} ${top_io name 1}
+${color light slate gray}${diskiograph /dev/sda 30,400 3333aa aa3333 0 -t -l}
+\
+$color$stippled_hr
+${color lightgrey}Net_leech: ${template7 wlan0 0} / ${template7 eth0 1} / ${template7 ppp0 2}\
+${alignr}${color lightgrey}Net_seed: ${template8 wlan0 0} / ${template8 eth0 1} / ${template8 ppp0 2}
+\
+${if_up wlan0}${template6 wlan0 0}
+${endif}${if_up eth0}${template6 eth0 1}
+${endif}${if_up ppp0}${template6 ppp0 2}
+${endif}\
+\
+${color lightgrey}IPz: ${template5 wlan0 0} / ${template5 eth0 1} / ${template5 ppp0 2}\
+${if_up wlan0}${alignr}${color lightgrey}Signal:$color ${wireless_link_qual_perc wlan0}%\
+ (${wireless_essid wlan0}, ${wireless_bitrate wlan0})${endif}
+\
+$color$stippled_hr
+${color #ddaa00}Portz${alignr}Konnektionz
+$color ${color grey} Inbound: ${color #2266cc}${tcp_portmon 1 32767 count} ${color grey} Outbound: ${color #cc6622}${tcp_portmon 32768 61000 count}${alignr}${color grey}ALL: ${color #22cc22}${tcp_portmon 1 65535 count} $color
