@@ -109,8 +109,8 @@ ${alignr}${color light slate gray}${top_io pid 1} ${top_io name 1}
 ${color light slate gray}${diskiograph /dev/sda 30,400 3333aa aa3333 0 -t -l}
 \
 $color$stippled_hr
-${color lightgrey}Net_leech: ${template7 wlan0 0} / ${template7 eth0 1} / ${template7 ppp0 2}\
-${alignr}${color lightgrey}Net_seed: ${template8 wlan0 0} / ${template8 eth0 1} / ${template8 ppp0 2}
+${color lightgrey}Net_leech: ${template7 wlan0 0} / ${template7 enp1s0 1} / ${template7 ppp0 2}\
+${alignr}${color lightgrey}Net_seed: ${template8 wlan0 0} / ${template8 enp1s0 1} / ${template8 ppp0 2}
 \
 ${if_up wlan0}${template6 wlan0 0}
 ${endif}${if_up enp1s0}${template6 enp1s0 1}
