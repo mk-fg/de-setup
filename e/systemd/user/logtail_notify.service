@@ -3,4 +3,7 @@ After=X.target
 
 [Service]
 SyslogIdentifier=%p
-ExecStart=/usr/bin/env logtail_notify -i ${HOME}/media/appz/icons/biohazard_48x.png -x ${XDG_RUNTIME_DIR}/logtail_notify.db /var/log/syslog/stripped.log
+ExecStart=/usr/bin/env notify.logtail\
+	-i ${HOME}/media/appz/icons/biohazard_48x.png\
+	-x ${XDG_RUNTIME_DIR}/logtail_notify.db\
+	/var/log/syslog/stripped.log
