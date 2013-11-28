@@ -4,7 +4,7 @@ Requires=notification-thing.service
 
 [Service]
 SyslogIdentifier=%p
-ExecStart=/usr/bin/env logtail_notify\
+ExecStart=/usr/bin/env notify.logtail\
  -i ${HOME}/media/appz/icons/biohazard_48x.png\
  -x ${XDG_RUNTIME_DIR}/logtail_notify.db\
  /var/log/syslog/stripped.log
