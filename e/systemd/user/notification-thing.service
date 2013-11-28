@@ -1,0 +1,9 @@
+[Unit]
+After=X.target
+
+[Service]
+SyslogIdentifier=%p
+Restart=always
+ExecStart=/usr/bin/env notification-thing\
+ --activity-timeout 0\
+ --net-pub-bind 0.0.0.0:8159 --net-sub-bind 0.0.0.0:8158
