@@ -1,5 +1,6 @@
 [Unit]
-After=X.target
+Requires=dbus.service
+After=X.target dbus.service
 
 [Service]
 SyslogIdentifier=%p
