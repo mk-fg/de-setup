@@ -4,6 +4,7 @@ Requires=notification-thing.service
 
 [Service]
 SyslogIdentifier=%p
+Restart=always
 ExecStart=/usr/bin/env notify.logtail\
  -i ${HOME}/media/appz/icons/biohazard_48x.png\
  -x ${XDG_RUNTIME_DIR}/logtail_notify.db\
