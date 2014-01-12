@@ -2,6 +2,7 @@
 After=X.target
 Wants=background.target
 Before=background.target
+PartOf=background.target
 
 [Service]
 Type=oneshot

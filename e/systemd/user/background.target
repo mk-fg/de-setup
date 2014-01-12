@@ -1,3 +1,4 @@
 [Unit]
 Description=X background image, kinda DE-init point
+Requires=X.target
 After=X.target

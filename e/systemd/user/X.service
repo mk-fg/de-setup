@@ -1,5 +1,5 @@
 [Unit]
-Wants=X.target
+Requires=X.target
 Before=X.target
 
 [Service]

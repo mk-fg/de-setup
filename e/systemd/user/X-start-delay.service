@@ -1,6 +1,7 @@
 [Unit]
 After=X.service
 Before=X.target
+PartOf=startx.target
 
 [Service]
 Type=oneshot

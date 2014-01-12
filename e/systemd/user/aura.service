@@ -1,5 +1,6 @@
 [Unit]
 After=background.target
+PartOf=background.target
 
 [Service]
 SyslogIdentifier=%p

@@ -1,5 +1,6 @@
 [Unit]
 After=X.target
+PartOf=startx.target
 
 [Service]
 Type=oneshot

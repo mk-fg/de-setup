@@ -1,9 +1,9 @@
 [Unit]
 After=X.target
 Before=background.target xsettings.service
+PartOf=startx.target
 
 [Service]
 SyslogIdentifier=%p
 KillMode=none
 ExecStart=/usr/bin/env enlightenment_start -locked
-ExecStopPost=-/bin/sh -c 'test -e "$HOME"/.e/logout_after && /usr/bin/env pkill -INT -U 1000 -x systemd'

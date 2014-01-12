@@ -1,6 +1,7 @@
 [Unit]
-After=X.target notification-thing.service
 Requires=notification-thing.service
+After=X.target notification-thing.service
+PartOf=startx.target
 
 [Service]
 SyslogIdentifier=%p
