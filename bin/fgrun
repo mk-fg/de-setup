@@ -1,26 +1,36 @@
 #!/bin/bash
 
+dhistfile="$HOME"/.dmenu_history
+
 exe=$(
-	( tac ~/.dmenu_history 2>/dev/null
+	( tac "$dhistfile" 2>/dev/null
 		echo $PATH | awk -F: '{for (i=1;i<=NF;i++) print $i}' |
 			xargs -I{} find {}/ \( -type f -o -type l \) -executable -printf '%f\n' )\
 		| awk '{if (!a[$0]) { a[$0]=1; print; }}'\
 		| dmenu -p 'Run:' -i -fn 'Luxi Sans-8:normal' )
 [[ -z "$exe" ]] && exit 0
 
-echo "$exe" >> ~/.dmenu_history
+## To also check last-cleanup timestamp, not just size
+# ts=$(printf '%(%s)T' -1)
+# ts_chk=$(getfattr -n user.ts.cleanup --only-values "$dhistfile" 2>/dev/null)
+# if [[ $? -ne 0 ]]
+# then ts_chk=$(( $RANDOM / 5 )) # ~0-3300
+# else ts_chk=$(( $ts - $ts_chk ))
+# fi
+ts_chk=0
 
-if [[ $(stat --format=%s ~/.dmenu_history) -gt 3000 ]]; then
+if [[ $ts_chk -gt 3000 || $(stat --format=%s "$dhistfile") -gt 1500 ]]; then
 	## First, remove the duplicate entries
-	awk '{if (!a[$0]) { a[$0]=1; print; }}'\
-		~/.dmenu_history >~/.dmenu_history.clean
-	mv .dmenu_history{.clean,}
-	if [[ $(stat --format=%s ~/.dmenu_history) -gt 1500 ]]; then
-		## Second, if it's still too large, trim it
-		tac ~/.dmenu_history\
-			| sed -n '1,100p' | tac >~/.dmenu_history.clean
-		mv .dmenu_history{.clean,}
+	awk '{if (!a[$0]) { a[$0]=1; print; }}' "$dhistfile" > "$dhistfile".clean
+	mv "$dhistfile"{.clean,}
+	## Second, if it's still too large, trim it
+	if [[ $(stat --format=%s "$dhistfile") -gt 1500 ]]; then
+		tac "$dhistfile" | sed -n '1,100p' | tac > "$dhistfile".clean
+		mv "$dhistfile"{.clean,}
 	fi
+	# setfattr -n user.ts.cleanup -v "$ts" "$dhistfile"
 fi
+
+echo "$exe" >> "$dhistfile"
 
 exec "$exe" "$@"
