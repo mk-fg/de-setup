@@ -1,4 +1,5 @@
 [Unit]
+Before=sound.target
 After=X.target sockets.target
 
 [Service]
