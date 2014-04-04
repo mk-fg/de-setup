@@ -1,0 +1,6 @@
+[Unit]
+After=X.target
+PartOf=startx.target
+
+[Timer]
+OnActiveSec=20
