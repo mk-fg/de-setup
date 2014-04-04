@@ -25,4 +25,4 @@ export XDG_DATA_DIRS="${HOME}/.xdg:/usr/share/enlightenment:/usr/share"
 export XDG_RUNTIME_DIR=/run/user/fraggod
 mkdir -p "$(dirname "$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2)")"
 
-exec /usr/lib/systemd/systemd --user --unit=startx.target
+exec ck-launch-session /usr/lib/systemd/systemd --user --unit=startx.target
