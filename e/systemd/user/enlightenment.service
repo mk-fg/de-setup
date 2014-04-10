@@ -6,8 +6,4 @@ PartOf=startx.target
 [Service]
 SyslogIdentifier=%p
 KillMode=none
-ExecStart=/usr/bin/env enlightenment_start -locked
-
-## Produces way too much crap to keep in any logs
-StandardOutput=null
-StandardError=null
+ExecStart=/bin/sh -c "enlightenment_start -locked | svlogd -r _ -ttt %h/.e/logs"
