@@ -9,6 +9,24 @@
 rings_ox=130
 rings_oy=155
 
+rings_colors = {
+	cpu=0x0000aa,
+	mem=0xffccee,
+	swap=0xffaaaa,
+	net_up=0x8f4444,
+	net_down=0x446f44,
+	fs_root=0xbdbb7b,
+	fs_home=0xaabdb6,
+}
+
+rings_defaults = {
+	bg_color=0xffffff,
+	bg_alpha=0.2,
+	fg_color=0xffffff,
+	fg_alpha=0.4,
+	x=rings_ox, y=rings_oy,
+}
+
 rings = {
 	{
 		-- Edit this table to customise your rings.  You can create more rings
@@ -23,12 +41,12 @@ rings = {
 		-- "max" is the maximum value of the ring. If the Conky variable outputs a
 		-- percentage, use 100.
 		max=12,
-		-- "bg_colour" is the colour of the base ring.
-		bg_colour=0xffffff,
+		-- "bg_color" is the color of the base ring.
+		bg_color=0xffffff,
 		-- "bg_alpha" is the alpha value of the base ring.
 		bg_alpha=0.1,
-		-- "fg_colour" is the colour of the indicator part of the ring.
-		fg_colour=0xffffff,
+		-- "fg_color" is the color of the indicator part of the ring.
+		fg_color=0xffffff,
 		-- "fg_alpha" is the alpha value of the indicator part of the ring.
 		fg_alpha=0.2,
 		-- "x" and "y" are the x and y coordinates of the centre of the ring,
@@ -50,11 +68,7 @@ rings = {
 		name='time',
 		arg='%M.%S',
 		max=60,
-		bg_colour=0xffffff,
 		bg_alpha=0.1,
-		fg_colour=0xffffff,
-		fg_alpha=0.4,
-		x=rings_ox, y=rings_oy,
 		radius=56,
 		thickness=5,
 		start_angle=0,
@@ -64,11 +78,8 @@ rings = {
 		name='time',
 		arg='%S',
 		max=60,
-		bg_colour=0xffffff,
 		bg_alpha=0.1,
-		fg_colour=0xffffff,
 		fg_alpha=0.6,
-		x=rings_ox, y=rings_oy,
 		radius=62,
 		thickness=5,
 		start_angle=0,
@@ -78,11 +89,8 @@ rings = {
 		name='cpu',
 		arg='cpu1',
 		max=100,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0x0000AA,
+		fg_color=rings_colors.cpu,
 		fg_alpha=0.3,
-		x=rings_ox, y=rings_oy,
 		radius=75,
 		thickness=4,
 		start_angle=93,
@@ -92,11 +100,8 @@ rings = {
 		name='cpu',
 		arg='cpu2',
 		max=100,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0x0000AA,
+		fg_color=rings_colors.cpu,
 		fg_alpha=0.3,
-		x=rings_ox, y=rings_oy,
 		radius=79,
 		thickness=4,
 		start_angle=93,
@@ -106,11 +111,8 @@ rings = {
 		name='cpu',
 		arg='cpu3',
 		max=100,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0x0000AA,
+		fg_color=rings_colors.cpu,
 		fg_alpha=0.3,
-		x=rings_ox, y=rings_oy,
 		radius=83,
 		thickness=4,
 		start_angle=93,
@@ -120,11 +122,8 @@ rings = {
 		name='cpu',
 		arg='cpu4',
 		max=100,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0x0000AA,
+		fg_color=rings_colors.cpu,
 		fg_alpha=0.3,
-		x=rings_ox, y=rings_oy,
 		radius=87,
 		thickness=4,
 		start_angle=93,
@@ -134,11 +133,8 @@ rings = {
 		name='cpu',
 		arg='cpu0',
 		max=100,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0x0000AA,
+		fg_color=rings_colors.cpu,
 		fg_alpha=0.6,
-		x=rings_ox, y=rings_oy,
 		radius=93,
 		thickness=6,
 		start_angle=93,
@@ -148,11 +144,8 @@ rings = {
 		name='memperc',
 		arg='',
 		max=100,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0xffffff,
+		fg_color=rings_colors.mem,
 		fg_alpha=0.5,
-		x=rings_ox, y=rings_oy,
 		radius=78,
 		thickness=11,
 		start_angle=212,
@@ -162,11 +155,8 @@ rings = {
 		name='swapperc',
 		arg='',
 		max=100,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0xffffff,
+		fg_color=rings_colors.swap,
 		fg_alpha=0.5,
-		x=rings_ox, y=rings_oy,
 		radius=90,
 		thickness=11,
 		start_angle=212,
@@ -176,11 +166,8 @@ rings = {
 		name='upspeedf',
 		arg='enp1s0',
 		max=5000,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0xff0000,
+		fg_color=rings_colors.net_up,
 		fg_alpha=0.3,
-		x=rings_ox, y=rings_oy,
 		radius=78,
 		thickness=11,
 		start_angle=-28,
@@ -190,11 +177,8 @@ rings = {
 		name='downspeedf',
 		arg='enp1s0',
 		max=5000,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0x006f00,
+		fg_color=rings_colors.net_down,
 		fg_alpha=0.3,
-		x=rings_ox, y=rings_oy,
 		radius=90,
 		thickness=11,
 		start_angle=-28,
@@ -204,11 +188,8 @@ rings = {
 		name='fs_used_perc',
 		arg='/',
 		max=100,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0xffffff,
+		fg_color=rings_colors.fs_root,
 		fg_alpha=0.5,
-		x=rings_ox, y=rings_oy,
 		radius=105,
 		thickness=3,
 		start_angle=-120,
@@ -218,11 +199,8 @@ rings = {
 		name='fs_used_perc',
 		arg='/home',
 		max=100,
-		bg_colour=0xffffff,
-		bg_alpha=0.2,
-		fg_colour=0xffffff,
+		fg_color=rings_colors.fs_home,
 		fg_alpha=0.5,
-		x=rings_ox, y=rings_oy,
 		radius=105,
 		thickness=3,
 		start_angle=-10,
@@ -257,8 +235,8 @@ clock_bin = {
 
 require 'cairo'
 
-function rgb_to_r_g_b(colour,alpha)
-	return ((colour / 0x10000) % 0x100) / 255., ((colour / 0x100) % 0x100) / 255., (colour % 0x100) / 255., alpha
+function rgb_to_r_g_b(color,alpha)
+	return ((color / 0x10000) % 0x100) / 255., ((color / 0x100) % 0x100) / 255., (color % 0x100) / 255., alpha
 end
 
 
@@ -282,15 +260,21 @@ function draw_bg(cr, t)
 end
 
 
-function draw_ring(cr,t,pt)
-	local w,h=conky_window.width,conky_window.height
+function draw_ring(cr, t, pt)
+	function ring_k(k)
+		local v = pt[k] or rings_defaults[k]
+		assert(v, k)
+		return v
+	end
 
-	local xc,yc,ring_r,ring_w,sa,ea=pt['x'],pt['y'],pt['radius'],pt['thickness'],pt['start_angle'],pt['end_angle']
-	local bgc, bga, fgc, fga=pt['bg_colour'], pt['bg_alpha'], pt['fg_colour'], pt['fg_alpha']
+	local w, h=conky_window.width, conky_window.height
 
-	local angle_0=sa*(2*math.pi/360)-math.pi/2
-	local angle_f=ea*(2*math.pi/360)-math.pi/2
-	local t_arc=t*(angle_f-angle_0)
+	local xc, yc, ring_r, ring_w, sa, ea = ring_k('x'), ring_k('y'), ring_k('radius'), ring_k('thickness'), ring_k('start_angle'), ring_k('end_angle')
+	local bgc, bga, fgc, fga = ring_k('bg_color'), ring_k('bg_alpha'), ring_k('fg_color'), ring_k('fg_alpha')
+
+	local angle_0 = sa*(2*math.pi/360)-math.pi/2
+	local angle_f = ea*(2*math.pi/360)-math.pi/2
+	local t_arc = t*(angle_f-angle_0)
 
 	-- Draw background ring
 
@@ -401,7 +385,7 @@ function draw_bin_clock(cr, secs, mins, hours)
 end
 
 
-function conky_clock_rings()
+function conky_rings_draw()
 	local function setup_rings(cr,pt)
 		local str=''
 		local value=0
@@ -440,4 +424,18 @@ function conky_clock_rings()
 
 	draw_clock_hands(cr, secs, mins, hours)
 	draw_bin_clock(cr, secs, mins, hours)
+end
+
+
+function conky_rings_color(ring_name)
+	local c = rings_colors[ring_name]
+	assert(c, ring_name)
+	return string.format('${color %s}', string.format('%06x', c))
+end
+
+function conky_rings_marker(ring_name)
+	if not rings_colors[ring_name] then
+		return ''
+	end
+	return string.format('%s[*]', conky_rings_color(ring_name))
 end

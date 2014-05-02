@@ -50,10 +50,10 @@ color1 darkgreen
 color2 4444cc
 
 template0 ${color \1}${top name \2}${offset -30}${tab 40}${top pid \2}${tab 20}${top cpu \2}${tab 20}${top mem \2}${tab 100}${top_mem name \2}${offset -30}${tab 145}${top_mem pid \2}${tab 165}${top_mem cpu \2}${tab 185}${top_mem mem \2}$color
-template1 ${if_mounted \2}${color lightgrey}\1${tab 60 1}$color${if_match ${fs_free_perc \2} <= \3}${color red}${endif}${fs_free \2} (${fs_free_perc \2}%)${if_match ${fs_free_perc \2} <= \3}${blink !!!!!}${endif}${tab 90}${fs_bar \2}$color${endif}
+template1 ${if_mounted \2}${color lightgrey}\1 ${lua_parse rings_marker fs_\1}${tab 60 1}$color${if_match ${fs_free_perc \2} <= \3}${color red}${endif}${fs_free \2} (${fs_free_perc \2}%)${if_match ${fs_free_perc \2} <= \3}${blink !!!!!}${endif}${tab 90}${fs_bar \2}$color${endif}
 template2 $color ${tcp_portmon \1 \2 rhost \3} ${alignr} ${tcp_portmon \1 \2 \4 \3} $color
 
-template4 ${color lightgrey}${if_match $\3perc >= \1}${color red}${endif}\4${tab 20}$color${if_match $\3perc >= \1}${color red}${endif}$\3/$\3max - $\3perc%${tab 55}${color light slate gray}${if_match $\3perc >= \2}${color maroon}${endif}${if_match $\3perc >= \1}${color red}${endif}${\3bar}
+template4 ${color lightgrey}${if_match $\3perc >= \1}${color red}${endif}\4 ${lua_parse rings_marker \3}${tab 25}$color${if_match $\3perc >= \1}${color red}${endif}$\3/$\3max - $\3perc%${tab 60}${color light slate gray}${if_match $\3perc >= \2}${color maroon}${endif}${if_match $\3perc >= \1}${color red}${endif}${\3bar}
 template5 ${color darkred}${if_up \1}${color\2}${endif}${addr \1}${color lightgrey}
 template6 ${color\2}${downspeedgraph \1 30,190 aa3333 3333aa 0 -t -l}${alignr}${color\2}${upspeedgraph \1 30,190 3333aa aa3333 0 -t -l}
 template7 ${color\2}${downspeed \1}${color lightgrey}
@@ -61,7 +61,7 @@ template8 ${color\2}${upspeed \1}${color lightgrey}
 template9 ${color light slate gray}${if_match ${cpu cpu\1} >= 85}${color red}${endif}${tab 10}${cpubar cpu\1 5,90}
 
 lua_load ~/.conkyrc.rings.lua
-lua_draw_hook_pre clock_rings
+lua_draw_hook_pre rings_draw
 
 
 TEXT
@@ -73,7 +73,7 @@ ${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg
 ${alignr}Morning (UGT)
 \
 $stippled_hr
-${color lightgrey}CPUz${tab 20}$color$cpu% (${freq_g})${tab 60}${color light slate gray}${cpubar}
+${color lightgrey}CPUz ${lua_parse rings_marker cpu}${tab 20}$color$cpu% (${freq_g})${tab 60}${color light slate gray}${cpubar}
 ${template9 1}${template9 2}${template9 3}${template9 4}
 \
 ${template4 90 70 mem RAM}
@@ -97,7 +97,7 @@ ${template0 gray 9}
 ${template0 gray 10}
 \
 $stippled_hr
-${template1 / / 20}
+${template1 root / 20}
 ${template1 home /home 20}
 ${template1 volatiles /var/volatiles 10}
 ${template1 dump /mnt/volatiles 10}
@@ -109,8 +109,8 @@ ${alignr}${color light slate gray}${top_io pid 1} ${top_io name 1}
 ${color light slate gray}${diskiograph /dev/sda 30,400 3333aa aa3333 0 -t -l}
 \
 $color$stippled_hr
-${color lightgrey}Net_leech: ${template7 wlan0 0} / ${template7 enp1s0 1} / ${template7 ppp0 2}\
-${alignr}${color lightgrey}Net_seed: ${template8 wlan0 0} / ${template8 enp1s0 1} / ${template8 ppp0 2}
+${color lightgrey}Net_leech: ${template7 wlan0 0} / ${template7 enp1s0 1} ${lua_parse rings_marker net_down}${color lightgrey} / ${template7 ppp0 2}\
+${alignr}${color lightgrey}Net_seed: ${template8 wlan0 0} / ${template8 enp1s0 1} ${lua_parse rings_marker net_up}${color lightgrey} / ${template8 ppp0 2}
 \
 ${if_up wlan0}${template6 wlan0 0}
 ${endif}${if_up enp1s0}${template6 enp1s0 1}
