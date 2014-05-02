@@ -242,6 +242,7 @@ file_cap = {
 
 require 'cairo'
 
+
 function rgb_to_r_g_b(color,alpha)
 	return ((color / 0x10000) % 0x100) / 255., ((color / 0x100) % 0x100) / 255., (color % 0x100) / 255., alpha
 end
@@ -268,7 +269,7 @@ end
 
 
 function draw_ring(cr, t, pt)
-	function ring_k(k)
+	local function ring_k(k)
 		local v = pt[k] or rings_defaults[k]
 		assert(v, k)
 		return v
@@ -393,23 +394,20 @@ end
 
 
 function conky_rings_draw()
-	local function setup_rings(cr,pt)
-		local str=''
-		local value=0
+	local function setup_rings(cr, pt)
+		local str, value
 
-		str=string.format('${%s %s}',pt['name'],pt['arg'])
-		str=conky_parse(str)
+		str = string.format('${%s %s}', pt['name'], pt['arg'])
+		str = conky_parse(str)
 
-		value=tonumber(str)
-		if value == nil then value = 0 end
-		pct=value/pt['max']
+		value = tonumber(str)
+		if not value then value = 0 end
+		pct = value / pt['max']
 
-		draw_ring(cr,pct,pt)
+		draw_ring(cr, pct, pt)
 	end
 
-	-- Check that Conky has been running for at least 5s
-
-	if conky_window == nil then return end
+	if not conky_window then return end
 	local cs = cairo_xlib_surface_create(
 		conky_window.display,
 		conky_window.drawable,
@@ -433,7 +431,6 @@ function conky_rings_draw()
 	draw_bin_clock(cr, secs, mins, hours)
 end
 
-
 function conky_rings_color(ring_name)
 	local c = rings_colors[ring_name]
 	assert(c, ring_name)
@@ -446,6 +443,7 @@ function conky_rings_marker(ring_name)
 	end
 	return string.format('%s[*]', conky_rings_color(ring_name))
 end
+
 
 function conky_file_cap_read(model_re)
 	local ts = os.time()
