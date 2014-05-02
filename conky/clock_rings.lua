@@ -1,4 +1,4 @@
--- Clock Rings + Binary Clock
+-- Clock Rings + Binary Clock + File Readers
 
 -- Original Clock Rings by londonali1010 (2009) - edited by h0zza (2012)
 -- [http://blog.hozzamedia.com/software/conky-resource-dialrings/]
@@ -232,6 +232,13 @@ clock_bin = {
 	border_color=0xffffff, border_alpha=0.3, border_width=1
 }
 
+file_cap = {
+	values=nil,
+	glob_cmd="dash -c 'echo /sys/class/power_supply/*/'", glob_dirs=nil,
+	ts_glob_i=600, ts_glob=0,
+	ts_read_i=120, ts_read=0,
+}
+
 
 require 'cairo'
 
@@ -438,4 +445,42 @@ function conky_rings_marker(ring_name)
 		return ''
 	end
 	return string.format('%s[*]', conky_rings_color(ring_name))
+end
+
+function conky_file_cap_read(model_re)
+	local ts = os.time()
+
+	if os.difftime(ts, file_cap.ts_read) > file_cap.ts_read_i then
+		if os.difftime(ts, file_cap.ts_glob) > file_cap.ts_glob_i then
+			local sh = io.popen(file_cap.glob_cmd, 'r')
+			file_cap.glob_dirs = {}
+			for p in string.gmatch(sh:read('*a'), '%S+') do
+				if string.find(p, '*') then break end
+				table.insert(file_cap.glob_dirs, p)
+			end
+			sh:close()
+			file_cap.ts_glob = ts
+		end
+
+		local f, cap, model
+		file_cap.values = {}
+		for i, d in ipairs(file_cap.glob_dirs) do
+			f = io.open(d .. 'capacity')
+			cap = f:read('*a')
+			f:close()
+			f = io.open(d .. 'model_name')
+			model = f:read('*a')
+			file_cap.values[model] = string.match(cap, '%S+')
+			f:close()
+		end
+		file_cap.ts_read = ts
+	end
+
+	for model, cap in pairs(file_cap.values) do
+		if string.match(model, model_re) then
+			return cap
+		end
+	end
+
+	return ''
 end

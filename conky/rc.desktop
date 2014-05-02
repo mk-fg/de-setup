@@ -79,9 +79,9 @@ ${template9 1}${template9 2}${template9 3}${template9 4}
 ${template4 90 70 mem RAM}
 ${template4 80 60 swap Swap}
 ${color lightgrey}Processes:$color $processes  \
-${color lightgrey}Running:$color $running_processes${alignr}${color lightgrey}\
-${color lightgrey}desktop
-${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00}
+${color lightgrey}Running:$color $running_processes${alignr}\
+${color lightgrey}${if_empty ${lua file_cap_read Apple%sWireless}}${else}Keyboard charge: ${lua file_cap_read Apple%sWireless}${endif}
+${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00}\
 \
 $color$stippled_hr
 ${color}---=={ CPU${alignr}RAM }==---
