@@ -445,8 +445,13 @@ function conky_rings_marker(ring_name)
 end
 
 
-function conky_file_cap_read(model_re)
-	local ts = os.time()
+function conky_file_cap_read(...)
+	local model_re, ts = '', os.time()
+
+	for i, v in ipairs(arg) do
+		if string.len(model_re) > 0 then model_re = model_re .. ' ' end
+		model_re = model_re .. v
+	end
 
 	if os.difftime(ts, file_cap.ts_read) > file_cap.ts_read_i then
 		if os.difftime(ts, file_cap.ts_glob) > file_cap.ts_glob_i then
