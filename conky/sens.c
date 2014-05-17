@@ -40,8 +40,7 @@ int main(int argc, char **argv) {
 	int exit_code = 0;
 	FILE *conf_file = NULL;
 
-	if (conf_arg > 0)
-		conf_file = fopen(argv[optind + 1], "r");
+	if (conf_arg > 0) conf_file = fopen(argv[optind], "r");
 	if (sensors_init(conf_file) != 0) {
 		fprintf(stderr, "libsensors init failed\n");
 		exit(1);
