@@ -239,6 +239,12 @@ file_cap = {
 	ts_read_i=120, ts_read=0,
 }
 
+sensors_check = {
+	values=nil,
+	cmd="sens",
+	ts_read_i=120, ts_read=0,
+}
+
 
 require 'cairo'
 
@@ -485,5 +491,26 @@ function conky_file_cap_read(...)
 		end
 	end
 
+	return ''
+end
+
+
+function conky_sens_read(name, precision)
+	local ts = os.time()
+	if os.difftime(ts, sensors_check.ts_read) > sensors_check.ts_read_i then
+		local sh = io.popen(sensors_check.cmd, 'r')
+		sensors_check.values = {}
+		for p in string.gmatch(sh:read('*a'), '(%S+ %S+)\n') do
+			local n = string.find(p, ' ')
+			sensors_check.values[string.sub(p, 0, n-1)] = string.sub(p, n)
+		end
+		sh:close()
+		sensors_check.ts_read = ts
+	end
+
+	if sensors_check.values[name] then
+		local fmt = string.format('%%.%sf', precision or 0)
+		return string.format(fmt, sensors_check.values[name])
+	end
 	return ''
 end
