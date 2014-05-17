@@ -514,3 +514,30 @@ function conky_sens_read(name, precision)
 	end
 	return ''
 end
+
+
+function conky_portmon(dir, count)
+	local p0, p1, ps
+	if dir == 'in'
+	then p0, p1, ps = 1, 32767, 'lservice'
+	 else
+		if dir ~= 'out' then return '' end
+		p0, p1, ps = 32768, 61000, 'rservice'
+	end
+
+	local _fmt_line = '${if_empty ${tcp_portmon %d %d rhost %d}}${else}'
+		.. ' ${tcp_portmon %d %d rhost %d}/${tcp_portmon %d %d %s %d} $endif'
+	function fmt_line(n)
+		return string.format(_fmt_line, p0, p1, n, p0, p1, n, p0, p1, ps, n)
+	end
+
+	local n, lines = 0,''
+	count = tonumber(count)
+	while n < count do
+		if string.len(lines) > 0 then lines = lines .. '\n' end
+		lines = lines .. fmt_line(n) .. '$alignr' .. fmt_line(n + 1)
+		n = n + 2
+	end
+
+	return lines
+end
