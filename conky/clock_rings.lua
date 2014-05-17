@@ -239,7 +239,7 @@ file_cap = {
 	ts_read_i=120, ts_read=0,
 }
 
-sensors_check = {
+sensors = {
 	values=nil,
 	cmd="sens",
 	ts_read_i=120, ts_read=0,
@@ -497,20 +497,20 @@ end
 
 function conky_sens_read(name, precision)
 	local ts = os.time()
-	if os.difftime(ts, sensors_check.ts_read) > sensors_check.ts_read_i then
-		local sh = io.popen(sensors_check.cmd, 'r')
-		sensors_check.values = {}
+	if os.difftime(ts, sensors.ts_read) > sensors.ts_read_i then
+		local sh = io.popen(sensors.cmd, 'r')
+		sensors.values = {}
 		for p in string.gmatch(sh:read('*a'), '(%S+ %S+)\n') do
 			local n = string.find(p, ' ')
-			sensors_check.values[string.sub(p, 0, n-1)] = string.sub(p, n)
+			sensors.values[string.sub(p, 0, n-1)] = string.sub(p, n)
 		end
 		sh:close()
-		sensors_check.ts_read = ts
+		sensors.ts_read = ts
 	end
 
-	if sensors_check.values[name] then
+	if sensors.values[name] then
 		local fmt = string.format('%%.%sf', precision or 0)
-		return string.format(fmt, sensors_check.values[name])
+		return string.format(fmt, sensors.values[name])
 	end
 	return ''
 end
