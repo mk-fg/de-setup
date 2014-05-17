@@ -1,0 +1,9 @@
+[Unit]
+Requires=dbus.service
+After=X.target dbus.service
+PartOf=startx.target
+
+[Service]
+SyslogIdentifier=%p
+Restart=on-failure
+ExecStart=/usr/bin/env bt_agent -n -a ~/.bt_auth
