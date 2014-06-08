@@ -1,7 +1,12 @@
--- Clock Rings + Binary Clock + File Readers
+-- Clock Rings + Binary Clock + File Readers + sensors + misc
 
 -- Original Clock Rings by londonali1010 (2009) - edited by h0zza (2012)
 -- [http://blog.hozzamedia.com/software/conky-resource-dialrings/]
+
+-- Sunrise/Sunset script by 2012 Alexander Yakushev
+-- https://github.com/alexander-yakushev/lustrous/blob/master/sunriseset.lua
+-- Based on algorithm by United Stated Naval Observatory, Washington
+-- Link: http://williams.best.vwh.net/sunrise_sunset_algorithm.htm
 
 
 -- Settings
@@ -245,16 +250,23 @@ sensors = {
 	ts_read_i=120, ts_read=0,
 }
 
+sunrise = {
+	offset=6, -- from UTC, hours
+	lat=56.833,
+	lon=60.583,
+	zenith=90.83,
+}
+
 
 require 'cairo'
 
 
-function rgb_to_r_g_b(color,alpha)
+local function rgb_to_r_g_b(color,alpha)
 	return ((color / 0x10000) % 0x100) / 255., ((color / 0x100) % 0x100) / 255., (color % 0x100) / 255., alpha
 end
 
 
-function draw_bg(cr, t)
+local function draw_bg(cr, t)
 	local radius = t['corner_radius'] / t['aspect']
 	local degrees = math.pi / 180.0
 	local x, y, w, h = t['x'] - t['w'] / 2, t['y'] - t['h'] / 2, t['w'], t['h']
@@ -274,7 +286,7 @@ function draw_bg(cr, t)
 end
 
 
-function draw_ring(cr, t, pt)
+local function draw_ring(cr, t, pt)
 	local function ring_k(k)
 		local v = pt[k] or rings_defaults[k]
 		assert(v, k)
@@ -305,7 +317,7 @@ function draw_ring(cr, t, pt)
 end
 
 
-function draw_clock_hands(cr, secs, mins, hours)
+local function draw_clock_hands(cr, secs, mins, hours)
 	local r, xc, yc = clock['r'], clock['x'], clock['y']
 	local xh,yh,xm,ym,xs,ys
 
@@ -346,12 +358,12 @@ function draw_clock_hands(cr, secs, mins, hours)
 end
 
 
-function bit_check(x, pos)
+local function bit_check(x, pos)
 	pos = 2 ^ pos
 	return x % (pos * 2) >= pos
 end
 
-function bit_decode(x, max)
+local function bit_decode(x, max)
 	local bits, x = {}, tonumber(x)
 	for bit = 0, 7 do
 		if 2 ^ bit > max then break end
@@ -360,12 +372,12 @@ function bit_decode(x, max)
 	return bits
 end
 
-function round(val, decimal)
+local function round(val, decimal)
 	local exp = decimal and 10^decimal or 1
 	return math.ceil(val * exp - 0.5) / exp
 end
 
-function draw_bin_clock(cr, secs, mins, hours)
+local function draw_bin_clock(cr, secs, mins, hours)
 	local bin_bg = {}
 	for k, v in pairs(bg) do bin_bg[k] = v end
 	bin_bg['x'], bin_bg['w'] = bg['x'] + bg['w'] / 2 + clock_bin['w'] / 2 + clock_bin['clock_offset'], clock_bin['w']
@@ -396,6 +408,70 @@ function draw_bin_clock(cr, secs, mins, hours)
 			cairo_stroke(cr)
 		end
 	end
+end
+
+
+local rad = math.rad
+local deg = math.deg
+local floor = math.floor
+local frac = function(n) return n - floor(n) end
+local cos = function(d) return math.cos(rad(d)) end
+local acos = function(d) return deg(math.acos(d)) end
+local sin = function(d) return math.sin(rad(d)) end
+local asin = function(d) return deg(math.asin(d)) end
+local tan = function(d) return math.tan(rad(d)) end
+local atan = function(d) return deg(math.atan(d)) end
+
+local function fit_into_range(val, min, max)
+	local range = max - min
+	local count
+	if val < min then
+		count = floor((min - val) / range) + 1
+		return val + count * range
+	elseif val >= max then
+		count = floor((val - max) / range) + 1
+		return val - count * range
+	else
+		return val
+	end
+end
+
+local function day_of_year(date)
+	local n1 = floor(275 * date.month / 9)
+	local n2 = floor((date.month + 9) / 12)
+	local n3 = (1 + floor((date.year - 4 * floor(date.year / 4) + 2) / 3))
+	return n1 - (n2 * n3) + date.day - 30
+end
+
+local function sunturn_time(date, rising, latitude, longitude, zenith, local_offset)
+	local n, lng_hour = day_of_year(date), longitude / 15
+	local t = rising and n + ((6 - lng_hour) / 24) or n + ((18 - lng_hour) / 24)
+	local M = (0.9856 * t) - 3.289
+	local L = fit_into_range(M + (1.916 * sin(M)) + (0.020 * sin(2 * M)) + 282.634, 0, 360)
+	local RA = fit_into_range(atan(0.91764 * tan(L)), 0, 360)
+	local Lquadrant = floor(L / 90) * 90
+	local RAquadrant = floor(RA / 90) * 90
+	RA = RA + Lquadrant - RAquadrant
+	RA = RA / 15
+	local sinDec = 0.39782 * sin(L)
+	local cosDec = cos(asin(sinDec))
+	local cosH = (cos(zenith) - (sinDec * sin(latitude))) / (cosDec * cos(latitude))
+
+	-- Never rises / never sets at specified date (near poles)
+	if rising and cosH > 1
+		then return 'N/R'
+	elseif cosH < -1
+		then return 'N/S'
+	end
+
+	local H = ( rising and 360 - acos(cosH) or acos(cosH) ) / 15
+	local T = H + RA - (0.06571 * t) - 6.622
+	local UT = fit_into_range(T - lng_hour, 0, 24)
+	local LT = UT + local_offset
+
+	return os.time({
+		day = date.day, month = date.month, year = date.year,
+		hour = floor(LT), min = frac(LT) * 60 })
 end
 
 
@@ -527,7 +603,7 @@ function conky_portmon(dir, count)
 
 	local _fmt_line = '${if_empty ${tcp_portmon %d %d rhost %d}}${else}'
 		.. ' ${tcp_portmon %d %d rhost %d}/${tcp_portmon %d %d %s %d} $endif'
-	function fmt_line(n)
+	local function fmt_line(n)
 		return string.format(_fmt_line, p0, p1, n, p0, p1, n, p0, p1, ps, n)
 	end
 
@@ -540,4 +616,16 @@ function conky_portmon(dir, count)
 	end
 
 	return lines
+end
+
+
+function conky_sun_event_time(t, fmt, ...)
+	assert(t == 'rise' or t == 'set', t)
+
+	fmt = fmt or '%H:%M'
+	for i, v in ipairs(arg) do fmt = fmt .. ' ' .. fmt end
+
+	local ts = sunturn_time( os.date('*t'), t == 'rise',
+		sunrise.lat, sunrise.lon, sunrise.zenith, sunrise.offset )
+	return os.date(fmt, ts)
 end

@@ -70,7 +70,9 @@ ${voffset 240}
 $color${pre_exec id -un}@$nodename - $sysname $kernel\
 ${alignr}${time %a, %d %b, %H:%M (%Z)}
 ${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg\
-${alignr}Morning (UGT)
+${alignr}\
+${color lightgrey}sunrise: ${color #c6cfff}${lua sun_event_time rise}${color}, \
+${color lightgrey}sunset: ${color #fad6a5}${lua sun_event_time set}${color}
 \
 $stippled_hr
 ${color lightgrey}CPUz ${lua_parse rings_marker cpu}${tab 20}$color$cpu% (${freq_g})${tab 60}${color light slate gray}${cpubar}
