@@ -411,25 +411,24 @@ local function draw_bin_clock(cr, secs, mins, hours)
 end
 
 
-local rad = math.rad
-local deg = math.deg
-local floor = math.floor
-local frac = function(n) return n - floor(n) end
-local cos = function(d) return math.cos(rad(d)) end
-local acos = function(d) return deg(math.acos(d)) end
-local sin = function(d) return math.sin(rad(d)) end
-local asin = function(d) return deg(math.asin(d)) end
-local tan = function(d) return math.tan(rad(d)) end
-local atan = function(d) return deg(math.atan(d)) end
+strg = {
+	frac=function(n) return n - math.floor(n) end,
+	cos=function(d) return math.cos(math.rad(d)) end,
+	acos=function(d) return math.deg(math.acos(d)) end,
+	sin=function(d) return math.sin(math.rad(d)) end,
+	asin=function(d) return math.deg(math.asin(d)) end,
+	tan=function(d) return math.tan(math.rad(d)) end,
+	atan=function(d) return math.deg(math.atan(d)) end
+}
 
 local function fit_into_range(val, min, max)
 	local range = max - min
 	local count
 	if val < min then
-		count = floor((min - val) / range) + 1
+		count = math.floor((min - val) / range) + 1
 		return val + count * range
 	elseif val >= max then
-		count = floor((val - max) / range) + 1
+		count = math.floor((val - max) / range) + 1
 		return val - count * range
 	else
 		return val
@@ -437,9 +436,9 @@ local function fit_into_range(val, min, max)
 end
 
 local function day_of_year(date)
-	local n1 = floor(275 * date.month / 9)
-	local n2 = floor((date.month + 9) / 12)
-	local n3 = (1 + floor((date.year - 4 * floor(date.year / 4) + 2) / 3))
+	local n1 = math.floor(275 * date.month / 9)
+	local n2 = math.floor((date.month + 9) / 12)
+	local n3 = (1 + math.floor((date.year - 4 * math.floor(date.year / 4) + 2) / 3))
 	return n1 - (n2 * n3) + date.day - 30
 end
 
@@ -447,15 +446,13 @@ local function sunturn_time(date, rising, latitude, longitude, zenith, local_off
 	local n, lng_hour = day_of_year(date), longitude / 15
 	local t = rising and n + ((6 - lng_hour) / 24) or n + ((18 - lng_hour) / 24)
 	local M = (0.9856 * t) - 3.289
-	local L = fit_into_range(M + (1.916 * sin(M)) + (0.020 * sin(2 * M)) + 282.634, 0, 360)
-	local RA = fit_into_range(atan(0.91764 * tan(L)), 0, 360)
-	local Lquadrant = floor(L / 90) * 90
-	local RAquadrant = floor(RA / 90) * 90
-	RA = RA + Lquadrant - RAquadrant
+	local L = fit_into_range(M + (1.916 * strg.sin(M)) + (0.020 * strg.sin(2 * M)) + 282.634, 0, 360)
+	local RA = fit_into_range(strg.atan(0.91764 * strg.tan(L)), 0, 360)
+	RA = RA + math.floor(L / 90) * 90 - math.floor(RA / 90) * 90
 	RA = RA / 15
-	local sinDec = 0.39782 * sin(L)
-	local cosDec = cos(asin(sinDec))
-	local cosH = (cos(zenith) - (sinDec * sin(latitude))) / (cosDec * cos(latitude))
+	local sinDec = 0.39782 * strg.sin(L)
+	local cosDec = strg.cos(strg.asin(sinDec))
+	local cosH = (strg.cos(zenith) - (sinDec * strg.sin(latitude))) / (cosDec * strg.cos(latitude))
 
 	-- Never rises / never sets at specified date (near poles)
 	if rising and cosH > 1
@@ -464,14 +461,14 @@ local function sunturn_time(date, rising, latitude, longitude, zenith, local_off
 		then return 'N/S'
 	end
 
-	local H = ( rising and 360 - acos(cosH) or acos(cosH) ) / 15
+	local H = ( rising and 360 - strg.acos(cosH) or strg.acos(cosH) ) / 15
 	local T = H + RA - (0.06571 * t) - 6.622
 	local UT = fit_into_range(T - lng_hour, 0, 24)
 	local LT = UT + local_offset
 
 	return os.time({
 		day = date.day, month = date.month, year = date.year,
-		hour = floor(LT), min = frac(LT) * 60 })
+		hour = math.floor(LT), min = strg.frac(LT) * 60 })
 end
 
 
