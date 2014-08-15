@@ -84,7 +84,7 @@ ${color lightgrey}Processes:$color $processes  \
 ${color lightgrey}Running:$color $running_processes${alignr}\
 ${template3 cpu k10temp-0-c3__temp1_input 68}\
 ${color lightgrey}, ${template3 mb atk0110-0-0__temp2_input 60}\
-${color lightgrey}, ${template3 gpu radeon-0-500__temp1_input 80}\
+${color lightgrey}, ${template3 gpu radeon-0-400__temp1_input 80}\
 ${if_empty ${lua file_cap_read Apple Wireless}}${else}${color lightgrey}, kb_batt: ${color}${lua file_cap_read Apple Wireless}${endif}
 ${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00}\
 \
