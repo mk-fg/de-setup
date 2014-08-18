@@ -568,7 +568,7 @@ function conky_file_cap_read(...)
 end
 
 
-function conky_sens_read(name, precision)
+function conky_sens_cache()
 	local ts = os.time()
 	if os.difftime(ts, sensors.ts_read) > sensors.ts_read_i then
 		local sh = io.popen(sensors.cmd, 'r')
@@ -580,7 +580,20 @@ function conky_sens_read(name, precision)
 		sh:close()
 		sensors.ts_read = ts
 	end
+end
 
+function conky_sens_read(name, precision)
+	conky_sens_cache()
+	if not sensors.values[name]
+			and string.sub(name, 0, 3) == 're:' then
+		local name_re = string.sub(name, 4)
+		for k, v in pairs(sensors.values) do
+			if string.find(k, name_re) then
+				sensors.values[name] = sensors.values[k]
+				break
+			end
+		end
+	end
 	if sensors.values[name] then
 		local fmt = string.format('%%.%sf', precision or 0)
 		return string.format(fmt, sensors.values[name])
@@ -593,7 +606,7 @@ function conky_portmon(dir, count)
 	local p0, p1, ps
 	if dir == 'in'
 	then p0, p1, ps = 1, 32767, 'lservice'
-	 else
+	else
 		if dir ~= 'out' then return '' end
 		p0, p1, ps = 32768, 61000, 'rservice'
 	end
@@ -604,7 +617,7 @@ function conky_portmon(dir, count)
 		return string.format(_fmt_line, p0, p1, n, p0, p1, n, p0, p1, ps, n)
 	end
 
-	local n, lines = 0,''
+	local n, lines = 0, ''
 	count = tonumber(count)
 	while n < count do
 		if string.len(lines) > 0 then lines = lines .. '\n' end
