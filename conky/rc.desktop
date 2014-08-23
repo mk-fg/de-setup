@@ -68,7 +68,7 @@ TEXT
 ${voffset 240}
 
 $color${pre_exec id -un}@$nodename - $sysname $kernel\
-${alignr}${time %a, %d %b, %H:%M (%Z)}
+${alignr}${time %a, %d %b, %H:%M:%S (%Z)}
 ${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg\
 ${alignr}\
 ${color lightgrey}sunrise: ${color #c6cfff}${lua sun_event_time rise}${color}, \
