@@ -1,36 +1,112 @@
-#!/bin/bash
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+from __future__ import print_function
 
-dhistfile="$HOME"/.dmenu_history
+import itertools as it, operator as op, functools as ft
+from os.path import join, expanduser, dirname, basename
+from contextlib import contextmanager, closing
+from tempfile import NamedTemporaryFile
+import os, sys, io, json, stat, subprocess
 
-exe=$(
-	( tac "$dhistfile" 2>/dev/null
-		echo $PATH | awk -F: '{for (i=1;i<=NF;i++) print $i}' |
-			xargs -I{} find {}/ \( -type f -o -type l \) -executable -printf '%f\n' )\
-		| awk '{if (!a[$0]) { a[$0]=1; print; }}'\
-		| dmenu -p 'Run:' -i -fn 'Luxi Sans-8:normal' )
-[[ -z "$exe" ]] && exit 0
+dmenu_history = expanduser('~/.dmenu_history')
+dmenu_history_hwm = 10 * 2**10
+dmenu_cache = expanduser('~/.dmenu_cache')
+dmenu_args = ['-p', 'Run:', '-i', '-fn', 'Luxi Sans-8:normal']
 
-## To also check last-cleanup timestamp, not just size
-# ts=$(printf '%(%s)T' -1)
-# ts_chk=$(getfattr -n user.ts.cleanup --only-values "$dhistfile" 2>/dev/null)
-# if [[ $? -ne 0 ]]
-# then ts_chk=$(( $RANDOM / 5 )) # ~0-3300
-# else ts_chk=$(( $ts - $ts_chk ))
-# fi
-ts_chk=0
+@contextmanager
+def replacement(path):
+	kws = dict( delete=False,
+		dir=dirname(path), prefix=basename(path)+'.' )
+	with NamedTemporaryFile(**kws) as tmp:
+		try:
+			yield tmp
+			tmp.flush()
+			os.rename(tmp.name, path)
+		finally:
+			try: os.unlink(tmp.name)
+			except (OSError, IOError): pass
 
-if [[ $ts_chk -gt 3000 || $(stat --format=%s "$dhistfile") -gt 1500 ]]; then
-	## First, remove the duplicate entries
-	awk '{if (!a[$0]) { a[$0]=1; print; }}' "$dhistfile" > "$dhistfile".clean
-	mv "$dhistfile"{.clean,}
-	## Second, if it's still too large, trim it
-	if [[ $(stat --format=%s "$dhistfile") -gt 1500 ]]; then
-		tac "$dhistfile" | sed -n '1,100p' | tac > "$dhistfile".clean
-		mv "$dhistfile"{.clean,}
-	fi
-	# setfattr -n user.ts.cleanup -v "$ts" "$dhistfile"
-fi
+def mask_check(val, mask): return val & mask == mask
 
-echo "$exe" >> "$dhistfile"
+_uid_gid = None
+def exec_check(st):
+	global _uid_gid
+	mode = st.st_mode
+	if mask_check(mode, stat.S_IXOTH): return True
+	if _uid_gid is None: _uid_gid = os.geteuid(), os.getegid()
+	uid, gid = _uid_gid
+	if st.st_gid == gid and mask_check(mode, stat.S_IXGRP): return True
+	if st.st_uid == uid and mask_check(mode, stat.S_IXUSR): return True
+	return False
 
-exec "$exe" "$@"
+def clean_strings(values, index=None):
+	index, values = index and list(index), list(values)
+	if index is None: index = values
+	index = dict.fromkeys(index, True)
+	return filter(None, (v.strip() for v in values if index.pop(v, False)))
+
+def list_lines(values):
+	values = list(values)
+	values.append('')
+	return '\n'.join(values)
+
+def main(args=None):
+	# Read caches
+	try:
+		with open(dmenu_cache) as src:
+			dcache = json.load(src)
+			dmenu_cache_ts = os.stat(dmenu_cache).st_mtime
+	except (OSError, IOError):
+		dcache, dmenu_cache_ts = dict(), 0
+	try:
+		with open(dmenu_history) as src:
+			history = filter(None, src.read().splitlines())
+	except (OSError, IOError): history = list()
+	if os.environ.get('FGRUN_RECACHE'): dmenu_cache_ts = 0
+
+	# Update caches
+	dcache_change, bins, ps = False, set(), set()
+	for p in os.environ.get('PATH', '').split(':'):
+		if not p.strip(): continue
+		try: p_mtime = os.stat(p).st_mtime
+		except (OSError, IOError): continue
+		if p not in dcache or p_mtime > dmenu_cache_ts:
+			dcache_p = list()
+			dcache_change, dcache[p] = True, dcache_p
+			try: bs = os.listdir(p)
+			except (OSError, IOError): continue
+			for b in bs:
+				try:
+					if not exec_check(os.stat(join(p, b))): raise AssertionError
+				except (OSError, IOError, AssertionError): pass
+				else: dcache_p.append(b)
+		ps.add(p)
+	for p in set(dcache).difference(ps):
+		dcache_change = True
+		del dcache[p]
+
+	# Run dmenu
+	dmenu_list = clean_strings(list(it.chain(
+		reversed(history), it.chain.from_iterable(dcache.viewvalues()) )))
+	dmenu = subprocess.Popen(
+		['dmenu'] + dmenu_args,
+		stdin=subprocess.PIPE, stdout=subprocess.PIPE )
+	dmenu.stdin.write(list_lines(dmenu_list))
+	dmenu.stdin.close()
+	del dmenu_list
+	b = dmenu.stdout.read().strip()
+	if dmenu.wait() != 0: b = None
+
+	# Write caches, run app
+	if dcache_change:
+		with replacement(dmenu_cache) as tmp: json.dump(dcache, tmp)
+	if b:
+		if os.stat(dmenu_history).st_size >= dmenu_history_hwm:
+			history.append(b)
+			history = list(reversed(clean_strings(reversed(history))))
+			with replacement(dmenu_history) as tmp: tmp.write(list_lines(history))
+		else:
+			with open(dmenu_history, 'a') as dst: dst.write(b + '\n')
+		os.execvp(b, [b] + sys.argv[1:])
+
+if __name__ == '__main__': sys.exit(main())
