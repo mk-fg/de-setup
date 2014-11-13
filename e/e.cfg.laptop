@@ -1,0 +1,3149 @@
+----- file: e.cfg
+group "E_Config" struct {
+    group "desklock_backgrounds" list {
+        group "E_Config_Desklock_Background" struct {
+            value "file" string: "/tmp/bg.png";
+            value "hide_logo" uchar: 0;
+        }
+    }
+    group "desktop_backgrounds" list {
+        group "E_Config_Desktop_Background" struct {
+            value "container" int: 0;
+            value "desk_x" int: 0;
+            value "desk_y" int: 0;
+            value "file" string: "/tmp/bg.png";
+            value "manager" int: 0;
+            value "zone" int: 0;
+        }
+        group "E_Config_Desktop_Background" struct {
+            value "container" int: 0;
+            value "desk_x" int: 1;
+            value "desk_y" int: 0;
+            value "file" string: "/tmp/bg.png";
+            value "manager" int: 0;
+            value "zone" int: 0;
+        }
+        group "E_Config_Desktop_Background" struct {
+            value "container" int: 0;
+            value "desk_x" int: 2;
+            value "desk_y" int: 0;
+            value "file" string: "/tmp/bg.png";
+            value "manager" int: 0;
+            value "zone" int: 0;
+        }
+        group "E_Config_Desktop_Background" struct {
+            value "container" int: 0;
+            value "desk_x" int: 3;
+            value "desk_y" int: 0;
+            value "file" string: "/tmp/bg.png";
+            value "manager" int: 0;
+            value "zone" int: 0;
+        }
+        group "E_Config_Desktop_Background" struct {
+            value "container" int: 0;
+            value "desk_x" int: 4;
+            value "desk_y" int: 0;
+            value "file" string: "/tmp/bg.png";
+            value "manager" int: 0;
+            value "zone" int: 0;
+        }
+        group "E_Config_Desktop_Background" struct {
+            value "container" int: 0;
+            value "desk_x" int: 5;
+            value "desk_y" int: 0;
+            value "file" string: "/tmp/bg.png";
+            value "manager" int: 0;
+            value "zone" int: 0;
+        }
+    }
+    group "desktop_names" list {
+        group "E_Config_Desktop_Name" struct {
+            value "container" int: 0;
+            value "desk_x" int: 0;
+            value "desk_y" int: 0;
+            value "manager" int: 0;
+            value "name" string: "CNC";
+            value "zone" int: 0;
+        }
+        group "E_Config_Desktop_Name" struct {
+            value "container" int: 0;
+            value "desk_x" int: 1;
+            value "desk_y" int: 0;
+            value "manager" int: 0;
+            value "name" string: "Web";
+            value "zone" int: 0;
+        }
+        group "E_Config_Desktop_Name" struct {
+            value "container" int: 0;
+            value "desk_x" int: 2;
+            value "desk_y" int: 0;
+            value "manager" int: 0;
+            value "name" string: "Emacs";
+            value "zone" int: 0;
+        }
+        group "E_Config_Desktop_Name" struct {
+            value "container" int: 0;
+            value "desk_x" int: 3;
+            value "desk_y" int: 0;
+            value "manager" int: 0;
+            value "name" string: "Mail";
+            value "zone" int: 0;
+        }
+    }
+    group "font_defaults" list {
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "about_title";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "about_version";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "application";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "button";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "button_text";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "check_button";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "clock";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "configure";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "desklock_passwd";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "desklock_title";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "desktop_icon";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "dialog_error";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "e_basic_font";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "entry";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "exebuf_command";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "fileman_icon";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "fileman_typebuf";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "frame";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "ilist_header";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "ilist_item";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "init_text";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "init_title";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "init_version";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "label";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "menu_item";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "menu_title";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "module_large";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "module_large_s";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "module_normal";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "module_normal_s";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "module_small";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "module_small_s";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "move_text";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "radio_button";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "resize_text";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "slider";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "tb_big";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "tb_light";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "tb_plain";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "title_bar";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "tlist";
+        }
+        group "E_Font_Default" struct {
+            value "font" string: "Ubuntu";
+            value "size" int: 11;
+            value "text_class" string: "winlist_title";
+        }
+    }
+    group "gadcons" list {
+        group "E_Config_Gadcon" struct {
+            group "clients" list {
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 720;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 80;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "efm_navigation.1";
+                    value "name" string: "efm_navigation";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 1;
+                }
+            }
+            value "id" int: 1;
+            value "name" string: "toolbar";
+            value "zone" uint: 0;
+        }
+        group "E_Config_Gadcon" struct {
+            group "clients" list {
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 128;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 32;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "backlight";
+                    value "name" string: "backlight";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 5;
+                    value "style" string: "plain";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 224;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 42;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "battery";
+                    value "name" string: "battery";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 1;
+                    value "style" string: "plain";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 256;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 112;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "clock";
+                    value "name" string: "clock";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 2;
+                    value "style" string: "plain";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 320;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 32;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "connman";
+                    value "name" string: "connman";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 11;
+                    value "style" string: "plain";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 192;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 32;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "cpufreq";
+                    value "name" string: "cpufreq";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 7;
+                    value "style" string: "plain";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 1;
+                    value "geom.pos" int: 96;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 216;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "ibar.1";
+                    value "name" string: "ibar";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 5;
+                    value "style" string: "inset";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 64;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 24;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "ibox.1";
+                    value "name" string: "ibox";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 4;
+                    value "style" string: "inset";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 288;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 32;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "mixer.0";
+                    value "name" string: "mixer";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 10;
+                    value "style" string: "plain";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 32;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 32;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "pager";
+                    value "name" string: "pager";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 2;
+                    value "style" string: "inset";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 0;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 32;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "start";
+                    value "name" string: "start";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 1;
+                    value "style" string: "plain";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 1286;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 1366;
+                    value "geom.size" int: 16;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "systray";
+                    value "name" string: "systray";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 7;
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 1;
+                    value "geom.pos" int: 352;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 308;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "tasks.0";
+                    value "name" string: "tasks";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 6;
+                    value "style" string: "inset";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 160;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 800;
+                    value "geom.size" int: 32;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "temperature.1";
+                    value "name" string: "temperature";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 0;
+                    value "state_info.seq" int: 6;
+                    value "style" string: "plain";
+                }
+                group "E_Config_Gadcon_Client" struct {
+                    value "autoscroll" uchar: 0;
+                    value "geom.pos" int: 154;
+                    value "geom.pos_x" double: 0.0000000000000000000000000;
+                    value "geom.pos_y" double: 0.0000000000000000000000000;
+                    value "geom.res" int: 760;
+                    value "geom.size" int: 42;
+                    value "geom.size_h" double: 0.0000000000000000000000000;
+                    value "geom.size_w" double: 0.0000000000000000000000000;
+                    value "id" string: "xkbswitch";
+                    value "name" string: "xkbswitch";
+                    value "orient" int: 0;
+                    value "resizable" uchar: 0;
+                    value "state_info.flags" int: 3;
+                    value "state_info.seq" int: 3;
+                    value "style" string: "plain";
+                }
+            }
+            value "id" int: 1;
+            value "name" string: "shelf";
+            value "zone" uint: 0;
+        }
+        group "E_Config_Gadcon" struct {
+            value "id" int: 114;
+            value "name" string: "gadman";
+            value "zone" uint: 0;
+        }
+        group "E_Config_Gadcon" struct {
+            value "id" int: 115;
+            value "name" string: "gadman_top";
+            value "zone" uint: 0;
+        }
+    }
+    group "mime_icons" list {
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "application/mxf";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "application/pdf";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "application/postscript";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "application/vnd.rn-realmedia";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "DESKTOP";
+            value "mime" string: "application/x-desktop";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "application/x-edje";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "application/x-shockwave-flash";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "application/x-xcf";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/bmp";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/gif";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/jpeg";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/png";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/svg+xml";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/svg+xml-compressed";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/tiff";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/vnd.microsoft.icon";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/vnd.wap.wbmp";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-compressed-xcf";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-icon";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-ms-bmp";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-photoshop";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-pixmap";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-portable-anymap";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-portable-bitmap";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-portable-graymap";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-portable-pixmap";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-tga";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-xcf";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "image/x-xpixmap";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/3gpp";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/3gpp";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/3gpp2";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/dv";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/mp2t";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/mp2t";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/mp4";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/mp4";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/mp4v-es";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/mpeg";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/mpeg";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/ogg";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/quicktime";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/quicktime";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/webm";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/webm";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-flv";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-flv";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-la-asf";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-matroska";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-matroska";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-ms-asf";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-ms-wm";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-ms-wmv";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-ms-wmx";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-ms-wvx";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-msvideo";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-ogm+ogg";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-real-video";
+        }
+        group "E_Config_Mime_Icon" struct {
+            value "icon" string: "THUMB";
+            value "mime" string: "video/x-theora+ogg";
+        }
+    }
+    group "modules" list {
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 0;
+            value "name" string: "backlight";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "battery";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "clock";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_applications";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_bindings";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_dialogs";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_display";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_interaction";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_intl";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_menus";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_paths";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_performance";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_randr";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_shelves";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_theme";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_window_manipulation";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "conf_window_remembers";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 0;
+            value "name" string: "cpufreq";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 0;
+            value "enabled" uchar: 0;
+            value "name" string: "dropshadow";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "everything";
+            value "priority" int: -1000;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 0;
+            value "name" string: "fileman";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 0;
+            value "name" string: "fileman_opinfo";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "gadman";
+            value "priority" int: 100;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "ibar";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "ibox";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 0;
+            value "enabled" uchar: 1;
+            value "name" string: "lokker";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 0;
+            value "name" string: "mixer";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 0;
+            value "enabled" uchar: 1;
+            value "name" string: "msgbus";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 0;
+            value "name" string: "notification";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 0;
+            value "name" string: "pager";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "shot";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 0;
+            value "name" string: "start";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "syscon";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 0;
+            value "enabled" uchar: 1;
+            value "name" string: "systray";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 0;
+            value "enabled" uchar: 1;
+            value "name" string: "tasks";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 0;
+            value "enabled" uchar: 0;
+            value "name" string: "teamwork";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 0;
+            value "name" string: "temperature";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "winlist";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
+            value "delayed" uchar: 1;
+            value "enabled" uchar: 1;
+            value "name" string: "xkbswitch";
+            value "priority" int: 0;
+        }
+    }
+    group "remembers" list {
+    }
+    group "shelves" list {
+        group "E_Config_Shelf" struct {
+            value "autohide" int: 1;
+            value "autohide_show_action" int: 0;
+            value "container" int: 0;
+            value "desk_show_mode" int: 0;
+            value "fit_along" uchar: 1;
+            value "fit_size" uchar: 0;
+            value "hide_duration" float: 1.0000000000000000000000000;
+            value "hide_timeout" float: 1.0000000000000000000000000;
+            value "id" int: 1;
+            value "layer" int: 250;
+            value "manager" int: 0;
+            value "name" string: "shelf";
+            value "orient" int: 9;
+            value "overlap" int: 1;
+            value "popup" uchar: 0;
+            value "size" int: 28;
+            value "style" string: "default";
+            value "zone" int: 0;
+        }
+    }
+    group "syscon.actions" list {
+        group "E_Config_Syscon_Action" struct {
+            value "action" string: "desk_lock";
+            value "button" string: "button";
+            value "icon" string: "system-lock-screen";
+            value "is_main" int: 1;
+        }
+        group "E_Config_Syscon_Action" struct {
+            value "action" string: "halt";
+            value "button" string: "button";
+            value "icon" string: "system-shutdown";
+            value "is_main" int: 2;
+            value "params" string: "now";
+        }
+        group "E_Config_Syscon_Action" struct {
+            value "action" string: "hibernate";
+            value "button" string: "button";
+            value "icon" string: "system-suspend-hibernate";
+            value "is_main" int: 0;
+            value "params" string: "now";
+        }
+        group "E_Config_Syscon_Action" struct {
+            value "action" string: "logout";
+            value "button" string: "button";
+            value "icon" string: "system-log-out";
+            value "is_main" int: 0;
+            value "params" string: "now";
+        }
+        group "E_Config_Syscon_Action" struct {
+            value "action" string: "reboot";
+            value "button" string: "button";
+            value "icon" string: "system-restart";
+            value "is_main" int: 0;
+            value "params" string: "now";
+        }
+        group "E_Config_Syscon_Action" struct {
+            value "action" string: "suspend";
+            value "button" string: "button";
+            value "icon" string: "system-suspend";
+            value "is_main" int: 1;
+            value "params" string: "now";
+        }
+    }
+    group "xkb.current_layout" struct {
+        group "E_Config_XKB_Layout" struct {
+            value "model" string: "default";
+            value "name" string: "us";
+            value "variant" string: "basic";
+        }
+    }
+    group "xkb.used_layouts" list {
+        group "E_Config_XKB_Layout" struct {
+            value "model" string: "default";
+            value "name" string: "ru";
+            value "variant" string: "basic";
+        }
+        group "E_Config_XKB_Layout" struct {
+            value "model" string: "default";
+            value "name" string: "us";
+            value "variant" string: "basic";
+        }
+    }
+    group "xkb.used_options" list {
+        group "E_Config_XKB_Option" struct {
+            value "name" string: "grp:caps_toggle";
+        }
+    }
+    value "allow_above_fullscreen" int: 0;
+    value "allow_manip" int: 1;
+    value "always_click_to_focus" int: 1;
+    value "always_click_to_raise" int: 1;
+    value "auto_raise_delay" double: 0.5000000000000000000000000;
+    value "backlight.dim" double: 0.2999999999999999888977698;
+    value "backlight.idle_dim" uchar: 0;
+    value "backlight.normal" double: 1.0000000000000000000000000;
+    value "backlight.timer" double: 30.0000000000000000000000000;
+    value "backlight.transition" double: 0.5000000000000000000000000;
+    value "border_fix_on_shelf_toggle" int: 1;
+    value "border_keyboard.move.dx" uchar: 1;
+    value "border_keyboard.move.dy" uchar: 1;
+    value "border_keyboard.resize.dx" uchar: 1;
+    value "border_keyboard.resize.dy" uchar: 1;
+    value "border_keyboard.timeout" double: 0.0000000000000000000000000;
+    value "border_raise_on_focus" int: 1;
+    value "border_raise_on_mouse_action" int: 1;
+    value "border_shade_animate" int: 1;
+    value "border_shade_speed" double: 3000.0000000000000000000000000;
+    value "border_shade_transition" int: 3;
+    value "cache_flush_poll_interval" int: 512;
+    value "cfgdlg_auto_apply" int: 0;
+    value "cfgdlg_default_mode" int: 0;
+    value "cfgdlg_normal_wins" uchar: 0;
+    value "clientlist_group_by" int: 0;
+    value "clientlist_include_all_zones" int: 0;
+    value "clientlist_limit_caption_len" int: 0;
+    value "clientlist_max_caption_len" int: 2;
+    value "clientlist_separate_iconified_apps" int: 0;
+    value "clientlist_separate_with" int: 1;
+    value "clientlist_sort_by" int: 2;
+    value "clientlist_warp_to_iconified_desktop" int: 0;
+    value "cnfmdlg_disabled" int: 0;
+    value "config_type" uint: 3;
+    value "config_version" int: 1000017;
+    value "cursor_size" int: 32;
+    value "default_system_menu" string: "/usr/etc/xdg/menus/enlightenment.menu";
+    value "desk_auto_switch" int: 0;
+    value "desk_flip_animate_interpolation" int: 0;
+    value "desk_flip_animate_mode" int: 1;
+    value "desk_flip_wrap" int: 0;
+    value "desk_resist" int: 32;
+    value "deskenv.load_gnome" uchar: 0;
+    value "deskenv.load_kde" uchar: 0;
+    value "deskenv.load_xmodmap" uchar: 1;
+    value "deskenv.load_xrdb" uchar: 1;
+    value "desklock_ask_presentation" uchar: 0;
+    value "desklock_ask_presentation_timeout" double: 30.0000000000000000000000000;
+    value "desklock_auth_method" int: 0;
+    value "desklock_autolock_idle" int: 1;
+    value "desklock_autolock_idle_timeout" double: 5400.0000000000000000000000000;
+    value "desklock_autolock_screensaver" int: 1;
+    value "desklock_login_box_zone" int: -1;
+    value "desklock_on_suspend" int: 1;
+    value "desklock_passwd" int: 0;
+    value "desklock_pin" int: 0;
+    value "desklock_post_screensaver_time" double: 300.0000000000000000000000000;
+    value "desklock_start_locked" int: 0;
+    value "desklock_use_custom_desklock" int: 0;
+    value "desktop_default_name" string: "%i-%i";
+    value "desktop_default_window_profile" string: "standard";
+    value "device_auto_mount" int: 0;
+    value "device_auto_open" int: 0;
+    value "device_desktop" int: 1;
+    value "disable_all_pointer_warps" int: 0;
+    value "dpms_enable" int: 1;
+    value "dpms_off_enable" int: 1;
+    value "dpms_off_timeout" int: 5400;
+    value "dpms_standby_enable" int: 1;
+    value "dpms_standby_timeout" int: 5400;
+    value "dpms_suspend_enable" int: 1;
+    value "dpms_suspend_timeout" int: 5400;
+    value "drag_resist" int: 16;
+    value "edge_flip_dragging" int: 1;
+    value "edje_cache" int: 32;
+    value "edje_collection_cache" int: 64;
+    value "exe_always_single_instance" uchar: 0;
+    value "exebuf_term_cmd" string: "fgterm -hold -e";
+    value "exec.expire_timeout" double: 30.0000000000000000000000000;
+    value "exec.show_exit_dialog" uchar: 0;
+    value "exec.show_run_dialog" uchar: 1;
+    value "filemanager_copy" uchar: 0;
+    value "filemanager_secure_rm" uchar: 0;
+    value "filemanager_single_click" uchar: 0;
+    value "focus_last_focused_per_desktop" int: 1;
+    value "focus_policy" int: 0;
+    value "focus_revert_on_hide_or_close" int: 1;
+    value "focus_setting" int: 1;
+    value "font_cache" int: 512;
+    value "font_hinting" int: 1;
+    value "framerate" double: 130.0000000000000000000000000;
+    value "fullscreen_flip" int: 1;
+    value "fullscreen_policy" int: 0;
+    value "gadget_resist" int: 32;
+    value "geometry_auto_move" int: 1;
+    value "geometry_auto_resize_limit" int: 1;
+    value "icon_theme" string: "Tango";
+    value "icon_theme_overrides" uchar: 0;
+    value "idle_cursor" uchar: 1;
+    value "image_cache" int: 4096;
+    value "kill_if_close_not_possible" int: 1;
+    value "kill_process" int: 1;
+    value "kill_timer_wait" double: 10.0000000000000000000000000;
+    value "language" string: "en_US.UTF-8";
+    value "maximize_policy" int: 50;
+    value "menu_apps_show" int: 0;
+    value "menu_autoscroll_cursor_margin" int: 1;
+    value "menu_autoscroll_margin" int: 0;
+    value "menu_eap_comment_show" int: 0;
+    value "menu_eap_generic_show" int: 1;
+    value "menu_eap_name_show" int: 1;
+    value "menu_favorites_show" int: 0;
+    value "menu_gadcon_client_toplevel" int: 0;
+    value "menu_icons_hide" uchar: 0;
+    value "menus_click_drag_timeout" double: 0.2500000000000000000000000;
+    value "menus_fast_mouse_move_threshhold" double: 300.0000000000000000000000000;
+    value "menus_scroll_speed" double: 1000.0000000000000000000000000;
+    value "mode.offline" uchar: 0;
+    value "mode.presentation" uchar: 0;
+    value "mouse_accel_denominator" int: 1;
+    value "mouse_accel_numerator" int: 10;
+    value "mouse_accel_threshold" int: 10;
+    value "mouse_hand" int: 1;
+    value "move_info_follows" int: 1;
+    value "move_info_visible" int: 1;
+    value "multiscreen_flip" int: 0;
+    value "no_dpms_on_fullscreen" uchar: 0;
+    value "no_module_delay" int: 0;
+    value "null_container_win" uchar: 0;
+    value "pass_click_on" int: 1;
+    value "ping_clients" int: 1;
+    value "ping_clients_interval" int: 128;
+    value "pointer_slide" int: 0;
+    value "pointer_warp_speed" double: 0.1000000000000000055511151;
+    value "powersave.extreme" double: 1200.0000000000000000000000000;
+    value "powersave.high" double: 300.0000000000000000000000000;
+    value "powersave.low" double: 5.0000000000000000000000000;
+    value "powersave.max" int: 4;
+    value "powersave.medium" double: 60.0000000000000000000000000;
+    value "powersave.min" int: 0;
+    value "powersave.none" double: 0.2500000000000000000000000;
+    value "priority" int: 3;
+    value "raise_on_revert_focus" int: 0;
+    value "remember_internal_fm_windows" uchar: 1;
+    value "remember_internal_fm_windows_globally" uchar: 0;
+    value "remember_internal_windows" int: 3;
+    value "resize_info_follows" int: 1;
+    value "resize_info_visible" int: 1;
+    value "scale.base_dpi" int: 90;
+    value "scale.factor" double: 1.0000000000000000000000000;
+    value "scale.max" double: 3.0000000000000000000000000;
+    value "scale.min" double: 0.8000000000000000444089210;
+    value "scale.use_custom" uchar: 0;
+    value "scale.use_dpi" uchar: 1;
+    value "screen_limits" int: 0;
+    value "screensaver_ask_presentation" uchar: 0;
+    value "screensaver_ask_presentation_timeout" double: 30.0000000000000000000000000;
+    value "screensaver_blanking" int: 2;
+    value "screensaver_enable" int: 1;
+    value "screensaver_expose" int: 2;
+    value "screensaver_interval" int: 0;
+    value "screensaver_suspend" uchar: 0;
+    value "screensaver_suspend_delay" double: 15.0000000000000000000000000;
+    value "screensaver_suspend_on_ac" uchar: 0;
+    value "screensaver_timeout" int: 5400;
+    value "screensaver_wake_on_notify" int: 0;
+    value "screensaver_wake_on_urgent" int: 0;
+    value "show_cursor" uchar: 1;
+    value "show_desktop_icons" int: 1;
+    value "show_splash" int: 0;
+    value "syscon.do_input" uchar: 1;
+    value "syscon.extra.icon_size" int: 48;
+    value "syscon.main.icon_size" int: 48;
+    value "syscon.secondary.icon_size" int: 48;
+    value "syscon.timeout" double: 5.0000000000000000000000000;
+    value "theme_default_border_style" string: "default";
+    value "thumb_nice" int: 0;
+    value "thumbscroll_enable" int: 0;
+    value "thumbscroll_friction" double: 1.0000000000000000000000000;
+    value "thumbscroll_momentum_threshhold" double: 100.0000000000000000000000000;
+    value "thumbscroll_threshhold" int: 8;
+    value "transient.desktop" int: 1;
+    value "transient.iconify" int: 1;
+    value "transient.layer" int: 1;
+    value "transient.lower" int: 1;
+    value "transient.move" int: 1;
+    value "transient.raise" int: 1;
+    value "transient.resize" int: 0;
+    value "transition_change" string: "vswipe";
+    value "transition_desk" string: "crossfade";
+    value "transition_start" string: "vswipe";
+    value "update.check" uchar: 0;
+    value "update.later" uchar: 0;
+    value "use_app_icon" int: 0;
+    value "use_auto_raise" int: 0;
+    value "use_desktop_window_profile" int: 0;
+    value "use_e_cursor" int: 0;
+    value "use_resist" int: 1;
+    value "wallpaper_import_last_dev" string: "~/";
+    value "wallpaper_import_last_path" string: "/";
+    value "window_activehint_policy" int: 2;
+    value "window_grouping" int: 0;
+    value "window_placement_policy" int: 0;
+    value "window_resist" int: 12;
+    value "winlist_list_focus_while_selecting" int: 1;
+    value "winlist_list_jump_desk_while_selecting" int: 1;
+    value "winlist_list_move_after_select" int: 0;
+    value "winlist_list_raise_while_selecting" int: 1;
+    value "winlist_list_show_iconified" int: 1;
+    value "winlist_list_show_other_desk_iconified" int: 1;
+    value "winlist_list_show_other_desk_windows" int: 0;
+    value "winlist_list_show_other_screen_iconified" int: 1;
+    value "winlist_list_show_other_screen_windows" int: 0;
+    value "winlist_list_uncover_while_selecting" int: 0;
+    value "winlist_no_warp_on_direction" int: 0;
+    value "winlist_pos_align_x" double: 0.5000000000000000000000000;
+    value "winlist_pos_align_y" double: 0.5000000000000000000000000;
+    value "winlist_pos_max_h" int: 320;
+    value "winlist_pos_max_w" int: 320;
+    value "winlist_pos_min_h" int: 0;
+    value "winlist_pos_min_w" int: 0;
+    value "winlist_pos_size_h" double: 0.5000000000000000000000000;
+    value "winlist_pos_size_w" double: 0.5000000000000000000000000;
+    value "winlist_scroll_animate" int: 1;
+    value "winlist_scroll_speed" double: 0.1000000000000000055511151;
+    value "winlist_warp_at_end" int: 1;
+    value "winlist_warp_speed" double: 0.0000000000000000000000000;
+    value "winlist_warp_while_selecting" int: 1;
+    value "xkb.cur_layout" string: "us";
+    value "xkb.default_model" string: "default";
+    value "xkb.dont_touch_my_damn_keyboard" uchar: 0;
+    value "xkb.only_label" int: 0;
+    value "xsettings.enabled" uchar: 0;
+    value "xsettings.match_e17_icon_theme" uchar: 0;
+    value "xsettings.match_e17_theme" uchar: 0;
+    value "xsettings.net_theme_name" string: "Default";
+    value "xsettings.xft_antialias" int: 0;
+    value "xsettings.xft_hinting" int: 0;
+    value "zone_desks_x_count" int: 6;
+    value "zone_desks_y_count" int: 1;
+}
+----- file: e_bindings.cfg
+group "E_Config_Bindings" struct {
+    group "acpi_bindings" list {
+        group "E_Config_Binding_Acpi" struct {
+            value "action" string: "syscon";
+            value "context" int: 0;
+            value "params" string: "";
+            value "status" int: -1;
+            value "type" int: 3;
+        }
+        group "E_Config_Binding_Acpi" struct {
+            value "action" string: "halt";
+            value "context" int: 0;
+            value "status" int: -1;
+            value "type" int: 6;
+        }
+    }
+    group "key_bindings" list {
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Menu";
+            value "modifiers" int: 0;
+            value "params" string: "xdotool click 2";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Pause";
+            value "modifiers" int: 0;
+            value "params" string: "dbus-send --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.CloseNotification uint32:0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Print";
+            value "modifiers" int: 0;
+            value "params" string: "dbus-send --session --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.DBus.Properties.Set string:org.freedesktop.Notifications string:plug variant:string:toggle";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "volume_decrease";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86AudioLowerVolume";
+            value "modifiers" int: 0;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "volume_mute";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86AudioMute";
+            value "modifiers" int: 0;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "volume_increase";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86AudioRaiseVolume";
+            value "modifiers" int: 0;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "backlight";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86BrightnessAdjust";
+            value "modifiers" int: 0;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "hibernate";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86Hibernate";
+            value "modifiers" int: 0;
+            value "params" string: "now";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "backlight";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86LightBulb";
+            value "modifiers" int: 0;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "backlight_adjust";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86MonBrightnessDown";
+            value "modifiers" int: 0;
+            value "params" string: "-0.1";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "backlight_adjust";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86MonBrightnessUp";
+            value "modifiers" int: 0;
+            value "params" string: "0.1";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "hibernate";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86PowerDown";
+            value "modifiers" int: 0;
+            value "params" string: "now";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "halt";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86PowerOff";
+            value "modifiers" int: 0;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "suspend";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86Sleep";
+            value "modifiers" int: 0;
+            value "params" string: "now";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "suspend";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86Standby";
+            value "modifiers" int: 0;
+            value "params" string: "now";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "menu_show";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86Start";
+            value "modifiers" int: 0;
+            value "params" string: "all";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "suspend";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "XF86Suspend";
+            value "modifiers" int: 0;
+            value "params" string: "now";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Pause";
+            value "modifiers" int: 1;
+            value "params" string: "dbus-send --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.Flush";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Print";
+            value "modifiers" int: 1;
+            value "params" string: "dbus-send --session --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.DBus.Properties.Set string:org.freedesktop.Notifications string:cleanup variant:string:toggle";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "logout";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Escape";
+            value "modifiers" int: 10;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_jump_to_or_start";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Return";
+            value "modifiers" int: 12;
+            value "params" string: "emacs ~/bin/wrappers/emacs";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "s";
+            value "modifiers" int: 12;
+            value "params" string: "default horizontal";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "v";
+            value "modifiers" int: 12;
+            value "params" string: "xclipc --slashes-to-dots";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_kill";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "x";
+            value "modifiers" int: 12;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_fullscreen_toggle";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "s";
+            value "modifiers" int: 13;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "menu_show";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Menu";
+            value "modifiers" int: 2;
+            value "params" string: "clients";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Pause";
+            value "modifiers" int: 2;
+            value "params" string: "dbus-send --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.Cleanup double:2.0 uint32:0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "screen_send_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F1";
+            value "modifiers" int: 3;
+            value "params" string: "0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "screen_send_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F2";
+            value "modifiers" int: 3;
+            value "params" string: "1";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "screen_send_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F3";
+            value "modifiers" int: 3;
+            value "params" string: "2";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "screen_send_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F4";
+            value "modifiers" int: 3;
+            value "params" string: "3";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Pause";
+            value "modifiers" int: 3;
+            value "params" string: "dbus-send --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.Cleanup double:0 uint32:1";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Pause";
+            value "modifiers" int: 4;
+            value "params" string: "dbus-send --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.Redisplay";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "shot";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Print";
+            value "modifiers" int: 4;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Down";
+            value "modifiers" int: 5;
+            value "params" string: "0 1";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F10";
+            value "modifiers" int: 5;
+            value "params" string: "default horizontal";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Left";
+            value "modifiers" int: 5;
+            value "params" string: "-1 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Right";
+            value "modifiers" int: 5;
+            value "params" string: "1 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "winlist";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Tab";
+            value "modifiers" int: 5;
+            value "params" string: "prev";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Up";
+            value "modifiers" int: 5;
+            value "params" string: "0 -1";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "syscon";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Delete";
+            value "modifiers" int: 6;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "kbd_layout";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "1";
+            value "modifiers" int: 8;
+            value "params" string: "us";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "kbd_layout";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "2";
+            value "modifiers" int: 8;
+            value "params" string: "ru";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "winlist";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Down";
+            value "modifiers" int: 8;
+            value "params" string: "down";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F1";
+            value "modifiers" int: 8;
+            value "params" string: "0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F10";
+            value "modifiers" int: 8;
+            value "params" string: "9";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F11";
+            value "modifiers" int: 8;
+            value "params" string: "fgsheep";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_lock";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F12";
+            value "modifiers" int: 8;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F2";
+            value "modifiers" int: 8;
+            value "params" string: "1";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F3";
+            value "modifiers" int: 8;
+            value "params" string: "2";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F4";
+            value "modifiers" int: 8;
+            value "params" string: "3";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F5";
+            value "modifiers" int: 8;
+            value "params" string: "4";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F6";
+            value "modifiers" int: 8;
+            value "params" string: "5";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F7";
+            value "modifiers" int: 8;
+            value "params" string: "6";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F8";
+            value "modifiers" int: 8;
+            value "params" string: "7";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "desk_linear_flip_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F9";
+            value "modifiers" int: 8;
+            value "params" string: "8";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "winlist";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Left";
+            value "modifiers" int: 8;
+            value "params" string: "left";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Print";
+            value "modifiers" int: 8;
+            value "params" string: "fgblank";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Return";
+            value "modifiers" int: 8;
+            value "params" string: "fgterm";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "winlist";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Right";
+            value "modifiers" int: 8;
+            value "params" string: "right";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "winlist";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Tab";
+            value "modifiers" int: 8;
+            value "params" string: "next";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "winlist";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Up";
+            value "modifiers" int: 8;
+            value "params" string: "up";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "apostrophe";
+            value "modifiers" int: 8;
+            value "params" string: "ec -- -e \"(emms-next)\"";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "c";
+            value "modifiers" int: 8;
+            value "params" string: "default right";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_jump_to_or_start";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "f";
+            value "modifiers" int: 8;
+            value "params" string: "firefox ~/bin/wrappers/firefox";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_jump_to_or_start";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "g";
+            value "modifiers" int: 8;
+            value "params" string: "claws-mail ~/bin/wrappers/claws-mail";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "grave";
+            value "modifiers" int: 8;
+            value "params" string: "fgrun";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "s";
+            value "modifiers" int: 8;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "semicolon";
+            value "modifiers" int: 8;
+            value "params" string: "ec -- -e \"(emms-previous)\"";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "slash";
+            value "modifiers" int: 8;
+            value "params" string: "ec -- -e \"(fg-emms-notify)\"";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "v";
+            value "modifiers" int: 8;
+            value "params" string: "xclipc --nostrip";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_move_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Down";
+            value "modifiers" int: 9;
+            value "params" string: "0 10";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F1";
+            value "modifiers" int: 9;
+            value "params" string: "0 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F10";
+            value "modifiers" int: 9;
+            value "params" string: "9 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F2";
+            value "modifiers" int: 9;
+            value "params" string: "1 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F3";
+            value "modifiers" int: 9;
+            value "params" string: "2 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F4";
+            value "modifiers" int: 9;
+            value "params" string: "3 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F5";
+            value "modifiers" int: 9;
+            value "params" string: "4 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F6";
+            value "modifiers" int: 9;
+            value "params" string: "5 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F7";
+            value "modifiers" int: 9;
+            value "params" string: "6 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F8";
+            value "modifiers" int: 9;
+            value "params" string: "7 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_desk_move_to";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "F9";
+            value "modifiers" int: 9;
+            value "params" string: "8 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_move_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Left";
+            value "modifiers" int: 9;
+            value "params" string: "-10 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_move_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Right";
+            value "modifiers" int: 9;
+            value "params" string: "10 0";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "winlist";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Tab";
+            value "modifiers" int: 9;
+            value "params" string: "prev";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_move_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Up";
+            value "modifiers" int: 9;
+            value "params" string: "0 -10";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "apostrophe";
+            value "modifiers" int: 9;
+            value "params" string: "ec -- -e \"(emms-pause)\"";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "c";
+            value "modifiers" int: 9;
+            value "params" string: "default left";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "s";
+            value "modifiers" int: 9;
+            value "params" string: "default vertical";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "semicolon";
+            value "modifiers" int: 9;
+            value "params" string: "ec -- -e \"(emms-stop)\"";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "v";
+            value "modifiers" int: 9;
+            value "params" string: "xclipc";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_close";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "x";
+            value "modifiers" int: 9;
+        }
+    }
+    group "mouse_bindings" list {
+        group "E_Config_Binding_Mouse" struct {
+            value "action" string: "window_move";
+            value "any_mod" uchar: 0;
+            value "button" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 8;
+        }
+        group "E_Config_Binding_Mouse" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 0;
+            value "button" uchar: 3;
+            value "context" int: 2;
+            value "modifiers" int: 8;
+        }
+        group "E_Config_Binding_Mouse" struct {
+            value "action" string: "menu_show";
+            value "any_mod" uchar: 0;
+            value "button" uchar: 2;
+            value "context" int: 3;
+            value "modifiers" int: 0;
+            value "params" string: "clients";
+        }
+        group "E_Config_Binding_Mouse" struct {
+            value "action" string: "menu_show";
+            value "any_mod" uchar: 0;
+            value "button" uchar: 3;
+            value "context" int: 3;
+            value "modifiers" int: 0;
+            value "params" string: "favorites";
+        }
+        group "E_Config_Binding_Mouse" struct {
+            value "action" string: "menu_show";
+            value "any_mod" uchar: 0;
+            value "button" uchar: 1;
+            value "context" int: 3;
+            value "modifiers" int: 0;
+            value "params" string: "main";
+        }
+    }
+    group "signal_bindings" list {
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,clicked,1";
+            value "source" string: "e.event.maximize";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "smart";
+            value "signal" string: "mouse,clicked,2";
+            value "source" string: "e.event.maximize";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_kill";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,clicked,3";
+            value "source" string: "e.event.close";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "expand";
+            value "signal" string: "mouse,clicked,3";
+            value "source" string: "e.event.maximize";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_menu";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,clicked,3";
+            value "source" string: "e.event.titlebar";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_menu";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,clicked,?";
+            value "source" string: "e.event.icon";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_lower";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,clicked,?";
+            value "source" string: "e.event.lower";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_iconic_toggle";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,clicked,?";
+            value "source" string: "e.event.minimize";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_shaded_toggle";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "up";
+            value "signal" string: "mouse,clicked,?";
+            value "source" string: "e.event.shade";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_close";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,clicked,[12]";
+            value "source" string: "e.event.close";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_drag_icon";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.icon";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "b";
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.resize.b";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "bl";
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.resize.bl";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "br";
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.resize.br";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "l";
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.resize.l";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "r";
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.resize.r";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "t";
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.resize.t";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "tl";
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.resize.tl";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "tr";
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.resize.tr";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_move";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,down,1";
+            value "source" string: "e.event.titlebar";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_shaded_toggle";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "up";
+            value "signal" string: "mouse,down,1,double";
+            value "source" string: "e.event.titlebar";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_shaded_toggle";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "up";
+            value "signal" string: "mouse,down,2";
+            value "source" string: "e.event.titlebar";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_move";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "signal" string: "mouse,down,3";
+            value "source" string: "e.event.resize.*";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_resize";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "end";
+            value "signal" string: "mouse,up,1";
+            value "source" string: "e.event.resize.*";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_move";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "end";
+            value "signal" string: "mouse,up,1";
+            value "source" string: "e.event.titlebar";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_move";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "end";
+            value "signal" string: "mouse,up,3";
+            value "source" string: "e.event.resize.*";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_shaded";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "1 up";
+            value "signal" string: "mouse,wheel,?,-1";
+            value "source" string: "e.event.titlebar";
+        }
+        group "E_Config_Binding_Signal" struct {
+            value "action" string: "window_shaded";
+            value "any_mod" uchar: 1;
+            value "context" int: 2;
+            value "modifiers" int: 0;
+            value "params" string: "0 up";
+            value "signal" string: "mouse,wheel,?,1";
+            value "source" string: "e.event.titlebar";
+        }
+    }
+    group "wheel_bindings" list {
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 2;
+            value "direction" int: 0;
+            value "modifiers" int: 4;
+            value "params" string: "-1";
+            value "z" int: -1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 2;
+            value "direction" int: 0;
+            value "modifiers" int: 4;
+            value "params" string: "1";
+            value "z" int: 1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 2;
+            value "direction" int: 1;
+            value "modifiers" int: 4;
+            value "params" string: "-1";
+            value "z" int: -1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 2;
+            value "direction" int: 1;
+            value "modifiers" int: 4;
+            value "params" string: "1";
+            value "z" int: 1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 4;
+            value "direction" int: 0;
+            value "modifiers" int: 4;
+            value "params" string: "-1";
+            value "z" int: -1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 4;
+            value "direction" int: 0;
+            value "modifiers" int: 4;
+            value "params" string: "1";
+            value "z" int: 1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 4;
+            value "direction" int: 1;
+            value "modifiers" int: 4;
+            value "params" string: "-1";
+            value "z" int: -1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 4;
+            value "direction" int: 1;
+            value "modifiers" int: 4;
+            value "params" string: "1";
+            value "z" int: 1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 8;
+            value "direction" int: 0;
+            value "modifiers" int: 4;
+            value "params" string: "-1";
+            value "z" int: -1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 8;
+            value "direction" int: 0;
+            value "modifiers" int: 4;
+            value "params" string: "1";
+            value "z" int: 1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 8;
+            value "direction" int: 1;
+            value "modifiers" int: 4;
+            value "params" string: "-1";
+            value "z" int: -1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "desk_linear_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 8;
+            value "direction" int: 1;
+            value "modifiers" int: 4;
+            value "params" string: "1";
+            value "z" int: 1;
+        }
+    }
+    value "config_version" uint: 0;
+}
+----- file: e_comp.cfg
+group "Comp_Config" struct {
+    group "match.borders" list {
+    }
+    group "match.menus" list {
+    }
+    group "match.overrides" list {
+    }
+    group "match.popups" list {
+    }
+    value "disable_screen_effects" uchar: 0;
+    value "enable_advanced_features" uchar: 0;
+    value "engine" int: 2;
+    value "fast_borders" uchar: 1;
+    value "fast_menus" uchar: 1;
+    value "fast_overrides" uchar: 1;
+    value "fast_popups" uchar: 1;
+    value "first_draw_delay" double: 0.1499999999999999944488849;
+    value "fps_average_range" int: 60;
+    value "fps_corner" uchar: 0;
+    value "fps_show" uchar: 0;
+    value "grab" uchar: 0;
+    value "indirect" uchar: 0;
+    value "lock_fps" uchar: 0;
+    value "match.disable_borders" uchar: 0;
+    value "match.disable_menus" uchar: 0;
+    value "match.disable_objects" uchar: 0;
+    value "match.disable_overrides" uchar: 0;
+    value "match.disable_popups" uchar: 0;
+    value "max_unmapped_time" int: 36000;
+    value "min_unmapped_time" int: 300;
+    value "nocomp_fs" uchar: 1;
+    value "nofade" uchar: 0;
+    value "send_dump" uchar: 1;
+    value "send_flush" uchar: 1;
+    value "shadow_style" string: "default";
+    value "smooth_windows" uchar: 0;
+    value "swap_mode" uchar: 0;
+    value "texture_from_pixmap" uchar: 1;
+    value "version" int: 1;
+    value "vsync" uchar: 0;
+}
+----- file: e_randr.cfg
+----- file: e_remember_restart.cfg
+group "E_Remember_List" struct {
+}
+----- file: exehist.cfg
+group "E_Exehist" struct {
+    group "history" list {
+    }
+    value "startup_id" int: 1531;
+}
+----- file: module.battery.cfg
+group "Battery_Config" struct {
+    value "alert" int: 5;
+    value "alert_p" int: 8;
+    value "alert_timeout" int: 0;
+    value "desktop_notifications" int: 0;
+    value "force_mode" int: 0;
+    value "fuzzy" int: 0;
+    value "poll_interval" int: 512;
+    value "suspend_below" int: 2;
+}
+----- file: module.clock.cfg
+group "Config" struct {
+    group "items" list {
+        group "Config_Item" struct {
+            value "digital_24h" int: 0;
+            value "digital_clock" int: 1;
+            value "id" string: "clock";
+            value "show_date" int: 0;
+            value "show_seconds" int: 0;
+            value "week.start" int: 1;
+            value "weekend.len" int: 2;
+            value "weekend.start" int: 6;
+        }
+    }
+}
+----- file: module.comp.cfg
+group "Comp_Config" struct {
+    group "match.borders" list {
+    }
+    group "match.menus" list {
+    }
+    group "match.overrides" list {
+    }
+    group "match.popups" list {
+    }
+    value "efl_sync" uchar: 0;
+    value "engine" int: 2;
+    value "first_draw_delay" double: 0.1499999999999999944488849;
+    value "fps_average_range" int: 30;
+    value "fps_corner" uchar: 0;
+    value "fps_show" uchar: 0;
+    value "grab" uchar: 0;
+    value "indirect" uchar: 0;
+    value "lock_fps" uchar: 0;
+    value "loose_sync" uchar: 1;
+    value "max_unmapped_time" int: 36000;
+    value "min_unmapped_time" int: 300;
+    value "nocomp_fs" uchar: 0;
+    value "send_dump" uchar: 1;
+    value "send_flush" uchar: 1;
+    value "shadow_style" string: "default";
+    value "smooth_windows" uchar: 1;
+    value "swap_mode" uchar: 0;
+    value "texture_from_pixmap" uchar: 1;
+    value "vsync" uchar: 1;
+}
+----- file: module.conf.cfg
+group "Config" struct {
+    value "menu_augmentation" int: 1;
+    value "version" int: 1000000;
+}
+----- file: module.cpufreq.cfg
+group "Cpufreq_Config" struct {
+    value "auto_powersave" int: 1;
+    value "config_version" int: 1;
+    value "poll_interval" int: 32;
+    value "restore_governor" int: 0;
+}
+----- file: module.everything-apps.cfg
+group "Module_Config" struct {
+    value "cmd_sudo" string: "/usr/bin/gksudo --preserve-env";
+    value "cmd_terminal" string: "/usr/bin/xterm -hold -e";
+    value "version" int: 1000000;
+}
+----- file: module.everything-files.cfg
+group "Module_Config" struct {
+    value "cache_dirs" uchar: 0;
+    value "search_cache" uchar: 0;
+    value "search_recent" uchar: 1;
+    value "show_homedir" uchar: 1;
+    value "show_recent" uchar: 0;
+    value "version" int: 1000000;
+}
+----- file: module.everything.cfg
+group "Config" struct {
+    group "collections" list {
+        group "Plugin_Config" struct {
+            group "plugins" list {
+                group "Plugin_Config" struct {
+                    value "aggregate" int: 0;
+                    value "enabled" int: 1;
+                    value "min_query" int: 0;
+                    value "name" string: "Applications";
+                    value "priority" int: 0;
+                    value "top_level" int: 0;
+                    value "trigger_only" int: 0;
+                    value "view_mode" int: -1;
+                }
+                group "Plugin_Config" struct {
+                    value "aggregate" int: 0;
+                    value "enabled" int: 1;
+                    value "min_query" int: 0;
+                    value "name" string: "Files";
+                    value "priority" int: 0;
+                    value "top_level" int: 0;
+                    value "trigger_only" int: 0;
+                    value "view_mode" int: -1;
+                }
+                group "Plugin_Config" struct {
+                    value "aggregate" int: 0;
+                    value "enabled" int: 1;
+                    value "min_query" int: 0;
+                    value "name" string: "Settings";
+                    value "priority" int: 0;
+                    value "top_level" int: 0;
+                    value "trigger_only" int: 0;
+                    value "view_mode" int: -1;
+                }
+                group "Plugin_Config" struct {
+                    value "aggregate" int: 0;
+                    value "enabled" int: 1;
+                    value "min_query" int: 0;
+                    value "name" string: "Windows";
+                    value "priority" int: 0;
+                    value "top_level" int: 0;
+                    value "trigger_only" int: 0;
+                    value "view_mode" int: -1;
+                }
+            }
+            value "aggregate" int: 0;
+            value "enabled" int: 0;
+            value "min_query" int: 0;
+            value "name" string: "Start";
+            value "priority" int: 0;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: 2;
+        }
+    }
+    group "conf_actions" list {
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Actions";
+            value "priority" int: 2;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Open with...";
+            value "priority" int: 1;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+    }
+    group "conf_objects" list {
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Applications";
+            value "priority" int: 1;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Files";
+            value "priority" int: 2;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 3;
+            value "name" string: "Recent Files";
+            value "priority" int: 3;
+            value "top_level" int: 0;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 0;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Text";
+            value "priority" int: 999;
+            value "top_level" int: 0;
+            value "trigger" string: " ";
+            value "trigger_only" int: 0;
+            value "view_mode" int: 0;
+        }
+    }
+    group "conf_subjects" list {
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Applications";
+            value "priority" int: 1;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 0;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Calculator";
+            value "priority" int: 100;
+            value "top_level" int: 1;
+            value "trigger" string: "=";
+            value "trigger_only" int: 1;
+            value "view_mode" int: 0;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 3;
+            value "name" string: "Exebuf";
+            value "priority" int: 3;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 1;
+            value "name" string: "Files";
+            value "priority" int: 2;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Plugins";
+            value "priority" int: 100;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: 2;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 3;
+            value "name" string: "Recent Files";
+            value "priority" int: 3;
+            value "top_level" int: 0;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Settings";
+            value "priority" int: 10;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 0;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Text";
+            value "priority" int: 999;
+            value "top_level" int: 0;
+            value "trigger" string: " ";
+            value "trigger_only" int: 0;
+            value "view_mode" int: 0;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "Windows";
+            value "priority" int: 2;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: -1;
+        }
+        group "Plugin_Config" struct {
+            group "plugins" list {
+                group "Plugin_Config" struct {
+                    value "aggregate" int: 0;
+                    value "enabled" int: 1;
+                    value "min_query" int: 0;
+                    value "name" string: "Applications";
+                    value "priority" int: 0;
+                    value "top_level" int: 0;
+                    value "trigger_only" int: 0;
+                    value "view_mode" int: -1;
+                }
+                group "Plugin_Config" struct {
+                    value "aggregate" int: 0;
+                    value "enabled" int: 1;
+                    value "min_query" int: 0;
+                    value "name" string: "Files";
+                    value "priority" int: 0;
+                    value "top_level" int: 0;
+                    value "trigger_only" int: 0;
+                    value "view_mode" int: -1;
+                }
+                group "Plugin_Config" struct {
+                    value "aggregate" int: 0;
+                    value "enabled" int: 1;
+                    value "min_query" int: 0;
+                    value "name" string: "Settings";
+                    value "priority" int: 0;
+                    value "top_level" int: 0;
+                    value "trigger_only" int: 0;
+                    value "view_mode" int: -1;
+                }
+                group "Plugin_Config" struct {
+                    value "aggregate" int: 0;
+                    value "enabled" int: 1;
+                    value "min_query" int: 0;
+                    value "name" string: "Windows";
+                    value "priority" int: 0;
+                    value "top_level" int: 0;
+                    value "trigger_only" int: 0;
+                    value "view_mode" int: -1;
+                }
+            }
+            value "aggregate" int: 0;
+            value "enabled" int: 0;
+            value "min_query" int: 0;
+            value "name" string: "Start";
+            value "priority" int: 0;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: 2;
+        }
+    }
+    value "cycle_mode" int: 0;
+    value "edge_height" int: 385;
+    value "edge_width" int: 340;
+    value "first_run" uchar: 1;
+    value "height" int: 366;
+    value "hide_input" int: 0;
+    value "hide_list" int: 0;
+    value "history_sort_mode" int: 0;
+    value "quick_nav" int: 0;
+    value "rel_x" double: 0.5000000000000000000000000;
+    value "rel_y" double: 0.4299999999999999933386619;
+    value "scroll_animate" int: 1;
+    value "scroll_speed" double: 10.0000000000000000000000000;
+    value "version" int: 1000000;
+    value "view_mode" int: 1;
+    value "view_zoom" int: 0;
+    value "width" int: 464;
+}
+----- file: module.fileman.cfg
+group "Fileman_Config" struct {
+    group "paths" list {
+        group "Fileman_Path" struct {
+            value "desktop_mode" int: 2;
+            value "dev" string: "desktop";
+            value "path" string: "/";
+            value "zone" uint: 0;
+        }
+    }
+    value "config_version" int: 1000000;
+    value "icon.extension.show" uchar: 1;
+    value "icon.fixed.h" uchar: 0;
+    value "icon.fixed.w" uchar: 0;
+    value "icon.icon.h" int: 48;
+    value "icon.icon.w" int: 48;
+    value "icon.list.h" int: 16;
+    value "icon.list.w" int: 16;
+    value "icon.max_thumb_size" uint: 0;
+    value "list.sort.dirs.first" uchar: 1;
+    value "list.sort.dirs.last" uchar: 0;
+    value "list.sort.extension" uchar: 0;
+    value "list.sort.mtime" uchar: 0;
+    value "list.sort.no_case" uchar: 1;
+    value "list.sort.size" uchar: 0;
+    value "selection.single" uchar: 0;
+    value "selection.windows_modifiers" uchar: 0;
+    value "theme.fixed" uchar: 0;
+    value "tooltip.delay" double: 1.0000000000000000000000000;
+    value "tooltip.enable" uchar: 1;
+    value "tooltip.size" double: 30.0000000000000000000000000;
+    value "view.always_order" uchar: 0;
+    value "view.desktop_navigation" uchar: 0;
+    value "view.fit_custom_pos" uchar: 0;
+    value "view.link_drop" uchar: 0;
+    value "view.mode" int: 1;
+    value "view.no_subdir_drop" uchar: 0;
+    value "view.no_subdir_jump" uchar: 0;
+    value "view.open_dirs_in_place" uchar: 1;
+    value "view.selector" uchar: 0;
+    value "view.show_desktop_icons" uchar: 1;
+    value "view.show_full_path" uchar: 0;
+    value "view.show_sidebar" uchar: 0;
+    value "view.show_toolbar" uchar: 0;
+    value "view.single_click" uchar: 0;
+    value "view.spring_delay" int: 1;
+    value "view.toolbar_orient" uint: 5;
+}
+----- file: module.gadman.cfg
+group "Gadman_Config" struct {
+    value "anim_bg" int: 1;
+    value "anim_gad" int: 1;
+    value "bg_type" int: 0;
+    value "color_a" int: 255;
+    value "color_b" int: 255;
+    value "color_g" int: 255;
+    value "color_r" int: 255;
+}
+----- file: module.ibar.cfg
+group "IBar_Config" struct {
+    group "items" list {
+        group "IBar_Config_Item" struct {
+            value "dir" string: "default";
+            value "dont_add_nonorder" int: 0;
+            value "dont_icon_menu_mouseover" uchar: 0;
+            value "dont_track_launch" uchar: 0;
+            value "eap_label" int: 0;
+            value "id" string: "0";
+            value "lock_move" int: 0;
+            value "show_label" int: 1;
+        }
+        group "IBar_Config_Item" struct {
+            value "dir" string: "default";
+            value "dont_add_nonorder" int: 0;
+            value "dont_icon_menu_mouseover" uchar: 0;
+            value "dont_track_launch" uchar: 0;
+            value "eap_label" int: 0;
+            value "id" string: "ibar.1";
+            value "lock_move" int: 0;
+            value "show_label" int: 1;
+        }
+    }
+}
+----- file: module.ibox.cfg
+group "IBox_Config" struct {
+    group "items" list {
+        group "IBox_Config_Item" struct {
+            value "expand_on_desktop" int: 0;
+            value "icon_label" int: 0;
+            value "id" string: "0";
+            value "show_desk" int: 0;
+            value "show_label" int: 0;
+            value "show_zone" int: 1;
+        }
+        group "IBox_Config_Item" struct {
+            value "expand_on_desktop" int: 0;
+            value "icon_label" int: 0;
+            value "id" string: "ibox.1";
+            value "show_desk" int: 0;
+            value "show_label" int: 0;
+            value "show_zone" int: 1;
+        }
+    }
+}
+----- file: module.mixer.cfg
+group "Mixer_Module_Config" struct {
+    group "gadgets" hash {
+        key "mixer.0";
+        group "Mixer_Gadget_Config" struct {
+            value "keybindings_popup" int: 0;
+            value "lock_sliders" int: 0;
+            value "show_locked" int: 0;
+            value "state.left" int: 0;
+            value "state.mute" int: 0;
+            value "state.right" int: 0;
+            value "using_default" uchar: 0;
+        }
+    }
+    value "default_gc_id" string: "mixer.0";
+    value "desktop_notification" int: 1;
+    value "version" int: 1000000;
+}
+----- file: module.notification.cfg
+group "Notification_Config" struct {
+    value "corner" int: 1;
+    value "dual_screen" int: 0;
+    value "force_timeout" int: 0;
+    value "ignore_replacement" int: 0;
+    value "show_critical" int: 1;
+    value "show_low" int: 0;
+    value "show_normal" int: 1;
+    value "timeout" float: 5.0000000000000000000000000;
+    value "version" int: 1000000;
+}
+----- file: module.pager.cfg
+group "Pager_Config" struct {
+    value "btn_desk" uchar: 2;
+    value "btn_drag" uchar: 0;
+    value "btn_noplace" uchar: 1;
+    value "disable_live_preview" uchar: 1;
+    value "drag_resist" uint: 3;
+    value "flip_desk" uchar: 0;
+    value "popup" uint: 1;
+    value "popup_act_height" int: 60;
+    value "popup_height" int: 60;
+    value "popup_speed" double: 1.0000000000000000000000000;
+    value "popup_urgent" uint: 1;
+    value "popup_urgent_speed" double: 1.5000000000000000000000000;
+    value "popup_urgent_stick" uint: 0;
+    value "show_desk_names" uint: 0;
+}
+----- file: module.syscon.cfg
+group "Syscon_Config" struct {
+    value "menu" uchar: 0;
+}
+----- file: module.tasks.cfg
+group "Tasks_Config" struct {
+    group "items" list {
+        group "Tasks_Config_Item" struct {
+            value "icon_only" uchar: 0;
+            value "id" string: "0";
+            value "minh" int: 32;
+            value "minw" int: 100;
+            value "show_all" int: 0;
+            value "text_only" uchar: 0;
+        }
+        group "Tasks_Config_Item" struct {
+            value "icon_only" uchar: 0;
+            value "id" string: "tasks.0";
+            value "minh" int: 32;
+            value "minw" int: 100;
+            value "show_all" int: 0;
+            value "text_only" uchar: 0;
+        }
+    }
+}
+----- file: module.temperature.cfg
+group "Temperature_Config" struct {
+    group "faces" hash {
+        key "temperature.1";
+        group "Temperature_Config_Face" struct {
+            value "backend" int: 0;
+            value "high" int: 80;
+            value "id" string: "temperature.1";
+            value "low" int: 30;
+            value "poll_interval" int: 128;
+            value "sensor_type" int: 0;
+            value "units" int: 0;
+        }
+    }
+}
+----- file: systray.cfg
+group "Systray_Config" struct {
+    value "use_xembed" int: 1;
+}
