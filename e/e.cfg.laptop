@@ -1177,8 +1177,8 @@ group "E_Config" struct {
     value "cfgdlg_auto_apply" int: 0;
     value "cfgdlg_default_mode" int: 0;
     value "cfgdlg_normal_wins" uchar: 0;
-    value "clientlist_group_by" int: 0;
-    value "clientlist_include_all_zones" int: 0;
+    value "clientlist_group_by" int: 1;
+    value "clientlist_include_all_zones" int: 1;
     value "clientlist_limit_caption_len" int: 0;
     value "clientlist_max_caption_len" int: 2;
     value "clientlist_separate_iconified_apps" int: 0;
