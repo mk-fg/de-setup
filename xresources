@@ -30,7 +30,7 @@ XTerm*utf8Title: true
 
 XTerm*multiScroll: true
 XTerm*jumpScroll: true
-XTerm*saveLines: 65535
+XTerm*saveLines: 2000
 XTerm*waitForMap: true
 
 XTerm*loginShell: false
