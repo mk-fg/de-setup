@@ -1202,9 +1202,9 @@ group "E_Config" struct {
     value "desklock_ask_presentation" uchar: 0;
     value "desklock_ask_presentation_timeout" double: 30.0000000000000000000000000;
     value "desklock_auth_method" int: 0;
-    value "desklock_autolock_idle" int: 1;
+    value "desklock_autolock_idle" int: 0;
     value "desklock_autolock_idle_timeout" double: 5400.0000000000000000000000000;
-    value "desklock_autolock_screensaver" int: 1;
+    value "desklock_autolock_screensaver" int: 0;
     value "desklock_login_box_zone" int: -1;
     value "desklock_on_suspend" int: 1;
     value "desklock_passwd" int: 0;
