@@ -11,7 +11,8 @@ create_zenv_file() {
 }
 if ! pgrep gpg-agent >/dev/null; then
 	create_zenv_file 2>/dev/null
-	gpg-agent >>/dev/shm/zenv_agents --daemon --pinentry-program $(which pinget)
+	gpg-agent --daemon --use-standard-socket\
+		--homedir "${HOME}/.gnupg" --pinentry-program $(which pinget)
 fi
 if ! pgrep ssh-agent >/dev/null; then
 	create_zenv_file 2>/dev/null
