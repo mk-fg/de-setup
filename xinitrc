@@ -9,14 +9,11 @@ create_zenv_file() {
 	chgrp wheel /dev/shm/zenv_agents
 	chmod 660 /dev/shm/zenv_agents
 }
-if ! pgrep gpg-agent >/dev/null; then
-	create_zenv_file 2>/dev/null
-	gpg-agent >>/dev/shm/zenv_agents --daemon --pinentry-program $(which pinget)
-fi
 if ! pgrep ssh-agent >/dev/null; then
 	create_zenv_file 2>/dev/null
 	ssh-agent | grep -v '^echo' >>/dev/shm/zenv_agents
 fi
+pgrep gpg-agent >/dev/null || gpg-agent --daemon
 source /dev/shm/zenv_agents
 
 # Misc env
