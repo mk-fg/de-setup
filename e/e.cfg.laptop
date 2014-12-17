@@ -1177,8 +1177,8 @@ group "E_Config" struct {
     value "cfgdlg_auto_apply" int: 0;
     value "cfgdlg_default_mode" int: 0;
     value "cfgdlg_normal_wins" uchar: 0;
-    value "clientlist_group_by" int: 0;
-    value "clientlist_include_all_zones" int: 0;
+    value "clientlist_group_by" int: 1;
+    value "clientlist_include_all_zones" int: 1;
     value "clientlist_limit_caption_len" int: 0;
     value "clientlist_max_caption_len" int: 2;
     value "clientlist_separate_iconified_apps" int: 0;
@@ -1202,9 +1202,9 @@ group "E_Config" struct {
     value "desklock_ask_presentation" uchar: 0;
     value "desklock_ask_presentation_timeout" double: 30.0000000000000000000000000;
     value "desklock_auth_method" int: 0;
-    value "desklock_autolock_idle" int: 1;
+    value "desklock_autolock_idle" int: 0;
     value "desklock_autolock_idle_timeout" double: 5400.0000000000000000000000000;
-    value "desklock_autolock_screensaver" int: 1;
+    value "desklock_autolock_screensaver" int: 0;
     value "desklock_login_box_zone" int: -1;
     value "desklock_on_suspend" int: 1;
     value "desklock_passwd" int: 0;
@@ -2093,7 +2093,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "apostrophe";
             value "modifiers" int: 9;
-            value "params" string: "ec -- -e \"(emms-pause)\"";
+            value "params" string: "de.music.pause";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_maximized_toggle";
@@ -2117,7 +2117,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "semicolon";
             value "modifiers" int: 9;
-            value "params" string: "ec -- -e \"(emms-stop)\"";
+            value "params" string: "de.music.stop";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
