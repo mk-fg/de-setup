@@ -2115,7 +2115,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "apostrophe";
             value "modifiers" int: 9;
-            value "params" string: "ec -- -e \"(emms-pause)\"";
+            value "params" string: "de.music.pause";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_maximized_toggle";
@@ -2139,7 +2139,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "semicolon";
             value "modifiers" int: 9;
-            value "params" string: "ec -- -e \"(emms-stop)\"";
+            value "params" string: "de.music.stop";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
