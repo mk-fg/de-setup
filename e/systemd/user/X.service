@@ -4,4 +4,4 @@ Before=X.target
 
 [Service]
 SyslogIdentifier=%p
-ExecStart=/usr/lib/systemd/systemd-multi-seat-x $DISPLAY
+ExecStart=/usr/bin/X $DISPLAY
