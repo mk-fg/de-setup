@@ -8,6 +8,8 @@ PAMName=systemd-user
 
 User=fraggod
 Slice=user-fraggod.slice
+KillMode=mixed
+Delegate=yes
 
 Environment=DISPLAY=:1
 Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%u/dbus/user_bus_socket
