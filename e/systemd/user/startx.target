@@ -1,6 +1,6 @@
 [Unit]
 # Not default.target because systemd starts default.target
-#  along with user@1000 randomly early on boot, not sure why.
+#  along with e.g. user@1000 randomly whenever something "logs in" via pam
 Description=startx-like custom session
 
 # To avoid implicit After= deps here

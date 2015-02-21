@@ -1,6 +1,6 @@
 [Unit]
 Before=sound.target
-After=X.target sockets.target
+After=xorg.target sockets.target
 
 [Service]
 SyslogIdentifier=%p
@@ -10,3 +10,6 @@ Restart=always
 RestartPreventExitStatus=SIGTERM SIGINT SIGABRT SIGKILL
 StartLimitInterval=10s
 StartLimitBurst=5
+
+[Install]
+WantedBy=startx.target

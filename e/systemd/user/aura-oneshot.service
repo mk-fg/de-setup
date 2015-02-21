@@ -1,5 +1,5 @@
 [Unit]
-After=X.target
+After=xorg.target
 Wants=background.target
 Before=background.target
 PartOf=background.target

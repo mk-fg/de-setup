@@ -1,0 +1,8 @@
+[Unit]
+Requires=xorg@%i.socket
+After=xorg@%i.socket
+
+[Service]
+SyslogIdentifier=%p
+SuccessExitStatus=0 1
+ExecStart=/usr/bin/X :%i -nolisten tcp -noreset -verbose 2

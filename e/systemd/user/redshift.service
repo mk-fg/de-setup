@@ -1,5 +1,5 @@
 [Unit]
-After=X.target background.target
+After=xorg.target background.target
 PartOf=startx.target
 
 [Service]

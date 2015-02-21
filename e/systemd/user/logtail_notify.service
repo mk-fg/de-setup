@@ -1,6 +1,6 @@
 [Unit]
 Requires=notification-thing.service
-After=X.target notification-thing.service
+After=xorg.target notification-thing.service
 PartOf=startx.target
 
 [Service]

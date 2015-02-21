@@ -1,9 +1,12 @@
 [Unit]
-After=X.target
-Before=background.target xsettings.service
+Requires=xorg.target dbus.socket
+Wants=pulseaudio.service
 PartOf=startx.target
+After=xorg.target
+Before=background.target xsettings.service
 
 [Service]
 SyslogIdentifier=%p
 KillMode=none
-ExecStart=/bin/sh -c "enlightenment_start -locked | svlogd -r _ -ttt %h/.e/logs"
+Environment=E_START=enlightenment
+ExecStart=/bin/bash -c "exec svlogd -r _ -ttt %h/.e/logs < <(exec enlightenment_start -locked)"
