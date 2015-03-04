@@ -251,7 +251,7 @@ sensors = {
 }
 
 sunrise = {
-	offset=6, -- from UTC, hours
+	offset=5, -- from UTC, hours
 	lat=56.833,
 	lon=60.583,
 	zenith=90.83,
