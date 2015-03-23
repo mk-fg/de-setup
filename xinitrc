@@ -18,6 +18,7 @@ source /dev/shm/zenv_agents
 
 # Misc env
 export ELM_THEME=elm-efenniht
+export GTK_MODULES="libcanberra-gtk-module.so"
 export XDG_DATA_DIRS="${HOME}/.xdg:/usr/share/enlightenment:/usr/share"
 export XDG_RUNTIME_DIR=/run/user/fraggod
 mkdir -p "$(dirname "$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2)")"
