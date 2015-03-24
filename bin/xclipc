@@ -5,9 +5,9 @@ case "$1" in
 		xclip -out -selection primary | xclip -in -selection clipboard
 		exit $? ;;
 	--slashes-to-dots)
-		DATA=$(xclip -out -selection primary)
+		DATA=$(xclip -out -selection clipboard)
 		DATA="${DATA//\//.}" ;;
-	*) DATA=$(xclip -out -selection primary) ;;
+	*) DATA=$(xclip -out -selection clipboard) ;;
 esac
 
 shopt -s extglob

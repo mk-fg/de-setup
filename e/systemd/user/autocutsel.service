@@ -1,0 +1,8 @@
+[Unit]
+After=xorg.target
+PartOf=startx.target
+
+[Service]
+SyslogIdentifier=%p
+Restart=on-failure
+ExecStart=/usr/bin/env autocutsel
