@@ -4,4 +4,5 @@ PartOf=background.target
 
 [Service]
 SyslogIdentifier=%p
+Environment=LQR_WPSET_BG_SET_METHODS=enlightenment
 ExecStart=/usr/bin/env aura -d --no-fork --no-init /mnt/volatiles/images ${HOME}/media/bgz
