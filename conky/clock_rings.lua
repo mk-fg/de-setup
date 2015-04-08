@@ -639,3 +639,8 @@ function conky_sun_event_time(t, fmt, ...)
 		sunrise.lat, sunrise.lon, sunrise.zenith, sunrise.offset )
 	return os.date(fmt, ts)
 end
+
+
+function conky_env(var)
+	return os.getenv(var)
+end

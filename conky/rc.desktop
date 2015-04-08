@@ -67,7 +67,7 @@ lua_draw_hook_pre rings_draw
 TEXT
 ${voffset 240}
 
-$color${pre_exec id -un}@$nodename - $sysname $kernel\
+$color${lua env USER}@$nodename - $kernel\
 ${alignr}${time %a, %d %b, %H:%M:%S (%Z)}
 ${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg\
 ${alignr}\
