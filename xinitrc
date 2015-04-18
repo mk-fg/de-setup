@@ -1,20 +1,22 @@
-#!/bin/sh
+#!/bin/bash
+
+env_file=/tmp/.zenv.agents
 
 # For proper PATH and such
 source /etc/profile
 
 # Agents
 create_zenv_file() {
-	touch /dev/shm/zenv_agents
-	chgrp wheel /dev/shm/zenv_agents
-	chmod 660 /dev/shm/zenv_agents
+	touch "$env_file"
+	chgrp wheel "$env_file"
+	chmod 660 "$env_file"
 }
 if ! pgrep ssh-agent >/dev/null; then
 	create_zenv_file 2>/dev/null
-	ssh-agent | grep -v '^echo' >>/dev/shm/zenv_agents
+	ssh-agent | grep -v '^echo' >>"$env_file"
 fi
 pgrep gpg-agent >/dev/null || gpg-agent --daemon
-source /dev/shm/zenv_agents
+source "$env_file"
 
 # Misc env
 export ELM_THEME=elm-efenniht
