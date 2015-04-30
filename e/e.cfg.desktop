@@ -1459,49 +1459,6 @@ group "E_Config_Bindings" struct {
             value "params" string: "dbus-send --session --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.DBus.Properties.Set string:org.freedesktop.Notifications string:plug variant:string:toggle";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "volume_decrease";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86AudioLowerVolume";
-            value "modifiers" int: 0;
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "volume_mute";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86AudioMute";
-            value "modifiers" int: 0;
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "volume_increase";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86AudioRaiseVolume";
-            value "modifiers" int: 0;
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "backlight";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86BrightnessAdjust";
-            value "modifiers" int: 0;
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "hibernate";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86Hibernate";
-            value "modifiers" int: 0;
-            value "params" string: "now";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "backlight";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86LightBulb";
-            value "modifiers" int: 0;
-        }
-        group "E_Config_Binding_Key" struct {
             value "action" string: "backlight_adjust";
             value "any_mod" uchar: 0;
             value "context" int: 9;
@@ -1516,53 +1473,6 @@ group "E_Config_Bindings" struct {
             value "key" string: "XF86MonBrightnessUp";
             value "modifiers" int: 0;
             value "params" string: "0.1";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "hibernate";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86PowerDown";
-            value "modifiers" int: 0;
-            value "params" string: "now";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "halt";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86PowerOff";
-            value "modifiers" int: 0;
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "suspend";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86Sleep";
-            value "modifiers" int: 0;
-            value "params" string: "now";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "suspend";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86Standby";
-            value "modifiers" int: 0;
-            value "params" string: "now";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "menu_show";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86Start";
-            value "modifiers" int: 0;
-            value "params" string: "all";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "suspend";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "XF86Suspend";
-            value "modifiers" int: 0;
-            value "params" string: "now";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -1617,6 +1527,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "x";
             value "modifiers" int: 12;
+            value "params" string: "default right";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_fullscreen_toggle";
@@ -1922,6 +1833,14 @@ group "E_Config_Bindings" struct {
             value "action" string: "exec";
             value "any_mod" uchar: 0;
             value "context" int: 9;
+            value "key" string: "a";
+            value "modifiers" int: 8;
+            value "params" string: "de.mouse_remove";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
             value "key" string: "apostrophe";
             value "modifiers" int: 8;
             value "params" string: "ec -- -e \"(emms-next)\"";
@@ -2155,6 +2074,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "x";
             value "modifiers" int: 9;
+            value "params" string: "default right";
         }
     }
     group "mouse_bindings" list {
