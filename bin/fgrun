@@ -3,14 +3,14 @@
 from __future__ import print_function
 
 import itertools as it, operator as op, functools as ft
-from os.path import join, expanduser, dirname, basename
+from os.path import join, exists, expanduser, dirname, basename
 from contextlib import contextmanager, closing
 from tempfile import NamedTemporaryFile
 import os, sys, io, json, stat, subprocess
 
-dmenu_history = expanduser('~/.dmenu_history')
+dmenu_history = expanduser('~/.fgrun.history')
 dmenu_history_hwm = 10 * 2**10
-dmenu_cache = expanduser('~/.dmenu_cache')
+dmenu_cache = expanduser('~/.fgrun.cache')
 dmenu_args = ['-p', 'Run:', '-i', '-fn', 'Luxi Sans-8:normal']
 
 @contextmanager
@@ -101,7 +101,7 @@ def main(args=None):
 	if dcache_change:
 		with replacement(dmenu_cache) as tmp: json.dump(dcache, tmp)
 	if b:
-		if os.stat(dmenu_history).st_size >= dmenu_history_hwm:
+		if exists(dmenu_history) and os.stat(dmenu_history).st_size >= dmenu_history_hwm:
 			history.append(b)
 			history = list(reversed(clean_strings(reversed(history))))
 			with replacement(dmenu_history) as tmp: tmp.write(list_lines(history))
