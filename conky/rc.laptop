@@ -38,7 +38,6 @@ default_color white
 default_shade_color black
 default_outline_color black
 
-mail_spool $MAIL
 no_buffers yes
 uppercase no
 cpu_avg_samples 2
@@ -64,7 +63,7 @@ lua_load ~/.conkyrc.rings.lua
 
 
 TEXT
-$color${pre_exec id -un}@$nodename - $sysname $kernel\
+$color${lua env USER}@$nodename - $kernel\
 ${alignr}${time %a, %d %b, %H:%M:%S (%Z)}
 ${color lightgrey}Uptime:$color $uptime ${color lightgrey}- Load:$color $loadavg\
 ${alignr}\
@@ -98,7 +97,6 @@ ${template1 / / 20}
 ${template1 home /home 20}
 ${template1 var /var 20}
 ${template1 volatiles /var/volatiles 10}
-${template1 build /var/tmp/paludis 30}
 ${template1 tmp /tmp 30}
 ${color lightgrey}FS_read: ${color #99aaff}${diskio_read}\
   ${color lightgrey}FS_write: ${color #ffaa99}${diskio_write}\
