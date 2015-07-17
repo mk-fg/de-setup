@@ -1,6 +1,7 @@
 #!/bin/bash
 
 env_file=/tmp/.zenv.agents
+env_ext="${BASH_SOURCE[0]}".env
 
 # For proper PATH and such
 source /etc/profile
@@ -24,5 +25,6 @@ export GTK_MODULES="libcanberra-gtk-module.so"
 export XDG_DATA_DIRS="${HOME}/.xdg:/usr/share/enlightenment:/usr/share"
 export XDG_RUNTIME_DIR=/run/user/fraggod
 mkdir -p "$(dirname "$(echo $DBUS_SESSION_BUS_ADDRESS | cut -d= -f2)")"
+[[ -r "$env_ext" ]] && source "$env_ext"
 
 exec /usr/lib/systemd/systemd --user --unit=startx.target
