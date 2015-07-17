@@ -576,6 +576,11 @@ group "E_Config" struct {
             value "zone" uint: 0;
         }
         group "E_Config_Gadcon" struct {
+            value "id" int: 114;
+            value "name" string: "gadman";
+            value "zone" uint: 1;
+        }
+        group "E_Config_Gadcon" struct {
             value "id" int: 115;
             value "name" string: "gadman_top";
             value "zone" uint: 0;
