@@ -9,4 +9,4 @@ Restart=on-failure
 ExecStart=/usr/bin/env bt_agent -n -a ~/.bt_auth
 
 [Install]
-WantedBy=bluetooth.target
+WantedBy=startx.target
