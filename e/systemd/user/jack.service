@@ -1,0 +1,9 @@
+[Unit]
+Before=pulseaudio.service
+
+[Service]
+SyslogIdentifier=%p
+ExecStart=/usr/bin/env jackd --nozombies -d dummy
+
+[Install]
+WantedBy=startx.target
