@@ -1742,7 +1742,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "g";
             value "modifiers" int: 8;
-            value "params" string: "firefox ~/bin/wrappers/firefox";
+            value "params" string: "claws-mail ~/bin/wrappers/claws-mail";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
