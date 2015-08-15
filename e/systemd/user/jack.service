@@ -5,5 +5,10 @@ Before=pulseaudio.service
 SyslogIdentifier=%p
 ExecStart=/usr/bin/env jackd --nozombies -d dummy
 
+Restart=always
+RestartPreventExitStatus=SIGTERM SIGINT SIGABRT SIGKILL
+StartLimitInterval=10s
+StartLimitBurst=5
+
 [Install]
 WantedBy=startx.target
