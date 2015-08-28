@@ -1416,6 +1416,28 @@ group "E_Config_Bindings" struct {
             value "type" int: 6;
         }
     }
+    group "edge_bindings" list {
+        group "E_Config_Binding_Edge" struct {
+            value "action" string: "desk_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 3;
+            value "delay" float: -1.0000000000000000000000000;
+            value "drag_only" uchar: 0;
+            value "edge" uchar: 1;
+            value "modifiers" int: 0;
+            value "params" string: "-1 0";
+        }
+        group "E_Config_Binding_Edge" struct {
+            value "action" string: "desk_flip_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 3;
+            value "delay" float: -1.0000000000000000000000000;
+            value "drag_only" uchar: 0;
+            value "edge" uchar: 2;
+            value "modifiers" int: 0;
+            value "params" string: "1 0";
+        }
+    }
     group "key_bindings" list {
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -1910,6 +1932,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "apostrophe";
             value "modifiers" int: 9;
+            value "params" string: "de.music.pause";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_maximized_toggle";
@@ -1918,6 +1941,14 @@ group "E_Config_Bindings" struct {
             value "key" string: "c";
             value "modifiers" int: 9;
             value "params" string: "default left";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "quotedbl";
+            value "modifiers" int: 9;
+            value "params" string: "de.music.pause";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_maximized_toggle";
@@ -2484,6 +2515,26 @@ group "Module_Config" struct {
     value "show_recent" uchar: 0;
     value "version" int: 1000000;
 }
+----- file: module.everything.cache.cfg
+group "History" struct {
+    group "subjects" hash {
+        key "";
+        group "History_Types" struct {
+        }
+    }
+    group "subjects" hash {
+        key "APPLICATION";
+        group "History_Types" struct {
+        }
+    }
+    group "subjects" hash {
+        key "BORDER";
+        group "History_Types" struct {
+        }
+    }
+    value "begin" double: 1437479428.0651109218597412109375000;
+    value "version" int: 2;
+}
 ----- file: module.everything.cfg
 group "Config" struct {
     group "collections" list {
@@ -2555,6 +2606,16 @@ group "Config" struct {
             value "aggregate" int: 1;
             value "enabled" int: 1;
             value "min_query" int: 0;
+            value "name" string: "All";
+            value "priority" int: -1;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: 2;
+        }
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
             value "name" string: "Open with...";
             value "priority" int: 1;
             value "top_level" int: 1;
@@ -2563,6 +2624,16 @@ group "Config" struct {
         }
     }
     group "conf_objects" list {
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "All";
+            value "priority" int: -1;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: 2;
+        }
         group "Plugin_Config" struct {
             value "aggregate" int: 1;
             value "enabled" int: 1;
@@ -2606,6 +2677,16 @@ group "Config" struct {
         }
     }
     group "conf_subjects" list {
+        group "Plugin_Config" struct {
+            value "aggregate" int: 1;
+            value "enabled" int: 1;
+            value "min_query" int: 0;
+            value "name" string: "All";
+            value "priority" int: -1;
+            value "top_level" int: 1;
+            value "trigger_only" int: 0;
+            value "view_mode" int: 2;
+        }
         group "Plugin_Config" struct {
             value "aggregate" int: 1;
             value "enabled" int: 1;
