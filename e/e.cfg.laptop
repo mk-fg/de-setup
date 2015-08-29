@@ -1741,6 +1741,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "apostrophe";
             value "modifiers" int: 8;
+            value "params" string: "ece emms +";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_maximized_toggle";
@@ -1788,7 +1789,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "semicolon";
             value "modifiers" int: 8;
-            value "params" string: "ec -- -e \"(emms-previous)\"";
+            value "params" string: "ece emms -";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
