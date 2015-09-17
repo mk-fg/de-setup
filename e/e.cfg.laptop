@@ -1245,7 +1245,7 @@ group "E_Config" struct {
     value "focus_last_focused_per_desktop" int: 1;
     value "focus_policy" int: 0;
     value "focus_revert_on_hide_or_close" int: 1;
-    value "focus_setting" int: 1;
+    value "focus_setting" int: 3;
     value "font_cache" int: 512;
     value "font_hinting" int: 1;
     value "framerate" double: 130.0000000000000000000000000;
@@ -1358,7 +1358,7 @@ group "E_Config" struct {
     value "use_resist" int: 1;
     value "wallpaper_import_last_dev" string: "~/";
     value "wallpaper_import_last_path" string: "/";
-    value "window_activehint_policy" int: 2;
+    value "window_activehint_policy" int: 3;
     value "window_grouping" int: 0;
     value "window_placement_policy" int: 0;
     value "window_resist" int: 12;
