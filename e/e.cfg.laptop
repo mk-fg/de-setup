@@ -1557,7 +1557,6 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Print";
             value "modifiers" int: 4;
-            value "params" string: "dbus-send --type=method_call --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.Notifications.Redisplay";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "kbd_layout";
