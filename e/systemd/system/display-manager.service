@@ -12,7 +12,7 @@ KillMode=mixed
 Delegate=yes
 
 Environment=DISPLAY=:1
-Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%u/dbus/user_bus_socket
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%u/bus
 Environment=XDG_SESSION_TYPE=x11
 Environment=XDG_SESSION_CLASS=user
 

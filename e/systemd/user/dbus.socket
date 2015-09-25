@@ -1,5 +1,0 @@
-[Unit]
-Before=sockets.target
-
-[Socket]
-ListenStream=/run/user/fraggod/dbus/user_bus_socket
