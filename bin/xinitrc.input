@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -o pipefail
 err=0
@@ -8,12 +8,21 @@ xset r rate 250 40 || err=1
 setxkbmap -model acer_laptop -rules evdev\
 	-layout 'us,ru' -option 'grp:switch,grp:caps_toggle,grp_led:caps' || err=1
 
+# Not sure which it's supposed to apply to, gotta check
 dev='PS/2 Logitech Wheel Mouse'
 xinput list "$dev" &>/dev/null && {
 	xinput set-prop "$dev" --type=float 257 9999999 || err=1
 	xinput set-prop "$dev" --type=float 256 50 || err=1
 } ||:
 
+# Razer E-BLUE mouse - remap side-buttons to be mouse-2 (middle)
+dev=$( xinput list |
+	awk 'match($0,/\<2.4G 2.4G Wireless Device\s+id=([0-9]+)\s+\[slave\s+pointer\>/,a) {print a[1]}' )
+[[ -n "$dev" ]] && xinput list "$dev" &>/dev/null && {
+	xinput set-button-map "$dev" 1 2 3 4 5 6 7 0 2 10 11 12 13 || err=1
+} ||:
+
+# Synaptics settings, in case something (e.g. WM) messes these up
 synclient -l &>/dev/null && {
 	awk 'match($2,/"/) && NF==3 && $1=="Option" {gsub(/"/,"",$2); gsub(/"/,"",$3); print $2 "=" $3}'\
 		/usr/share/X11/xorg.conf.d/50-synaptics.conf | xargs synclient || err=1
