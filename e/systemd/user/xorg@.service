@@ -1,5 +1,4 @@
 [Unit]
-Requires=xorg@%i.socket
 After=xorg@%i.socket
 
 [Service]
