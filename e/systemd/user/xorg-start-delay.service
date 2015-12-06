@@ -1,6 +1,10 @@
+# Needed for xorg-server-1.18
+# Bug: https://bugs.freedesktop.org/show_bug.cgi?id=93072
+
 [Unit]
 DefaultDependencies=no
-After=xorg@1.service 
+Before=xorg.target
+After=xorg@1.service
 
 [Service]
 ExecStart=/usr/bin/sleep 2
