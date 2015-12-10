@@ -12,14 +12,14 @@ KillMode=mixed
 Delegate=yes
 
 Environment=DISPLAY=:1
-Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%u/bus
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/fraggod/bus
 Environment=XDG_SESSION_TYPE=x11
 Environment=XDG_SESSION_CLASS=user
 
 PermissionsStartOnly=true
-ExecStartPre=-/bin/mkdir -p -m700 /run/user/%u
-ExecStartPre=-/bin/chown %u: /run/user/%u
-ExecStart=-/bin/sh /home/%u/.xinitrc
+ExecStartPre=-/bin/mkdir -p -m700 /run/user/fraggod
+ExecStartPre=-/bin/chown fraggod: /run/user/fraggod
+ExecStart=-/bin/sh /home/fraggod/.xinitrc
 ExecStopPost=-/bin/sync
 
 [Install]
