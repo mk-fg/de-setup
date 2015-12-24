@@ -1,0 +1,12 @@
+[Service]
+Type=notify
+ExecStart=/usr/bin/pulseaudio --daemonize=no -nF /etc/pulse/manual.pa --disallow-exit --exit-idle-time=99999999
+
+Restart=always
+RestartSec=10
+StartLimitInterval=1min
+StartLimitBurst=5
+
+[Install]
+Also=pulseaudio.socket
+WantedBy=default.target
