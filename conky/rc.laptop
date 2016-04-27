@@ -96,7 +96,7 @@ $stippled_hr
 ${template1 / / 20}
 ${template1 home /home 20}
 ${template1 var /var 20}
-${template1 volatiles /mnt/volatiles 10}
+${template1 dump /mnt/volatiles 10}
 ${template1 tmp /tmp 30}
 ${color lightgrey}FS_read: ${color #99aaff}${diskio_read}\
   ${color lightgrey}FS_write: ${color #ffaa99}${diskio_write}\
