@@ -8,84 +8,64 @@ group "E_Config" struct {
     }
     group "desktop_backgrounds" list {
         group "E_Config_Desktop_Background" struct {
-            value "container" int: 0;
             value "desk_x" int: 0;
             value "desk_y" int: 0;
             value "file" string: "/tmp/bg.png";
-            value "manager" int: 0;
             value "zone" int: 0;
         }
         group "E_Config_Desktop_Background" struct {
-            value "container" int: 0;
             value "desk_x" int: 1;
             value "desk_y" int: 0;
             value "file" string: "/tmp/bg.png";
-            value "manager" int: 0;
             value "zone" int: 0;
         }
         group "E_Config_Desktop_Background" struct {
-            value "container" int: 0;
             value "desk_x" int: 2;
             value "desk_y" int: 0;
             value "file" string: "/tmp/bg.png";
-            value "manager" int: 0;
             value "zone" int: 0;
         }
         group "E_Config_Desktop_Background" struct {
-            value "container" int: 0;
             value "desk_x" int: 3;
             value "desk_y" int: 0;
             value "file" string: "/tmp/bg.png";
-            value "manager" int: 0;
             value "zone" int: 0;
         }
         group "E_Config_Desktop_Background" struct {
-            value "container" int: 0;
             value "desk_x" int: 4;
             value "desk_y" int: 0;
             value "file" string: "/tmp/bg.png";
-            value "manager" int: 0;
             value "zone" int: 0;
         }
         group "E_Config_Desktop_Background" struct {
-            value "container" int: 0;
             value "desk_x" int: 5;
             value "desk_y" int: 0;
             value "file" string: "/tmp/bg.png";
-            value "manager" int: 0;
             value "zone" int: 0;
         }
     }
     group "desktop_names" list {
         group "E_Config_Desktop_Name" struct {
-            value "container" int: 0;
             value "desk_x" int: 0;
             value "desk_y" int: 0;
-            value "manager" int: 0;
             value "name" string: "CNC";
             value "zone" int: 0;
         }
         group "E_Config_Desktop_Name" struct {
-            value "container" int: 0;
             value "desk_x" int: 1;
             value "desk_y" int: 0;
-            value "manager" int: 0;
             value "name" string: "Web";
             value "zone" int: 0;
         }
         group "E_Config_Desktop_Name" struct {
-            value "container" int: 0;
             value "desk_x" int: 2;
             value "desk_y" int: 0;
-            value "manager" int: 0;
             value "name" string: "Emacs";
             value "zone" int: 0;
         }
         group "E_Config_Desktop_Name" struct {
-            value "container" int: 0;
             value "desk_x" int: 3;
             value "desk_y" int: 0;
-            value "manager" int: 0;
             value "name" string: "Mail";
             value "zone" int: 0;
         }
@@ -1072,7 +1052,6 @@ group "E_Config" struct {
         group "E_Config_Shelf" struct {
             value "autohide" int: 1;
             value "autohide_show_action" int: 0;
-            value "container" int: 0;
             value "desk_show_mode" int: 0;
             value "fit_along" uchar: 1;
             value "fit_size" uchar: 0;
@@ -1080,7 +1059,6 @@ group "E_Config" struct {
             value "hide_timeout" float: 1.0000000000000000000000000;
             value "id" int: 1;
             value "layer" int: 250;
-            value "manager" int: 0;
             value "name" string: "shelf";
             value "orient" int: 9;
             value "overlap" int: 1;
@@ -1178,7 +1156,6 @@ group "E_Config" struct {
     value "border_shade_animate" int: 1;
     value "border_shade_speed" double: 3000.0000000000000000000000000;
     value "border_shade_transition" int: 3;
-    value "cache_flush_poll_interval" int: 512;
     value "cfgdlg_auto_apply" int: 0;
     value "cfgdlg_default_mode" int: 0;
     value "cfgdlg_normal_wins" uchar: 0;
@@ -1192,7 +1169,7 @@ group "E_Config" struct {
     value "clientlist_warp_to_iconified_desktop" int: 0;
     value "cnfmdlg_disabled" int: 0;
     value "config_type" uint: 3;
-    value "config_version" int: 1000017;
+    value "config_version" int: 1000019;
     value "cursor_size" int: 32;
     value "default_system_menu" string: "/usr/etc/xdg/menus/enlightenment.menu";
     value "desk_auto_switch" int: 0;
@@ -1232,8 +1209,6 @@ group "E_Config" struct {
     value "dpms_suspend_timeout" int: 5400;
     value "drag_resist" int: 16;
     value "edge_flip_dragging" int: 1;
-    value "edje_cache" int: 32;
-    value "edje_collection_cache" int: 64;
     value "exe_always_single_instance" uchar: 0;
     value "exebuf_term_cmd" string: "fgterm -hold -e";
     value "exec.expire_timeout" double: 30.0000000000000000000000000;
@@ -1246,7 +1221,6 @@ group "E_Config" struct {
     value "focus_policy" int: 0;
     value "focus_revert_on_hide_or_close" int: 1;
     value "focus_setting" int: 3;
-    value "font_cache" int: 512;
     value "font_hinting" int: 1;
     value "framerate" double: 130.0000000000000000000000000;
     value "fullscreen_flip" int: 1;
@@ -1257,7 +1231,8 @@ group "E_Config" struct {
     value "icon_theme" string: "Tango";
     value "icon_theme_overrides" uchar: 0;
     value "idle_cursor" uchar: 1;
-    value "image_cache" int: 4096;
+    value "keyboard.repeat_delay" int: 400;
+    value "keyboard.repeat_rate" int: 25;
     value "kill_if_close_not_possible" int: 1;
     value "kill_process" int: 1;
     value "kill_timer_wait" double: 10.0000000000000000000000000;
@@ -2422,6 +2397,7 @@ group "Comp_Config" struct {
     value "vsync" uchar: 0;
 }
 ----- file: e_randr.cfg
+----- file: e_randr2.cfg
 ----- file: e_remember_restart.cfg
 group "E_Remember_List" struct {
 }
@@ -3042,6 +3018,3 @@ group "Temperature_Config" struct {
     }
 }
 ----- file: systray.cfg
-group "Systray_Config" struct {
-    value "use_xembed" int: 1;
-}
