@@ -19,7 +19,7 @@ xinput list "$dev" &>/dev/null && {
 dev=$( xinput list |
 	awk 'match($0,/\<2.4G 2.4G Wireless Device\s+id=([0-9]+)\s+\[slave\s+pointer\>/,a) {print a[1]}' )
 [[ -n "$dev" ]] && xinput list "$dev" &>/dev/null && {
-	xinput set-button-map "$dev" 1 2 3 4 5 6 7 0 2 10 11 12 13 || err=1
+	xinput set-button-map "$dev" 1 8 3 4 5 6 7 0 2 10 11 12 13 || err=1
 } ||:
 
 # Synaptics settings, in case something (e.g. WM) messes these up
