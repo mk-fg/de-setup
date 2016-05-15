@@ -1,5 +1,3 @@
-(define debug #f)
-
 (define (mono-time)
 	"Return monotonic timestamp in seconds as real."
 	(+ 0.0 (/ (get-internal-real-time) internal-time-units-per-second)))
@@ -11,6 +9,7 @@
 (define razer-wait-max 0.5)
 (define razer-ts-start #f)
 (define razer-ts-done #f)
+(define razer-debug #f)
 
 (xbindkey-function '("b:8") (lambda ()
 	(let ((ts (mono-time)))
@@ -21,8 +20,8 @@
 
 (xbindkey-function '(Release "b:8") (lambda ()
 	(let ((ts (mono-time)))
-		(when debug
-			(format #t "razer: ~a/~a delay=~s[~a] wait=~a[~a]\n"
+		(when razer-debug
+			(format #t "razer: ~a/~a delay=~a[~a] wait=~a[~a]\n"
 				razer-ts-start razer-ts-done
 				(and razer-ts-done (- ts razer-ts-done)) razer-delay-min
 				(and razer-ts-start (- ts razer-ts-start)) razer-wait-max))
@@ -33,8 +32,8 @@
 				;; Enforce max "click" wait time
 				(and razer-ts-start (<= (- ts razer-ts-start) razer-wait-max)))
 			(set! razer-ts-done ts)
-			(when debug (format #t "razer: --- click!\n"))
-			(run-command "xdotool click 2"))))) ;; XXX: use something exported from xbindkeys instead
+			(when razer-debug (format #t "razer: --- click!\n"))
+			(run-command "xdotool click 2"))))) ;; XXX: something more liteweight maybe?
 
 ;; (xbindkey '("b:2") "echo click2+ >> ~/evtest.log")
 ;; (xbindkey '(Release "b:2") "echo click2- >> ~/evtest.log")
