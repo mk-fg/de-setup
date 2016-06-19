@@ -4,7 +4,7 @@ After=xorg.target sockets.target
 
 [Service]
 SyslogIdentifier=%p
-ExecStart=/usr/bin/env pulseaudio --exit-idle-time=999999
+ExecStart=/usr/bin/env pulseaudio --daemonize=no -nF /etc/pulse/manual.pa --disallow-exit --exit-idle-time=99999999
 
 Restart=always
 RestartPreventExitStatus=SIGTERM SIGINT SIGABRT SIGKILL
