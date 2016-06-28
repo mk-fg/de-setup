@@ -1,0 +1,7 @@
+[Unit]
+After=xorg.target xsettings.service
+PartOf=startx.target
+
+[Service]
+SyslogIdentifier=%p
+ExecStart=/usr/bin/env xbindkeys -n

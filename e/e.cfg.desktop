@@ -1659,7 +1659,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Down";
             value "modifiers" int: 8;
-            value "params" string: "down";
+            value "params" string: "next";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "desk_linear_flip_to";
@@ -1762,7 +1762,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Left";
             value "modifiers" int: 8;
-            value "params" string: "left";
+            value "params" string: "next";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -1786,7 +1786,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Right";
             value "modifiers" int: 8;
-            value "params" string: "right";
+            value "params" string: "next";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "winlist";
@@ -1802,7 +1802,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Up";
             value "modifiers" int: 8;
-            value "params" string: "up";
+            value "params" string: "next";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
