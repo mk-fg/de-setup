@@ -9,4 +9,4 @@ Restart=always
 ExecStart=/usr/bin/env notify.logtail\
  -i ${HOME}/media/appz/icons/biohazard_48x.png\
  -x ${XDG_RUNTIME_DIR}/logtail_notify.db\
- /var/log/syslog/stripped.log
+ -f 7:12 /var/log/syslog/stripped.log
