@@ -4,4 +4,5 @@ PartOf=startx.target
 
 [Service]
 SyslogIdentifier=%p
+Environment=ZSHRC_AUTOSTART=pa_mixer
 ExecStart=/usr/bin/env yeahconsole
