@@ -1,3 +1,5 @@
+### Must be enabled with UID instance, e.g. "systemctl enable autodm@1000"
+
 [Unit]
 After=systemd-user-sessions.service
 
@@ -11,17 +13,9 @@ Slice=user-%i.slice
 KillMode=mixed
 Delegate=yes
 
-## XDG_RUNTIME_DIR should NOT be set here, will be overidden by pam
-Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%i/bus
-Environment=DISPLAY=:1
-Environment=XDG_VTNR=2
-Environment=XDG_SESSION_TYPE=x11
-Environment=XDG_SESSION_CLASS=user
-
 PermissionsStartOnly=true
-ExecStartPre=-/bin/mkdir -p -m700 /run/user/%i
-ExecStartPre=-/bin/chown %i: /run/user/%i
-ExecStart=-/bin/sh /home/%i/.xinitrc
+ExecStartPre=-/bin/bash -c 'd="/run/user/$(id -ur %i)" && mkdir -p -m0700 "$d" && chown -R %i:%i "$d"'
+ExecStart=-/bin/bash -c 'exec $(eval echo "~$(id -un %i)")/.xinitrc'
 ExecStopPost=-/bin/sync
 
 [Install]
