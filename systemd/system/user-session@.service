@@ -8,7 +8,7 @@ Environment=XDG_SESSION_TYPE=x11
 Environment=XDG_SESSION_DESKTOP=enlightenment
 
 # "pam-run" is from https://github.com/mk-fg/fgtk/#pam-run
-ExecStart=/usr/local/bin/pam-run --debug -u %i -t :1 -- ~/.xinitrc
+ExecStart=/usr/local/bin/pam-run -u %i -t :1 -- ~/.xinitrc
 
 [Install]
 WantedBy=graphical.target
