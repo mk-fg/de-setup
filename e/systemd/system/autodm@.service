@@ -6,20 +6,22 @@ Type=notify
 NotifyAccess=all
 PAMName=systemd-user
 
-User=fraggod
-Slice=user-fraggod.slice
+User=%i
+Slice=user-%i.slice
 KillMode=mixed
 Delegate=yes
 
+## XDG_RUNTIME_DIR should NOT be set here, will be overidden by pam
+Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/%i/bus
 Environment=DISPLAY=:1
-Environment=DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/fraggod/bus
+Environment=XDG_VTNR=2
 Environment=XDG_SESSION_TYPE=x11
 Environment=XDG_SESSION_CLASS=user
 
 PermissionsStartOnly=true
-ExecStartPre=-/bin/mkdir -p -m700 /run/user/fraggod
-ExecStartPre=-/bin/chown fraggod: /run/user/fraggod
-ExecStart=-/bin/sh /home/fraggod/.xinitrc
+ExecStartPre=-/bin/mkdir -p -m700 /run/user/%i
+ExecStartPre=-/bin/chown %i: /run/user/%i
+ExecStart=-/bin/sh /home/%i/.xinitrc
 ExecStopPost=-/bin/sync
 
 [Install]
