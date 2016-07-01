@@ -19,15 +19,13 @@ fi
 pgrep gpg-agent >/dev/null || gpg-agent --daemon
 source "$env_file"
 
-# DE env basics
-export DBUS_SESSION_BUS_ADDRESS=unix:path="$XDG_RUNTIME_DIR"/bus
+# Misc env
 export DISPLAY=:1
-export XDG_VTNR=2
-export XDG_SESSION_TYPE=x11
-export XDG_SESSION_CLASS=user
 export ELM_THEME=elm-efenniht
 export GTK_MODULES="libcanberra-gtk-module.so"
 export XDG_DATA_DIRS="${HOME}/.xdg:/usr/share/enlightenment:/usr/share"
 [[ -r "$env_ext" ]] && source "$env_ext"
 
-exec /usr/lib/systemd/systemd --user --unit=startx.target
+systemctl --user import-environment
+systemctl --user start startx.target
+exec sleep infinity
