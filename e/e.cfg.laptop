@@ -2492,25 +2492,6 @@ group "Module_Config" struct {
     value "version" int: 1000000;
 }
 ----- file: module.everything.cache.cfg
-group "History" struct {
-    group "subjects" hash {
-        key "";
-        group "History_Types" struct {
-        }
-    }
-    group "subjects" hash {
-        key "APPLICATION";
-        group "History_Types" struct {
-        }
-    }
-    group "subjects" hash {
-        key "BORDER";
-        group "History_Types" struct {
-        }
-    }
-    value "begin" double: 1437479428.0651109218597412109375000;
-    value "version" int: 2;
-}
 ----- file: module.everything.cfg
 group "Config" struct {
     group "collections" list {
