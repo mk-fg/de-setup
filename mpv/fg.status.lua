@@ -4,7 +4,7 @@ function mpn(k, def) return mp.get_property_number(k, def or 0) end
 function bts(bytes, dn)
 	for n, u in ipairs({'B', 'K', 'M', 'G', 'T'}) do
 		n = n + (dn or 0)
-		if (bytes >= 2^((n-1)*10)) and (bytes < 2^(n*10))
+		if (bytes >= 10 * 2^((n-1)*10)) and (bytes < 10 * 2^(n*10))
 			then return bytes / 2^((n-1)*10), u
 		end
 	end
@@ -42,11 +42,11 @@ function update_status_line()
 	local r = mpn('speed', -1)
 	if r ~= 1 then atsl(string.format(' x%4.2f', r)) end
 
-	r = mpn('avsync', nil)
-	if r ~= nil then atsl(string.format(' A-V: %7.3f', r)) end
+	-- r = mpn('avsync', nil)
+	-- if r ~= nil then atsl(string.format(' A-V: %7.3f', r)) end
 
-	r = mp.get_property('total-avsync-change', 0)
-	if math.abs(r) > 0.05 then atsl(string.format(' ct:%7.3f', r)) end
+	-- r = mp.get_property('total-avsync-change', 0)
+	-- if math.abs(r) > 0.05 then atsl(string.format(' ct:%7.3f', r)) end
 
 	r = mpn('drop-frame-count', -1)
 	if r > 0 then atsl(' Late: ' .. r) end
