@@ -12,3 +12,6 @@ keycode 100 = Left
 keycode 102 = Right
 keycode 98 = Up
 keycode 104 = Down
+
+! Make right Alt same as the left one
+keycode 108 = Alt_L
