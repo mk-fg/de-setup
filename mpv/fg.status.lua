@@ -21,13 +21,17 @@ end
 function update_status_line()
 	status_line = ''
 
-	if mp.get_property_bool('pause') then atsl('(Paused) ')
+	if mp.get_property_bool('pause')
+		then atsl('(Paused) ')
 	elseif mp.get_property_bool('paused-for-cache')
 		then atsl(string.format('(Buffering - %d%%) ', mpn('cache-buffering-state')))
+	elseif mp.get_property_bool('idle') or mp.get_property_bool('core-idle')
+		then atsl(string.format('(Idle) '))
 	end
 
 	if mp.get_property('vid') ~= 'no' then atsl('V') end
 	if mp.get_property('aid') ~= 'no' then atsl('A') end
+	if mp.get_property('sid') ~= 'no' then atsl('S') end
 
 	atsl(': ')
 
@@ -57,16 +61,19 @@ function update_status_line()
 	if r then brs[#brs+1] = 'V:' .. bts_str(r / 8) end
 	r = mpn('audio-bitrate')
 	if r then brs[#brs+1] = 'A:' .. bts_str(r / 8) end
-	local cs = mpn('cache-size')
+	-- local cs =
 	r = mpn('cache')
 	if r > 95 then r = '>95%' else r = string.format('%3d%%', r) end
 	atsl(string.format(
-		' -- %s: %s %s [B/s %s]',
+		' -- %s: %s %2.0fs+%s/%s [B/s %s]',
 		(mp.get_property('cache-idle') == 'yes') and 'cached ' or 'caching',
-		r, bts_str(cs, nil, -1), table.concat(brs, ' ') ))
+		r, mpn('demuxer-cache-duration'),
+		bts_str(mpn('cache-used'), nil, -1), bts_str(mpn('cache-size'), nil, -1),
+		table.concat(brs, ' ') ))
 
 	mp.set_property('options/term-status-msg', status_line)
 end
 
 
-mp.register_event('tick', update_status_line)
+mp.add_periodic_timer(0.5, update_status_line)
+-- mp.register_event('tick', update_status_line)
