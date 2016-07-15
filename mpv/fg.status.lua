@@ -1,8 +1,9 @@
 function atsl(s) status_line = status_line .. s end
 function mpn(k, def) return mp.get_property_number(k, def or 0) end
 
-function bts(bytes, dn)
-	for n, u in ipairs({'B', 'K', 'M', 'G', 'T'}) do
+function bts(bytes, dn, units)
+	units = units or {'B', 'K', 'M', 'G', 'T'}
+	for n, u in ipairs(units) do
 		n = n + (dn or 0)
 		if (bytes >= 10 * 2^((n-1)*10)) and (bytes < 10 * 2^(n*10))
 			then return bytes / 2^((n-1)*10), u
@@ -11,8 +12,8 @@ function bts(bytes, dn)
 	return bytes, ''
 end
 
-function bts_str(bytes, dn, fmt)
-	local v, u = bts(bytes, dn)
+function bts_str(bytes, fmt, ...)
+	local v, u = bts(bytes, ...)
 	return string.format(fmt or '%.0f%s', v, u)
 end
 
@@ -53,14 +54,16 @@ function update_status_line()
 
 	local brs = {}
 	r = mpn('video-bitrate')
-	if r then brs[#brs+1] = 'V:' .. bts_str(r) end
+	if r then brs[#brs+1] = 'V:' .. bts_str(r / 8) end
 	r = mpn('audio-bitrate')
-	if r then brs[#brs+1] = 'A:' .. bts_str(r) end
+	if r then brs[#brs+1] = 'A:' .. bts_str(r / 8) end
 	local cs = mpn('cache-size')
+	r = mpn('cache')
+	if r > 95 then r = '>95%' else r = string.format('%3d%%', r) end
 	atsl(string.format(
-		' -- %s: %d%% %s [rate %s]',
-		(mp.get_property('cache-idle') == 'yes') and 'cached' or 'caching',
-		mpn('cache'), bts_str(cs, -1), table.concat(brs, ' ') ))
+		' -- %s: %s %s [B/s %s]',
+		(mp.get_property('cache-idle') == 'yes') and 'cached ' or 'caching',
+		r, bts_str(cs, nil, -1), table.concat(brs, ' ') ))
 
 	mp.set_property('options/term-status-msg', status_line)
 end
