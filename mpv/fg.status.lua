@@ -34,24 +34,13 @@ function update_status_line()
 	if mp.get_property('sid') ~= 'no' then atsl('S') end
 
 	atsl(': ')
-
 	atsl(mp.get_property_osd('time-pos'))
-
 	atsl(' / ');
 	atsl(mp.get_property_osd('duration'));
-
-	atsl(' (')
-	atsl(mp.get_property_osd('percent-pos', -1))
-	atsl('%)')
+	atsl(string.format(' (%2d%%)', mpn('percent-pos')))
 
 	local r = mpn('speed', -1)
 	if r ~= 1 then atsl(string.format(' x%4.2f', r)) end
-
-	-- r = mpn('avsync', nil)
-	-- if r ~= nil then atsl(string.format(' A-V: %7.3f', r)) end
-
-	-- r = mp.get_property('total-avsync-change', 0)
-	-- if math.abs(r) > 0.05 then atsl(string.format(' ct:%7.3f', r)) end
 
 	r = mpn('drop-frame-count', -1)
 	if r > 0 then atsl(' Late: ' .. r) end
@@ -61,11 +50,10 @@ function update_status_line()
 	if r then brs[#brs+1] = 'V:' .. bts_str(r / 8) end
 	r = mpn('audio-bitrate')
 	if r then brs[#brs+1] = 'A:' .. bts_str(r / 8) end
-	-- local cs =
 	r = mpn('cache')
 	if r > 95 then r = '>95%' else r = string.format('%3d%%', r) end
 	atsl(string.format(
-		' -- %s: %s %2.0fs+%s/%s [B/s %s]',
+		' -- %s %s %2.0fs+%s/%s [B/s %s]',
 		(mp.get_property('cache-idle') == 'yes') and 'cached ' or 'caching',
 		r, mpn('demuxer-cache-duration'),
 		bts_str(mpn('cache-used'), nil, -1), bts_str(mpn('cache-size'), nil, -1),
