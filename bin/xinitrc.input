@@ -15,11 +15,13 @@ xinput list "$dev" &>/dev/null && {
 	xinput set-prop "$dev" --type=float 256 50 || err=1
 } ||:
 
-# Razer E-BLUE mouse - remap side-buttons to be mouse-2 (middle)
+# Razer E-BLUE mouse
+# Middle button gets remapped to "8", so that xbindkeys script can proxy it to "2" with debouncing
+# One side button is used exclusively for wakeups, so is disabled, other one is for xmodmap to bind
 dev=$( xinput list |
 	awk 'match($0,/\<2.4G 2.4G Wireless Device\s+id=([0-9]+)\s+\[slave\s+pointer\>/,a) {print a[1]}' )
 [[ -n "$dev" ]] && xinput list "$dev" &>/dev/null && {
-	xinput set-button-map "$dev" 1 8 3 4 5 6 7 0 2 10 11 12 13 || err=1
+	xinput set-button-map "$dev" 1 8 3 4 5 6 7 0 9 10 11 12 13 || err=1
 } ||:
 
 # Synaptics settings, in case something (e.g. WM) messes these up
