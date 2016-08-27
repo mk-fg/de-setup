@@ -11,7 +11,7 @@
 (define razer-ts-done #f)
 (define razer-debug #f)
 
-(xbindkey-function '("b:8") (lambda ()
+(xbindkey-function "b:8" (lambda ()
 	(let ((ts (mono-time)))
 		(when
 			;; Enforce min ts diff between "done" and "start" of the next one
@@ -37,3 +37,8 @@
 
 ;; (xbindkey '("b:2") "echo click2+ >> ~/evtest.log")
 ;; (xbindkey '(Release "b:2") "echo click2- >> ~/evtest.log")
+
+
+;;;; -- Mouse-9 to act as a "Page Down" button event
+
+(xbindkey "b:9" "xdotool key Next")
