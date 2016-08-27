@@ -35,9 +35,12 @@ function update_status_line()
 
 	atsl(': ')
 	atsl(mp.get_property_osd('time-pos'))
-	atsl(' / ');
-	atsl(mp.get_property_osd('duration'));
-	atsl(string.format(' (%2d%%)', mpn('percent-pos')))
+	local r = mp.get_property_osd('duration')
+	if string.len(r) > 0 then
+		atsl(' / ')
+		atsl(mp.get_property_osd('duration'))
+		atsl(string.format(' (%2d%%)', mpn('percent-pos')))
+	end
 
 	local r = mpn('speed', -1)
 	if r ~= 1 then atsl(string.format(' x%4.2f', r)) end
