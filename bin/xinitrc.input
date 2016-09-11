@@ -3,9 +3,20 @@
 set -o pipefail
 err=0
 
-setxkbmap -model acer_laptop -rules evdev\
-	-layout 'us,ru' -option 'grp:switch,grp:caps_toggle,grp_led:caps' || err=1
-xmodmap ~/.xmodmaprc || err=1
+node=$(uname -n)
+if [[ "$node" = sacrilege ]]
+then
+	# There's some weird interaction between "setxkbmap -model ..." and xmodmap
+	xmodmap ~/.xmodmaprc || err=1
+	setxkbmap -model acer_laptop -rules evdev\
+		-layout 'us,ru' -option 'grp:switch,grp:caps_toggle,grp_led:caps' || err=1
+	# Running all "keycode ..." rules somehow breaks "-model acer_laptop" keys, idk
+	xmodmap -e 'keycode 108 = Alt_L'
+else
+	setxkbmap -rules evdev\
+		-layout 'us,ru' -option 'grp:switch,grp:caps_toggle,grp_led:caps' || err=1
+	xmodmap ~/.xmodmaprc || err=1
+fi
 xset r rate 250 40 || err=1
 
 # Not sure which it's supposed to apply to, gotta check
