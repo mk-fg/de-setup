@@ -1029,6 +1029,12 @@ group "E_Config" struct {
             value "priority" int: 0;
         }
         group "E_Config_Module" struct {
+            value "delayed" uchar: 0;
+            value "enabled" uchar: 1;
+            value "name" string: "time";
+            value "priority" int: 0;
+        }
+        group "E_Config_Module" struct {
             value "delayed" uchar: 1;
             value "enabled" uchar: 1;
             value "name" string: "winlist";
@@ -1149,7 +1155,7 @@ group "E_Config" struct {
     value "border_raise_on_focus" int: 1;
     value "border_raise_on_mouse_action" int: 1;
     value "border_shade_animate" int: 1;
-    value "border_shade_speed" double: 3000.0000000000000000000000000;
+    value "border_shade_speed" double: 6400.0000000000000000000000000;
     value "border_shade_transition" int: 3;
     value "cfgdlg_auto_apply" int: 0;
     value "cfgdlg_default_mode" int: 0;
@@ -1164,7 +1170,7 @@ group "E_Config" struct {
     value "clientlist_warp_to_iconified_desktop" int: 0;
     value "cnfmdlg_disabled" int: 0;
     value "config_type" uint: 3;
-    value "config_version" int: 1000019;
+    value "config_version" int: 1000021;
     value "cursor_size" int: 32;
     value "default_system_menu" string: "/usr/etc/xdg/menus/enlightenment.menu";
     value "desk_auto_switch" int: 0;
@@ -1190,7 +1196,6 @@ group "E_Config" struct {
     value "desklock_start_locked" int: 0;
     value "desklock_use_custom_desklock" int: 0;
     value "desktop_default_name" string: "%i-%i";
-    value "desktop_default_window_profile" string: "standard";
     value "device_auto_mount" int: 0;
     value "device_auto_open" int: 0;
     value "device_desktop" int: 1;
@@ -1214,6 +1219,7 @@ group "E_Config" struct {
     value "filemanager_single_click" uchar: 0;
     value "focus_last_focused_per_desktop" int: 1;
     value "focus_policy" int: 0;
+    value "focus_revert_allow_sticky" int: 0;
     value "focus_revert_on_hide_or_close" int: 1;
     value "focus_setting" int: 3;
     value "font_hinting" int: 1;
@@ -1323,13 +1329,15 @@ group "E_Config" struct {
     value "update.later" uchar: 0;
     value "use_app_icon" int: 0;
     value "use_auto_raise" int: 0;
-    value "use_desktop_window_profile" int: 0;
     value "use_e_cursor" int: 0;
     value "use_resist" int: 1;
     value "wallpaper_import_last_dev" string: "~/";
     value "wallpaper_import_last_path" string: "/";
     value "window_activehint_policy" int: 3;
     value "window_grouping" int: 0;
+    value "window_maximize_animate" int: 0;
+    value "window_maximize_time" double: 0.0500000000000000027755576;
+    value "window_maximize_transition" int: 3;
     value "window_placement_policy" int: 0;
     value "window_resist" int: 12;
     value "winlist_list_focus_while_selecting" int: 1;
@@ -1360,6 +1368,7 @@ group "E_Config" struct {
     value "xkb.default_model" string: "default";
     value "xkb.dont_touch_my_damn_keyboard" uchar: 1;
     value "xkb.only_label" int: 0;
+    value "xkb.use_cache" uchar: 0;
     value "xsettings.enabled" uchar: 0;
     value "xsettings.match_e17_icon_theme" uchar: 0;
     value "xsettings.match_e17_theme" uchar: 0;
@@ -1762,7 +1771,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Left";
             value "modifiers" int: 8;
-            value "params" string: "next";
+            value "params" string: "prev";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -1802,7 +1811,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Up";
             value "modifiers" int: 8;
-            value "params" string: "next";
+            value "params" string: "prev";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -2090,6 +2099,20 @@ group "E_Config_Bindings" struct {
             value "context" int: 3;
             value "modifiers" int: 0;
             value "params" string: "main";
+        }
+        group "E_Config_Binding_Mouse" struct {
+            value "action" string: "gadget_move";
+            value "any_mod" uchar: 0;
+            value "button" uchar: 1;
+            value "context" int: 9;
+            value "modifiers" int: 8;
+        }
+        group "E_Config_Binding_Mouse" struct {
+            value "action" string: "gadget_resize";
+            value "any_mod" uchar: 0;
+            value "button" uchar: 3;
+            value "context" int: 9;
+            value "modifiers" int: 8;
         }
     }
     group "signal_bindings" list {
@@ -2445,8 +2468,27 @@ group "E_Config_Bindings" struct {
             value "params" string: "1";
             value "z" int: 1;
         }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "bryce_resize";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "direction" int: 0;
+            value "modifiers" int: 2;
+            value "z" int: -1;
+        }
+        group "E_Config_Binding_Wheel" struct {
+            value "action" string: "bryce_resize";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "direction" int: 0;
+            value "modifiers" int: 2;
+            value "z" int: 1;
+        }
     }
     value "config_version" uint: 0;
+}
+----- file: e_bryces.cfg
+group "Bryces" struct {
 }
 ----- file: e_comp.cfg
 group "Comp_Config" struct {
@@ -2479,7 +2521,7 @@ group "Comp_Config" struct {
     value "match.disable_popups" uchar: 0;
     value "max_unmapped_time" int: 36000;
     value "min_unmapped_time" int: 300;
-    value "nocomp_fs" uchar: 0;
+    value "nocomp_fs" uchar: 1;
     value "nofade" uchar: 0;
     value "send_dump" uchar: 1;
     value "send_flush" uchar: 1;
@@ -2489,6 +2531,9 @@ group "Comp_Config" struct {
     value "texture_from_pixmap" uchar: 1;
     value "version" int: 1;
     value "vsync" uchar: 0;
+}
+----- file: e_gadget_sites.cfg
+group "E_Gadget_Sites" struct {
 }
 ----- file: e_randr.cfg
 ----- file: e_randr2.cfg
@@ -3092,5 +3137,8 @@ group "Temperature_Config" struct {
             value "units" int: 0;
         }
     }
+}
+----- file: module.time.cfg
+group "Config" struct {
 }
 ----- file: systray.cfg
