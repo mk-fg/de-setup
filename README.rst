@@ -86,6 +86,11 @@ To encode these back to eet blobs::
 Terminology needs specific config in addition to edje theme to have contrast
 ISO-6429 colors on top of theme-specific background/features.
 
+``_xterm-colors-to-eet.py`` script can be used to generate ISO-6429 color values
+for terminology eet config file, e.g. from `xresources <xresources>`_ file with
+xterm colors and sync colors between the two without having to enter these
+manually.
+
 
 conky
 -----
