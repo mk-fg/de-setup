@@ -48,6 +48,7 @@ def main(args=None):
 		help='Base indent level. Default: %(default)s')
 	parser.add_argument('-c', '--indent-chars', default='    ', metavar='str',
 		help='Indentation level characters, e.g. 4-spaces or tab. Default: %(default)r')
+
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
 	logging.basicConfig(level=logging.INFO)
@@ -83,7 +84,10 @@ def main(args=None):
 			cn = cn_chk
 			if cn == 'inverse_bg': cn = 'def'
 
-			for cid_t in t, 'normal':
+			t_opts = [t]
+			if t == 'intense_bold': t_opts.append('bold')
+			t_opts.append('normal') # safest fallback
+			for cid_t in t_opts:
 				cid = ColorID(cn, cid_t)
 				if cid not in colors: continue
 				ct = colors[cid]
