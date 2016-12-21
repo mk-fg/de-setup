@@ -1771,7 +1771,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Left";
             value "modifiers" int: 8;
-            value "params" string: "next";
+            value "params" string: "prev";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -1811,7 +1811,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Up";
             value "modifiers" int: 8;
-            value "params" string: "next";
+            value "params" string: "prev";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
