@@ -271,11 +271,6 @@ collections {
         image { image: "bg_shine2.png" COMP; size: 1024 480 2048 960; }
         image { image: "bg_shine.png"  COMP; size: 2048 960 99999 99999; }
       }
-      sounds {
-         sample { name: "bell" LOSSY 64;
-            source: "bell.wav";
-         }
-      }
       script {
          public message(Msg_Type:type, id, ...) {
             new r, g, b, a, v;
@@ -1333,11 +1328,6 @@ collections {
          }
          program {
             signal: "bell,ring"; source: "terminology";
-#if (EFL_VERSION_MAJOR > 1) || (EFL_VERSION_MINOR >= 9)
-            action: PLAY_SAMPLE "bell" 1.0 ALERT;
-#else
-            action: PLAY_SAMPLE "bell" 1.0;
-#endif
          }
          program {
             signal: "bell"; source: "terminology";
