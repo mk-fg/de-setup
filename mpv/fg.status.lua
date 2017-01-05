@@ -53,7 +53,7 @@ function update_status_line()
 	if r then brs[#brs+1] = 'V:' .. bts_str(r / 8) end
 	r = mpn('audio-bitrate')
 	if r then brs[#brs+1] = 'A:' .. bts_str(r / 8) end
-	r = mpn('cache')
+	r = mpn('cache-percent')
 	if r > 95 then r = '>95%' else r = string.format('%3d%%', r) end
 	atsl(string.format(
 		' -- %s %s %2.0fs+%s/%s [B/s %s]',
