@@ -8,5 +8,7 @@ Before=background.target xsettings.service
 [Service]
 SyslogIdentifier=%p
 KillMode=none
+StandardOutput=null
+StandardError=null
 Environment=E_START=enlightenment
 ExecStart=/bin/bash -c "exec svlogd -r _ -ttt %h/.e/logs < <(exec enlightenment -locked)"
