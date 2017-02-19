@@ -45,7 +45,7 @@ function update_status_line()
 	local r = mpn('speed', -1)
 	if r ~= 1 then atsl(string.format(' x%4.2f', r)) end
 
-	r = mpn('drop-frame-count', -1)
+	r = mpn('decoder-frame-drop-count', -1)
 	if r > 0 then atsl(' Late: ' .. r) end
 
 	local brs = {}
