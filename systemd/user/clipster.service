@@ -1,0 +1,7 @@
+[Unit]
+After=xorg.target background.target
+PartOf=startx.target
+
+[Service]
+SyslogIdentifier=%p
+ExecStart=/usr/bin/env clipster -d
