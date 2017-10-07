@@ -1,3 +1,4 @@
 #!/bin/sh
 
+xrandr --dpi 102
 xset dpms 0 0 $((40*60))

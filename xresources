@@ -49,3 +49,11 @@ yeahconsole*toggleKey: Control+grave
 yeahconsole*keySmaller: ControlAltWin+F2
 yeahconsole*keyBigger: ControlAltWin+F2
 yeahconsole*keyFull: ControlAltWin+F2
+
+Xft.dpi: 102
+Xft.rgba: rgb
+Xft.antialias: 1
+Xft.autohint: 0
+Xft.hinting: 1
+Xft.hintstyle: hintnone
+Xft.lcdfilter: lcddefault
