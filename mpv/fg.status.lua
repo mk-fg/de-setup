@@ -38,15 +38,19 @@ function update_status_line()
 	local r = mp.get_property_osd('duration')
 	if string.len(r) > 0 then
 		atsl(' / ')
-		atsl(mp.get_property_osd('duration'))
+		atsl(r)
 		atsl(string.format(' (%2d%%)', mpn('percent-pos')))
 	end
 
-	local r = mpn('speed', -1)
+	r = mpn('speed', -1)
 	if r ~= 1 then atsl(string.format(' x%4.2f', r)) end
 
-	r = mpn('drop-frame-count', -1)
+	r = mpn('decoder-frame-drop-count', -1)
 	if r > 0 then atsl(' Late: ' .. r) end
+
+	r = mpn('playlist-count')
+	if r > 1 then atsl(string.format(
+		' [pls:%02d/%02d]', mpn('playlist-pos-1'), r )) end
 
 	local brs = {}
 	r = mpn('video-bitrate')
