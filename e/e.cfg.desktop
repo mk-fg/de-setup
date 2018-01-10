@@ -1583,6 +1583,13 @@ group "E_Config_Bindings" struct {
             value "modifiers" int: 4;
         }
         group "E_Config_Binding_Key" struct {
+            value "action" string: "shot";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Sys_Req";
+            value "modifiers" int: 4;
+        }
+        group "E_Config_Binding_Key" struct {
             value "action" string: "desk_flip_by";
             value "any_mod" uchar: 0;
             value "context" int: 9;
@@ -1660,6 +1667,13 @@ group "E_Config_Bindings" struct {
             value "key" string: "Down";
             value "modifiers" int: 8;
             value "params" string: "next";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_iconic_toggle";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "Escape";
+            value "modifiers" int: 8;
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "desk_linear_flip_to";
@@ -1770,7 +1784,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "Print";
             value "modifiers" int: 8;
-            value "params" string: "fgblank";
+            value "params" string: "shot";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -2348,132 +2362,6 @@ group "E_Config_Bindings" struct {
             value "params" string: "0 up";
             value "signal" string: "mouse,wheel,?,1";
             value "source" string: "e.event.titlebar";
-        }
-    }
-    group "wheel_bindings" list {
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 2;
-            value "direction" int: 0;
-            value "modifiers" int: 4;
-            value "params" string: "-1";
-            value "z" int: -1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 2;
-            value "direction" int: 0;
-            value "modifiers" int: 4;
-            value "params" string: "1";
-            value "z" int: 1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 2;
-            value "direction" int: 1;
-            value "modifiers" int: 4;
-            value "params" string: "-1";
-            value "z" int: -1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 2;
-            value "direction" int: 1;
-            value "modifiers" int: 4;
-            value "params" string: "1";
-            value "z" int: 1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 4;
-            value "direction" int: 0;
-            value "modifiers" int: 4;
-            value "params" string: "-1";
-            value "z" int: -1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 4;
-            value "direction" int: 0;
-            value "modifiers" int: 4;
-            value "params" string: "1";
-            value "z" int: 1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 4;
-            value "direction" int: 1;
-            value "modifiers" int: 4;
-            value "params" string: "-1";
-            value "z" int: -1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 4;
-            value "direction" int: 1;
-            value "modifiers" int: 4;
-            value "params" string: "1";
-            value "z" int: 1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 8;
-            value "direction" int: 0;
-            value "modifiers" int: 4;
-            value "params" string: "-1";
-            value "z" int: -1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 8;
-            value "direction" int: 0;
-            value "modifiers" int: 4;
-            value "params" string: "1";
-            value "z" int: 1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 8;
-            value "direction" int: 1;
-            value "modifiers" int: 4;
-            value "params" string: "-1";
-            value "z" int: -1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "desk_linear_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 8;
-            value "direction" int: 1;
-            value "modifiers" int: 4;
-            value "params" string: "1";
-            value "z" int: 1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "bryce_resize";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "direction" int: 0;
-            value "modifiers" int: 2;
-            value "z" int: -1;
-        }
-        group "E_Config_Binding_Wheel" struct {
-            value "action" string: "bryce_resize";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "direction" int: 0;
-            value "modifiers" int: 2;
-            value "z" int: 1;
         }
     }
     value "config_version" uint: 0;
