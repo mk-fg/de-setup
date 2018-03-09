@@ -1,0 +1,8 @@
+[Unit]
+After=xorg.target background.target
+PartOf=startx.target
+
+[Service]
+SyslogIdentifier=%p
+Restart=on-abort
+ExecStart=/usr/bin/env conky -q -a %I
