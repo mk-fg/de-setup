@@ -1450,7 +1450,7 @@ group "E_Config" struct {
     value "powersave.min" int: 0;
     value "powersave.none" double: 0.2500000000000000000000000;
     value "priority" int: 3;
-    value "raise_on_revert_focus" int: 0;
+    value "raise_on_revert_focus" int: 1;
     value "remember_internal_fm_windows" uchar: 1;
     value "remember_internal_fm_windows_globally" uchar: 0;
     value "remember_internal_windows" int: 3;
@@ -1846,12 +1846,12 @@ group "E_Config_Bindings" struct {
             value "params" string: "ru";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "winlist";
+            value "action" string: "window_focus";
             value "any_mod" uchar: 0;
             value "context" int: 9;
             value "key" string: "Down";
             value "modifiers" int: 8;
-            value "params" string: "next";
+            value "params" string: "down";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_iconic_toggle";
@@ -1956,12 +1956,12 @@ group "E_Config_Bindings" struct {
             value "params" string: "8";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "winlist";
+            value "action" string: "window_focus";
             value "any_mod" uchar: 0;
             value "context" int: 9;
             value "key" string: "Left";
             value "modifiers" int: 8;
-            value "params" string: "prev";
+            value "params" string: "left";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -1980,12 +1980,12 @@ group "E_Config_Bindings" struct {
             value "params" string: "fgterm";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "winlist";
+            value "action" string: "window_focus";
             value "any_mod" uchar: 0;
             value "context" int: 9;
             value "key" string: "Right";
             value "modifiers" int: 8;
-            value "params" string: "next";
+            value "params" string: "right";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "winlist";
@@ -1996,12 +1996,12 @@ group "E_Config_Bindings" struct {
             value "params" string: "next";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "winlist";
+            value "action" string: "window_focus";
             value "any_mod" uchar: 0;
             value "context" int: 9;
             value "key" string: "Up";
             value "modifiers" int: 8;
-            value "params" string: "prev";
+            value "params" string: "up";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -2075,12 +2075,27 @@ group "E_Config_Bindings" struct {
             value "params" string: "ec -- -e \"(fg-emms-notify)\"";
         }
         group "E_Config_Binding_Key" struct {
+            value "action" string: "window_raise";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "space";
+            value "modifiers" int: 8;
+        }
+        group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
             value "any_mod" uchar: 0;
             value "context" int: 9;
             value "key" string: "v";
             value "modifiers" int: 8;
             value "params" string: "xclipc --nostrip";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "A";
+            value "modifiers" int: 9;
+            value "params" string: "de.mouse_remove 2";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_move_by";
