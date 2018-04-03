@@ -1679,7 +1679,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "v";
             value "modifiers" int: 12;
-            value "params" string: "xclipc --slashes-to-dots";
+            value "params" string: "exclip --slashes-to-dots";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_kill";
@@ -2087,7 +2087,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "v";
             value "modifiers" int: 8;
-            value "params" string: "xclipc --nostrip";
+            value "params" string: "exclip --verbatim";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -2255,7 +2255,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "v";
             value "modifiers" int: 9;
-            value "params" string: "xclipc";
+            value "params" string: "exclip";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_close";
