@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# OBSOLETE
+# Use https://github.com/mk-fg/fgtk/#exclip instead
+
 case "$1" in
 	--nostrip)
 		xclip -out -selection primary | xclip -in -selection clipboard
