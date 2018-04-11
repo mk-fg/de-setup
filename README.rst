@@ -112,7 +112,13 @@ mpv
 ---
 
 ``script=...`` option can be used in the main config (e.g. ``~/.mpv/config``) to
-load lua stuff, like this: ``script=~/.mpv/fg.status.lua``
+load lua stuff, like this: ``script=~/.mpv/fg.status.lua`` (one line per script)
+
+fg.lavfi-audio-vis.lua abuses --lavfi-complex to produce visualizations
+(overlaid showcqt + avectorscope filters atm) for audio-only files if window
+is enabled/available (e.g. via --force-window=immediate) and there's no video
+stream in it (album art don't count).
+
 
 
 xbindkeys
