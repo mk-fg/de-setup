@@ -95,6 +95,9 @@ manually.
 conky
 -----
 
+Common "top + stuff" vertical layout with radial displays
+and (mostly decorative) analog/binary clocks on top.
+
 ``rc.laptop`` is a cut-down version of ``rc.desktop`` for smaller screen.
 
 Requres conky lua extension enabled (at build-time, not the case on Arch for
@@ -103,9 +106,12 @@ lua with separate interval, with outputs cached between runs.
 
 Use "make" to build it.
 
-See this `Displaying any lm_sensors data in conky
-<http://blog.fraggod.net/2014/05/19/displaying-any-lm_sensors-data-temperature-fan-speeds-voltage-etc-in-conky.html>`_
-post for more details/screenshots.
+.. raw:: html
+
+  <img src="http://blog.fraggod.net/images/conky_sensors.jpg" height="600px">
+
+`Displaying any lm_sensors data in conky
+<http://blog.fraggod.net/2014/05/19/displaying-any-lm_sensors-data-temperature-fan-speeds-voltage-etc-in-conky.html>`_ blog post has more details on how it all works.
 
 
 mpv
@@ -114,10 +120,37 @@ mpv
 ``script=...`` option can be used in the main config (e.g. ``~/.mpv/config``) to
 load lua stuff, like this: ``script=~/.mpv/fg.status.lua`` (one line per script)
 
-fg.lavfi-audio-vis.lua abuses --lavfi-complex to produce visualizations
-(overlaid showcqt + avectorscope filters atm) for audio-only files if window
-is enabled/available (e.g. via --force-window=immediate) and there's no video
+fg.status.lua
+`````````````
+
+Default mpv status line replacement, with all the stuff that default one
+provides (with a bit nicer format), plus audio/video bitrate and some extra
+caching info.
+
+| Usually can look something like this:
+| ``VAS: 00:10:16 / 00:23:40 (43%) -- cached  >95% 10s+64M/64M [B/s V:366K A:15K]``
+|
+
+Where "VAS" are available streams (video/audio/subtitles), then time/position and
+buffering% / idle / paused state prefix, cache status (cached/caching, %full,
+decoded seconds, used/max state in dynamic B/K/M/G units), and then A/V bitrates
+(same auto-scaled units).
+
+Bitrates are generally useful when streaming stuff over network.
+
+fg.lavfi-audio-vis.lua
+``````````````````````
+
+Parameter-tweaker script that abuses --lavfi-complex to produce visualizations
+(overlaid showcqt + avectorscope filters atm) for audio-only files if window is
+enabled/available (e.g. via --force-window=immediate) and there's no video
 stream in it (album art don't count).
+
+.. raw:: html
+
+  <img src="http://blog.fraggod.net/images/mpv-ffmpeg-vis.jpg" height="400px">
+
+I.e. some fancy dynamic swarming/flowing colors instead of just blank black square.
 
 
 
