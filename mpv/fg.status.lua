@@ -1,41 +1,44 @@
-function atsl(s) status_line = status_line .. s end
-function mpn(k, def) return mp.get_property_number(k, def or 0) end
+-- Fancy mpv status line formatter/setter
 
-function bts(bytes, dn, units)
-	units = units or {'B', 'K', 'M', 'G', 'T'}
-	for n, u in ipairs(units) do
+local status_line = ''
+
+local function atsl(s) status_line = status_line..s; return true end
+local function mpn(k, def) return mp.get_property_number(k, def or 0) end
+
+local function bts(bytes, dn, units)
+	for n, u in ipairs(units or {'B', 'K', 'M', 'G', 'T'}) do
 		n = n + (dn or 0)
 		if (bytes >= 10 * 2^((n-1)*10)) and (bytes < 10 * 2^(n*10))
-			then return bytes / 2^((n-1)*10), u
-		end
+		then return bytes / 2^((n-1)*10), u end
 	end
 	return bytes, ''
 end
 
-function bts_str(bytes, fmt, ...)
+local function bts_str(bytes, fmt, ...)
 	local v, u = bts(bytes, ...)
 	return string.format(fmt or '%.0f%s', v, u)
 end
 
-
-function update_status_line()
+local function update_status_line()
 	status_line = ''
 
-	if mp.get_property_bool('pause')
-		then atsl('(Paused) ')
-	elseif mp.get_property_bool('paused-for-cache')
-		then atsl(string.format('(Buffering - %d%%) ', mpn('cache-buffering-state')))
-	elseif mp.get_property_bool('idle') or mp.get_property_bool('core-idle')
-		then atsl(string.format('(Idle) '))
+	if mp.get_property_bool('pause') then
+		atsl('(Paused) ')
+	elseif mp.get_property_bool('paused-for-cache') then
+		atsl(string.format('(Buffering - %d%%) ', mpn('cache-buffering-state')))
+	elseif mp.get_property_bool('idle') or mp.get_property_bool('core-idle') then
+		atsl(string.format('(Idle) '))
 	end
 
-	if mp.get_property('vid') ~= 'no' then atsl('V') end
-	if mp.get_property('aid') ~= 'no' then atsl('A') end
-	if mp.get_property('sid') ~= 'no' then atsl('S') end
+	local r = false
+	if mp.get_property('vid') ~= 'no' then r = atsl('V') end
+	if mp.get_property('aid') ~= 'no' then r = atsl('A') end
+	if mp.get_property('sid') ~= 'no' then r = atsl('S') end
+	if not r then atsl('?') end
 
 	atsl(': ')
 	atsl(mp.get_property_osd('time-pos'))
-	local r = mp.get_property_osd('duration')
+	r = mp.get_property_osd('duration')
 	if string.len(r) > 0 then
 		atsl(' / ')
 		atsl(r)
@@ -45,8 +48,9 @@ function update_status_line()
 	r = mpn('speed', -1)
 	if r ~= 1 then atsl(string.format(' x%4.2f', r)) end
 
-	r = mpn('decoder-frame-drop-count', -1)
-	if r > 0 then atsl(' Late: ' .. r) end
+	-- Causes segfaults when used with lavfi-complex
+	-- r = mpn('decoder-frame-drop-count', -1)
+	-- if r > 0 then atsl(' Late: '..r) end
 
 	r = mpn('playlist-count')
 	if r > 1 then atsl(string.format(
@@ -54,9 +58,9 @@ function update_status_line()
 
 	local brs = {}
 	r = mpn('video-bitrate')
-	if r then brs[#brs+1] = 'V:' .. bts_str(r / 8) end
+	if r then brs[#brs+1] = 'V:'..bts_str(r / 8) end
 	r = mpn('audio-bitrate')
-	if r then brs[#brs+1] = 'A:' .. bts_str(r / 8) end
+	if r then brs[#brs+1] = 'A:'..bts_str(r / 8) end
 	r = mpn('cache-percent')
 	if r > 95 then r = '>95%' else r = string.format('%3d%%', r) end
 	atsl(string.format(
@@ -68,7 +72,6 @@ function update_status_line()
 
 	mp.set_property('options/term-status-msg', status_line)
 end
-
 
 mp.add_periodic_timer(0.5, update_status_line)
 -- mp.register_event('tick', update_status_line)
