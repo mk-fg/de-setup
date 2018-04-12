@@ -21,11 +21,11 @@ separate "virtual desktops" anyway. And where I don't (e.g. floating skype,
 terminals), just bind a key to position things at some fixed location/size
 and/or set these to be persistent for specific app windows.
 
-Don't use DE menu(s?) - either have a key to start what I need (on a constant
-virtual desktop), use `dmenu <http://tools.suckless.org/dmenu/>`_ to launch more
-rare stuff or just run it from one of the terminals (`yeahconsole
-<http://phrat.de/yeahtools.html>`_) on top, general xterm which I always have
-open).
+Don't use DE menu(s?) - either have a key to start what I need
+(on a constant virtual desktop), use `dmenu <http://tools.suckless.org/dmenu/>`_
+to launch more rare stuff or just run it from one of the terminals -
+`yeahconsole <http://phrat.de/yeahtools.html>`_ on top
+or generic terminal window that's always open on desktop-1.
 
 
 
@@ -153,7 +153,6 @@ stream in it (album art don't count).
 I.e. some fancy dynamic swarming/flowing colors instead of just blank black square.
 
 
-
 xbindkeys
 ---------
 
@@ -163,3 +162,28 @@ apparently common issue with this particular brand.
 More info in `Debounce bogus repeated mouse clicks
 <http://blog.fraggod.net/2016/05/15/debounce-bogus-repeated-mouse-clicks-in-xorg-with-xbindkeys.html>`_
 blog post.
+
+
+bin
+---
+
+Mostly-obsolete scripts for whatever startup/init functionality and key bindings.
+
+Somewhat notable stuff:
+
+- `fgrun <https://github.com/mk-fg/de-setup/blob/master/bin/fgrun>`_ - python3
+  wrapper for dmenu, preserving and deduplicating history, as well as
+  scraping/caching list of binaries for selection there.
+
+- xclipc - obsoleted but useful key-bound script, for adding some processing to
+  some "copy to clipboard" operations, as well as making these more universal
+  wrt diff X selection buffers.
+
+  `exclip <http://blog.fraggod.net/2018/04/10/linux-x-desktop-clipboard-keys-via-exclip-tool.html>`_
+  is a more modern, fast and robust replacement for that hack.
+
+- xinitrc.\* - tweaks for various X input/display parameters like keyboard rates
+  and layouts, dpms, mouse/touchpad stuff, xmodmap, etc.
+
+  Useful to keep these outside of xorg.conf to be able to change re-apply them
+  at any time without having to restart anything or remember all the commands again.
