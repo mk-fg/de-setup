@@ -2226,6 +2226,30 @@ group "E_Config_Bindings" struct {
             value "params" string: "de.music.pause";
         }
         group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "bar";
+            value "modifiers" int: 9;
+            value "params" string: "pa_tweak -m media.role:music vol-set=0.1738";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "braceleft";
+            value "modifiers" int: 9;
+            value "params" string: "pa_tweak -m media.role:music vol-set=0.1018";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "braceright";
+            value "modifiers" int: 9;
+            value "params" string: "pa_tweak -m media.role:music vol-set=0.1296";
+        }
+        group "E_Config_Binding_Key" struct {
             value "action" string: "window_maximized_toggle";
             value "any_mod" uchar: 0;
             value "context" int: 9;
