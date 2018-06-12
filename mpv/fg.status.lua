@@ -16,7 +16,7 @@ end
 
 local function bts_str(bytes, fmt, ...)
 	local v, u = bts(bytes, ...)
-	return string.format(fmt or '%.0f%s', v, u)
+	return (fmt or '%.0f%s'):format(v, u)
 end
 
 local function update_status_line()
@@ -25,9 +25,9 @@ local function update_status_line()
 	if mp.get_property_bool('pause') then
 		atsl('(Paused) ')
 	elseif mp.get_property_bool('paused-for-cache') then
-		atsl(string.format('(Buffering - %d%%) ', mpn('cache-buffering-state')))
+		atsl(('(Buffering - %d%%) '):format(mpn('cache-buffering-state')))
 	elseif mp.get_property_bool('idle') or mp.get_property_bool('core-idle') then
-		atsl(string.format('(Idle) '))
+		atsl('(Idle) ')
 	end
 
 	local r = false
@@ -42,19 +42,18 @@ local function update_status_line()
 	if string.len(r) > 0 then
 		atsl(' / ')
 		atsl(r)
-		atsl(string.format(' (%2d%%)', mpn('percent-pos')))
+		atsl((' (%2d%%)'):format(mpn('percent-pos')))
 	end
 
 	r = mpn('speed', -1)
-	if r ~= 1 then atsl(string.format(' x%4.2f', r)) end
+	if r ~= 1 then atsl((' x%4.2f'):format(r)) end
 
 	-- Causes segfaults when used with lavfi-complex
 	-- r = mpn('decoder-frame-drop-count', -1)
 	-- if r > 0 then atsl(' Late: '..r) end
 
 	r = mpn('playlist-count')
-	if r > 1 then atsl(string.format(
-		' [pls:%02d/%02d]', mpn('playlist-pos-1'), r )) end
+	if r > 1 then atsl((' [pls:%02d/%02d]'):format(mpn('playlist-pos-1'), r)) end
 
 	local brs = {}
 	r = mpn('video-bitrate')
@@ -62,9 +61,8 @@ local function update_status_line()
 	r = mpn('audio-bitrate')
 	if r then brs[#brs+1] = 'A:'..bts_str(r / 8) end
 	r = mpn('cache-percent')
-	if r > 95 then r = '>95%' else r = string.format('%3d%%', r) end
-	atsl(string.format(
-		' -- %s %s %2.0fs+%s/%s [B/s %s]',
+	if r > 95 then r = '>95%' else r = ('%3d%%'):format(r) end
+	atsl((' -- %s %s %2.0fs+%s/%s [B/s %s]'):format(
 		(mp.get_property('cache-idle') == 'yes') and 'cached ' or 'caching',
 		r, mpn('demuxer-cache-duration'),
 		bts_str(mpn('cache-used'), nil, -1), bts_str(mpn('cache-size'), nil, -1),
