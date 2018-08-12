@@ -1,69 +1,70 @@
-background no
+conky.config = {
+	background = false,
 
-update_interval 4.0
-total_run_times 0
+	update_interval = 4.0,
+	total_run_times = 0,
 
-own_window yes
-own_window_type desktop
-own_window_colour black
-own_window_argb_visual yes
-own_window_transparent yes
-own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+	own_window = true,
+	own_window_type = 'desktop',
+	own_window_colour = 'black',
+	own_window_argb_visual = true,
+	own_window_transparent = true,
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
 
-minimum_size 400
-maximum_width 400
-gap_x 10
-gap_y 10
+	minimum_width = 400,
+	maximum_width = 400,
+	gap_x = 10,
+	gap_y = 10,
 
-# alignment top_left
-# alignment top_right
-alignment bottom_left
-# alignment bottom_right
-# alignment none
+	alignment = 'bottom_left',
 
-use_xft yes
-xftfont Luxi Sans:size=8
-xftalpha 1
-override_utf8_locale yes
+	font = 'Luxi Sans:size=8',
+	use_xft = true,
+	xftalpha = 1,
+	override_utf8_locale = true,
 
-double_buffer yes
-draw_shades yes
-draw_outline no
-draw_borders no
-draw_graph_borders yes
-stippled_borders 8
-border_width 1
+	double_buffer = true,
+	draw_shades = true,
+	draw_outline = false,
+	draw_borders = false,
+	draw_graph_borders = true,
+	stippled_borders = 8,
+	border_width = 1,
 
-default_color white
-default_shade_color black
-default_outline_color black
+	default_color = 'white',
+	default_shade_color = 'black',
+	default_outline_color = 'black',
 
-no_buffers yes
-uppercase no
-cpu_avg_samples 2
-net_avg_samples 2
-use_spacer none
+	no_buffers = true,
+	uppercase = false,
+	cpu_avg_samples = 2,
+	net_avg_samples = 2,
+	use_spacer = 'none',
 
-color0 cc4444
-color1 darkgreen
-color2 4444cc
+	color0 = 'cc4444',
+	color1 = 'darkgreen',
+	color2 = '4444cc',
 
-template0 ${color \1}${top name \2}${offset -30}${tab 40}${top pid \2}${tab 20}${top cpu \2}${tab 20}${top mem \2}${tab 100}${top_mem name \2}${offset -30}${tab 145}${top_mem pid \2}${tab 165}${top_mem cpu \2}${tab 185}${top_mem mem \2}$color
-template1 ${if_mounted \2}${color lightgrey}\1 ${lua_parse rings_marker fs_\1}${tab 60 1}$color${if_match ${fs_free_perc \2} <= \3}${color red}${endif}${fs_free \2} (${fs_free_perc \2}%)${if_match ${fs_free_perc \2} <= \3}${blink !!!!!}${endif}${tab 90}${fs_bar \2}$color${endif}
-template2 $color ${tcp_portmon \1 \2 rhost \3} ${alignr} ${tcp_portmon \1 \2 \4 \3} $color
-template3 ${color lightgrey}${if_empty ${lua sens_read \2}}${else}${if_match ${lua sens_read \2} > \3}${color red}\1: ${lua sens_read \2}C${blink !!!}${else}\1: ${color}${lua sens_read \2}C${endif}${endif}
-template4 ${color lightgrey}${if_match $\3perc >= \1}${color red}${endif}\4 ${lua_parse rings_marker \3}${tab 25}$color${if_match $\3perc >= \1}${color red}${endif}$\3/$\3max - $\3perc%${tab 60}${color light slate gray}${if_match $\3perc >= \2}${color maroon}${endif}${if_match $\3perc >= \1}${color red}${endif}${\3bar}
-template5 ${color darkred}${if_up \1}${color\2}${endif}${addr \1}${color lightgrey}
-template6 ${color\2}${downspeedgraph \1 30,190 aa3333 3333aa 0 -t -l}${alignr}${color\2}${upspeedgraph \1 30,190 3333aa aa3333 0 -t -l}
-template7 ${color\2}${downspeed \1}${color lightgrey}
-template8 ${color\2}${upspeed \1}${color lightgrey}
-template9 ${color light slate gray}${if_match ${cpu cpu\1} >= 85}${color red}${endif}${tab 10}${cpubar cpu\1 5,90}
+	template0 = '${color \\1}${top name \\2}${offset -30}${tab 40}${top pid \\2}${tab 20}${top cpu \\2}${tab 20}${top mem \\2}${tab 100}${top_mem name \\2}${offset -30}${tab 145}${top_mem pid \\2}${tab 165}${top_mem cpu \\2}${tab 185}${top_mem mem \\2}$color',
+	template1 = '${if_mounted \\2}${color lightgrey}\\1 ${lua_parse rings_marker fs_\\1}${tab 60 1}$color${if_match ${fs_free_perc \\2} <= \\3}${color red}${endif}${fs_free \\2} (${fs_free_perc \\2}%)${if_match ${fs_free_perc \\2} <= \\3}${blink !!!!!}${endif}${tab 90}${fs_bar \\2}$color${endif}',
+	template2 = '$color ${tcp_portmon \\1 \\2 rhost \\3} ${alignr} ${tcp_portmon \\1 \\2 \\4 \\3} $color',
+	template3 = '${color lightgrey}${if_empty ${lua sens_read \\2}}${else}${if_match ${lua sens_read \\2} > \\3}${color red}\\1: ${lua sens_read \\2}C${blink !!!}${else}\\1: ${color}${lua sens_read \\2}C${endif}${endif}',
+	template4 = '${color lightgrey}${if_match $\\3perc >= \\1}${color red}${endif}\\4 ${lua_parse rings_marker \\3}${tab 25}$color${if_match $\\3perc >= \\1}${color red}${endif}$\\3/$\\3max - $\\3perc%${tab 60}${color light slate gray}${if_match $\\3perc >= \\2}${color maroon}${endif}${if_match $\\3perc >= \\1}${color red}${endif}${\\3bar}',
+	template5 = '${color darkred}${if_up \\1}${color\\2}${endif}${addr \\1}${color lightgrey}',
+	template6 = '${color\\2}${downspeedgraph \\1 30,190 aa3333 3333aa 0 -t -l}${alignr}${color\\2}${upspeedgraph \\1 30,190 3333aa aa3333 0 -t -l}',
+	template7 = '${color\\2}${downspeed \\1}${color lightgrey}',
+	template8 = '${color\\2}${upspeed \\1}${color lightgrey}',
+	template9 = '${color light slate gray}${if_match ${cpu cpu\\1} >= 85}${color red}${endif}${tab 10}${cpubar cpu\\1 5,90}',
 
-lua_load ~/.conkyrc.rings.lua
-lua_draw_hook_pre rings_draw
+	lua_load = '~/.conkyrc.rings.lua',
+	lua_draw_hook_pre = 'rings_draw',
+
+	-- max_user_text = 10485760,
+	text_buffer_size = 1048576,
+}
 
 
-TEXT
+conky.text = [[
 ${voffset 240}
 
 $color${lua env USER}@$nodename - $kernel\
@@ -130,3 +131,6 @@ ${color #ddaa00}Portz${alignr}Konnektionz
 $color ${color grey} Inbound: ${color #2266cc}${tcp_portmon 1 32767 count} ${color grey} Outbound: ${color #cc6622}${tcp_portmon 32768 65535 count}${alignr}${color grey}ALL: ${color #22cc22}${tcp_portmon 1 65535 count} $color
 # ${color #2266cc}${lua_parse conky_portmon in 2}
 # ${color #cc6622}${lua_parse conky_portmon out 20}
+\
+$color$stippled_hr
+]]
