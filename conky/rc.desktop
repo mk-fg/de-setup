@@ -60,7 +60,7 @@ conky.config = {
 	lua_draw_hook_pre = 'rings_draw',
 
 	-- max_user_text = 10485760,
-	text_buffer_size = 1048576,
+	text_buffer_size = 18432,
 }
 
 
@@ -75,7 +75,7 @@ ${color lightgrey}sunrise: ${color #c6cfff}${lua sun_event_time rise}${color}, \
 ${color lightgrey}sunset: ${color #fad6a5}${lua sun_event_time set}${color}
 \
 $stippled_hr
-${color lightgrey}CPUz ${lua_parse rings_marker cpu}${tab 20}$color$cpu% (${freq_g})${tab 60}${color light slate gray}${cpubar}
+${color lightgrey}CPU ${lua_parse rings_marker cpu}${tab 20}$color$cpu% (${freq_g})${tab 60}${color light slate gray}${cpubar}
 ${template9 1}${template9 2}${template9 3}${template9 4}
 \
 ${template4 90 70 mem RAM}
@@ -122,15 +122,16 @@ ${endif}${if_up enp1s0}${template6 enp1s0 1}
 ${endif}${if_up ppp0}${template6 ppp0 2}
 ${endif}\
 \
-${color lightgrey}IPz: ${template5 wlan0 0} / ${template5 enp1s0 1} / ${template5 ppp0 2}\
+${color lightgrey}IPs: ${template5 wlan0 0} / ${template5 enp1s0 1} / ${template5 ppp0 2}\
 ${if_up wlan0}${alignr}${color lightgrey}Signal:$color ${wireless_link_qual_perc wlan0}%\
  (${wireless_essid wlan0}, ${wireless_bitrate wlan0})${endif}
-\
-$color$stippled_hr
-${color #ddaa00}Portz${alignr}Konnektionz
-$color ${color grey} Inbound: ${color #2266cc}${tcp_portmon 1 32767 count} ${color grey} Outbound: ${color #cc6622}${tcp_portmon 32768 65535 count}${alignr}${color grey}ALL: ${color #22cc22}${tcp_portmon 1 65535 count} $color
+# \
+# $color$stippled_hr
+# ${color #ddaa00}Ports${alignr}Conns
+# $color ${color grey} Inbound: ${color #2266cc}${tcp_portmon 1 32767 count} ${color grey} Outbound: ${color #cc6622}${tcp_portmon 32768 65535 count}${alignr}${color grey}ALL: ${color #22cc22}${tcp_portmon 1 65535 count} $color
 # ${color #2266cc}${lua_parse conky_portmon in 2}
 # ${color #cc6622}${lua_parse conky_portmon out 20}
 \
 $color$stippled_hr
+${catp /run/user/1000/cal.conky}
 ]]
