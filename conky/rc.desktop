@@ -1,6 +1,9 @@
 conky.config = {
 	background = false,
 
+	alignment = 'bottom_left',
+	# xinerama_head = 0,
+
 	update_interval = 4.0,
 	total_run_times = 0,
 
@@ -15,8 +18,6 @@ conky.config = {
 	maximum_width = 400,
 	gap_x = 10,
 	gap_y = 10,
-
-	alignment = 'bottom_left',
 
 	font = 'Luxi Sans:size=8',
 	use_xft = true,
