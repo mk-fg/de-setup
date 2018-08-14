@@ -5,4 +5,6 @@ PartOf=startx.target
 [Service]
 SyslogIdentifier=%p
 Restart=on-abort
-ExecStart=/usr/bin/env conky -q -a %I
+
+# Instance with head.alignment, e.g. bottom_left.0, top_right.1
+ExecStart=/bin/bash -c "p='%I'; exec conky -q -m$${p#*.} -a$${p%.*}"
