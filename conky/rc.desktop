@@ -2,7 +2,7 @@ conky.config = {
 	background = false,
 
 	alignment = 'bottom_left',
-	# xinerama_head = 0,
+	xinerama_head = 0,
 
 	update_interval = 4.0,
 	total_run_times = 0,
