@@ -43,14 +43,14 @@ xinput list "$dev" &>/dev/null && {
 # Middle button gets remapped to "8", so that xbindkeys script can proxy it to "2" with debouncing
 # One side button is used exclusively for wakeups, so is disabled, other one is for xmodmap to bind
 dev=$( xinput list |
-	awk 'match($0,/\<2.4G 2.4G Wireless Device\s+id=([0-9]+)\s+\[slave\s+pointer\>/,a) {print a[1]}' )
+	gawk 'match($0,/\<2.4G 2.4G Wireless Device Mouse\s+id=([0-9]+)\s+\[slave\s+pointer\>/,a) {print a[1]}' )
 [[ -n "$dev" ]] && xinput list "$dev" &>/dev/null && {
 	xinput set-button-map "$dev" 1 8 3 4 5 6 7 0 9 10 11 12 13 || err=1
 } ||:
 
 # Synaptics settings, in case something (e.g. WM) messes these up
 synclient -l &>/dev/null && {
-	awk 'match($2,/"/) && NF==3 && $1=="Option" {gsub(/"/,"",$2); gsub(/"/,"",$3); print $2 "=" $3}'\
+	gawk 'match($2,/"/) && NF==3 && $1=="Option" {gsub(/"/,"",$2); gsub(/"/,"",$3); print $2 "=" $3}'\
 		/usr/share/X11/xorg.conf.d/*-synaptics.conf | xargs synclient || err=1
 }
 
