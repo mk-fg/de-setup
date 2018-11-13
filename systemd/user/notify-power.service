@@ -1,0 +1,2 @@
+[Service]
+ExecStart=/usr/local/bin/notify.power
