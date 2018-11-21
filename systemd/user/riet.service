@@ -1,0 +1,9 @@
+[Unit]
+After=xorg.target background.target
+Before=conky.service
+PartOf=startx.target
+
+[Service]
+SyslogIdentifier=%p
+Restart=on-abort
+ExecStart=/usr/bin/env riet.conky -d 3020
