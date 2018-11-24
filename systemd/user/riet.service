@@ -1,5 +1,5 @@
 [Unit]
-After=xorg.target background.target
+After=xorg.target background.target notification-thing.service
 Before=conky.service
 PartOf=startx.target
 
