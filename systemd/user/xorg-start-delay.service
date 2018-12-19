@@ -1,10 +1,16 @@
-# Needed for xorg-server-1.18
-# Bug: https://bugs.freedesktop.org/show_bug.cgi?id=93072
+# This unit waits for Xorg to to avoid race conditions
+#  when starting everything that relies on Xorg server running.
+# Needed because Xorg socket activation does not work
+#  since 1.18+: https://bugs.freedesktop.org/show_bug.cgi?id=93072
 
 [Unit]
 DefaultDependencies=no
-Before=xorg.target
-After=xorg@1.service
+PartOf=xorg.target
 
 [Service]
-ExecStart=/usr/bin/sleep 2
+Type=oneshot
+ExecStart=/usr/bin/mkdir -pm1777 /tmp/.X11-unix
+ExecStart=/bin/bash -c "\
+	trap 'pkill -g 0' EXIT; trap 'exit' TERM; \
+	inotifywait -qq -e create /tmp/.X11-unix/ & \
+	[[ -e /tmp/.X11-unix/X1 ]] || wait"
