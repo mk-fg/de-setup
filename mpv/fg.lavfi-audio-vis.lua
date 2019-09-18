@@ -145,16 +145,25 @@ mp.register_script_message('fg.lavfi-audio-vis.af.src', function() lavfi_vis_upd
 ---- Extra --lavfi-complex audio filters to toggle
 local lavfi_src_orig = lavfi_src
 
--- "Sound through wall" filter, leaving only low-freq thuds and some resonating mid-range freqs
+--- Custom filter string to use with visualization and easy on/off toggle for testing
+
+mp.register_script_message('fg.lavfi-audio-vis.af', function(af)
+	lavfi_src_disabled = false
+	if not af or af:find('^ *$') then lavfi_src = lavfi_src_orig else lavfi_src = af end
+	lavfi_vis_update()
+end)
+
+--- "Sound through wall" filter, leaving only low-freq thuds and some resonating mid-range freqs
 -- Much lower volume overall, but retaining rythm, so can be used instead of full mute
--- Resulting firequalizer plot: dumpfile=test.plot (e.g. after multi=on) +
---  gnuplot -p -e 'set xlabel "freq"; set ylabel "gain"; set grid;'
---    ' set xrange [20:2000]; set logscale x 10; plot "test.plot" index 1'
+-- Resulting firequalizer plot: enable dumpfile there +
+--  gnuplot -p -e 'set xlabel "freq"; set ylabel "gain"; set grid;
+--    set xrange [20:2000]; set logscale x 10; plot "/tmp/mpv-firequalizer.plot" index 1'
 local lavfi_src_wall = lavfi_filter_string{
 	'firequalizer', {
+		-- dumpfile = '/tmp/mpv-firequalizer.plot',
 		gain = "'cubic_interpolate(f)'",
-		gain_entry = "'entry(20,-10);entry(50,2);entry(90,6);entry(140,5)"..
-			";entry(380,-10);entry(500,-16);entry(1000,-14);entry(2500,-26);entry(5000,-50)'",
+		gain_entry = "'entry(20,-10);entry(50,-2);entry(90,0);entry(140,-4)"..
+			";entry(380,-18);entry(500,-20);entry(1000,-16);entry(2500,-26);entry(5000,-50)'",
 		multi = 'on' },
 	'compand', {attacks='.3|.3', decays='.8|.8', points='-70/-70|-60/-20|1/0', delay='.3'} }
 
