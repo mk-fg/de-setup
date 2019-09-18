@@ -32,7 +32,7 @@ local function lavfi_filter_string(spec)
 end
 
 
--- vis - visualization part, src - pre-exising part, *_disabled - flags to toggle each of the former
+-- vis - visualization part, src - pre-exising part, *_disabled - flags to toggle each
 local lavfi_vis_disabled, lavfi_vis, lavfi_src, lavfi_src_disabled = true
 lavfi_src = mp.get_property('options/lavfi-complex') or ''
 
@@ -77,7 +77,8 @@ local function lavfi_vis_init(force)
 	end
 	if not lavfi_src then
 		if not force then
-			mp.msg.info('Non-trivial --lavfi-complex ("[aid1] ... [ao]") used, audio visualization disabled')
+			mp.msg.info( 'Non-trivial --lavfi-complex'..
+				' ("[aid1] ... [ao]") used, audio visualization disabled' )
 			return
 		end
 		lavfi_src = ''
@@ -90,7 +91,8 @@ local function lavfi_vis_init(force)
 	local filter_bg = lavfi_filter_string{
 		'firequalizer', {
 			-- better than using sono_v = 9 * b_weighting(f)
-			gain = "'20/log(10)*log(1.4884e8 * f*f*f / (f*f + 424.36) / (f*f + 1.4884e8) / sqrt(f*f + 25122.25))'",
+			gain = "'20/log(10)*log(1.4884e8 * f*f*f"..
+				" / (f*f + 424.36) / (f*f + 1.4884e8) / sqrt(f*f + 25122.25))'",
 			accuracy = 1000, -- accuracy bounded by delay
 			zero_phase = 'on' },
 		'showcqt', {
@@ -103,9 +105,11 @@ local function lavfi_vis_init(force)
 			bar_v = 9,
 			sono_v = 17,
 			font = "'Liberation Mono,Luxi Mono,Monospace|bold'", -- has to be monospace
-			fontcolor = "'st(0, (midi(f)-53.5)/12); st(1, 0.5 - 0.5 * cos(PI*ld(0))); r(1-ld(1)) + b(ld(1))'",
+			fontcolor = "'st(0, (midi(f)-53.5)/12);"..
+				" st(1, 0.5 - 0.5 * cos(PI*ld(0))); r(1-ld(1)) + b(ld(1))'",
 			tc = '0.33',
-			tlength = "'st(0,0.17); 384*tc / (384 / ld(0) + tc*f /(1-ld(0))) + 384*tc / (tc*f / ld(0) + 384 /(1-ld(0)))'" } }
+			tlength = "'st(0,0.17); 384*tc / (384 / ld(0)"..
+				" + tc*f /(1-ld(0))) + 384*tc / (tc*f / ld(0) + 384 /(1-ld(0)))'" } }
 		-- 'format=yuv420p' }
 	local filter_fg = lavfi_filter_string{ 'avectorscope',
 		{mode='lissajous_xy', size=size_fg, rate=30, scale='cbrt', draw='dot', zoom=1.5} }
@@ -113,12 +117,6 @@ local function lavfi_vis_init(force)
 	local overlay = lavfi_filter_string{'overlay', {format='yuv420'}}
 	lavfi_vis = ' asplit=3 [ao][a1][a2]; [a1] '..
 		filter_bg..' [v1]; [a2] '..filter_fg..' [v2]; [v1][v2] '..overlay..' [vo]'
-
-	-- local filter = lavfi_filter_string{ 'showspectrum',
-	-- 	{size='960x758', color='channel', scale='cbrt', orientation='vertical', overlap=1} }
-	-- local filter = lavfi_filter_string{'showwaves', {size='960x384', rate=60, mode='point', n=10, scale='lin'}}
-	-- local lavfi = '[aid1] asplit [ao][vis]; [vis]'..filter..'[vo]'
-	-- local lavfi = '[aid1] asplit=3 [ao][a1][a2]; [a1]'..filter1..'[v1]; [a2]'..filter2..'[v2]; [v1][v2] vstack [vo]'
 
 	-- These opts help window to not blink size briefly when switching tracks
 	mp.set_property('options/keepaspect', 'no')
@@ -131,7 +129,8 @@ local function lavfi_vis_toggle(state)
 	-- Enables/disables visualization, initializing filter string if necessary
 	if state ~= nil then lavfi_vis_disabled = not state
 		else lavfi_vis_disabled = not lavfi_vis_disabled end
-	if not lavfi_vis_disabled and not lavfi_vis then lavfi_vis_init(true) else lavfi_vis_update() end
+	if not lavfi_vis_disabled and not lavfi_vis
+		then lavfi_vis_init(true) else lavfi_vis_update() end
 end
 
 
@@ -148,18 +147,23 @@ local lavfi_src_orig = lavfi_src
 
 -- "Sound through wall" filter, leaving only low-freq thuds and some resonating mid-range freqs
 -- Much lower volume overall, but retaining rythm, so can be used instead of full mute
--- Resulting firequalizer plot: dumpfile=test.plot (e.g. after multi=on) + gnuplot -p -e
---  'set xlabel "freq"; set ylabel "gain"; set grid; set xrange [20:2000]; set logscale x 10; plot "test.plot" index 1'
-local lavfi_src_wall = "firequalizer=gain='cubic_interpolate(f)' : gain_entry='entry(20,-10);entry(50,2);"..
-	"entry(90,6);entry(140,5);entry(380,-10);entry(500,-16);entry(1000,-14);entry(2500,-26);entry(5000,-50)'"..
-	" : multi=on, compand=.3|.3:.8|.8:-70/-70|-60/-20|1/0:delay=.3"
+-- Resulting firequalizer plot: dumpfile=test.plot (e.g. after multi=on) +
+--  gnuplot -p -e 'set xlabel "freq"; set ylabel "gain"; set grid;'
+--    ' set xrange [20:2000]; set logscale x 10; plot "test.plot" index 1'
+local lavfi_src_wall = lavfi_filter_string{
+	'firequalizer', {
+		gain = "'cubic_interpolate(f)'",
+		gain_entry = "'entry(20,-10);entry(50,2);entry(90,6);entry(140,5)"..
+			";entry(380,-10);entry(500,-16);entry(1000,-14);entry(2500,-26);entry(5000,-50)'",
+		multi = 'on' },
+	'compand', {attacks='.3|.3', decays='.8|.8', points='-70/-70|-60/-20|1/0', delay='.3'} }
 
 mp.register_script_message('fg.lavfi-audio-vis.af.wall', function()
 	lavfi_src_disabled = false
-	if lavfi_src ~= lavfi_src_wall then lavfi_src = lavfi_src_wall else lavfi_src = lavfi_src_orig end
+	if lavfi_src ~= lavfi_src_wall
+		then lavfi_src = lavfi_src_wall else lavfi_src = lavfi_src_orig end
 	lavfi_vis_update()
 end)
-
 
 
 ---- Initial state, depending on --vo/--force-window + --vid and such in lavfi_vis_init(force=nil)
