@@ -89,12 +89,12 @@ local function lavfi_vis_init(force)
 
 	local size_bg, size_fg = '960x768', '960x200'
 	local filter_bg = lavfi_filter_string{
-		'firequalizer', {
-			-- better than using sono_v = 9 * b_weighting(f)
-			gain = "'20/log(10)*log(1.4884e8 * f*f*f"..
-				" / (f*f + 424.36) / (f*f + 1.4884e8) / sqrt(f*f + 25122.25))'",
-			accuracy = 1000, -- accuracy bounded by delay
-			zero_phase = 'on' },
+		-- 'firequalizer', {
+		-- 	-- dumpfile = 'test.plot',
+		-- 	gain = "'20/log(10)*log(1.4884e8 * f*f*f"..
+		-- 		" / (f*f + 424.36) / (f*f + 1.4884e8) / sqrt(f*f + 25122.25))'",
+		-- 	accuracy = 1000,
+		-- 	zero_phase = 'on' },
 		'showcqt', {
 			fps = 30,
 			size = size_bg,
