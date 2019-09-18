@@ -86,6 +86,7 @@ local function lavfi_vis_init(force)
 	-- Filter Docs: https://ffmpeg.org/ffmpeg-filters.html
 	-- Fancy Examples: https://trac.ffmpeg.org/wiki/FancyFilteringExamples
 
+	local size_bg, size_fg = '960x768', '960x200'
 	local filter_bg = lavfi_filter_string{
 		'firequalizer', {
 			-- better than using sono_v = 9 * b_weighting(f)
@@ -94,7 +95,7 @@ local function lavfi_vis_init(force)
 			zero_phase = 'on' },
 		'showcqt', {
 			fps = 30,
-			size = '960x768',
+			size = size_bg,
 			count = 2,
 			--csp = 'bt709',
 			bar_g = 2,
@@ -107,7 +108,7 @@ local function lavfi_vis_init(force)
 			tlength = "'st(0,0.17); 384*tc / (384 / ld(0) + tc*f /(1-ld(0))) + 384*tc / (tc*f / ld(0) + 384 /(1-ld(0)))'" } }
 		-- 'format=yuv420p' }
 	local filter_fg = lavfi_filter_string{ 'avectorscope',
-		{mode='lissajous_xy', size='960x200', rate=30, scale='cbrt', draw='dot', zoom=1.5} }
+		{mode='lissajous_xy', size=size_fg, rate=30, scale='cbrt', draw='dot', zoom=1.5} }
 
 	local overlay = lavfi_filter_string{'overlay', {format='yuv420'}}
 	lavfi_vis = ' asplit=3 [ao][a1][a2]; [a1] '..
@@ -118,6 +119,10 @@ local function lavfi_vis_init(force)
 	-- local filter = lavfi_filter_string{'showwaves', {size='960x384', rate=60, mode='point', n=10, scale='lin'}}
 	-- local lavfi = '[aid1] asplit [ao][vis]; [vis]'..filter..'[vo]'
 	-- local lavfi = '[aid1] asplit=3 [ao][a1][a2]; [a1]'..filter1..'[v1]; [a2]'..filter2..'[v2]; [v1][v2] vstack [vo]'
+
+	-- These opts help window to not blink size briefly when switching tracks
+	mp.set_property('options/keepaspect', 'no')
+	mp.set_property('options/geometry', size_bg)
 
 	lavfi_vis_update()
 end
