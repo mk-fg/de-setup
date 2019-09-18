@@ -1,5 +1,5 @@
--- Auto-enable fancy visualization for audio files in mpv if window/vo is forced/enabled
--- https://github.com/mpv-player/mpv/blob/master/player/lua/defaults.lua
+---- Auto-enable fancy visualization for audio files in mpv if window/vo is forced/enabled
+---- mpv lua api: manpage + https://github.com/mpv-player/mpv/blob/master/player/lua/defaults.lua
 
 local function str_split(str, pat)
 	local res = {}
@@ -31,47 +31,56 @@ local function lavfi_filter_string(spec)
 	return table.concat(filter_str, '  ,  ')
 end
 
-local function lavfi_vis_for_audio()
+
+-- vis - visualization part, src - pre-exising part, *_disabled - flags to toggle each of the former
+local lavfi_vis_disabled, lavfi_vis, lavfi_src, lavfi_src_disabled = true
+lavfi_src = mp.get_property('options/lavfi-complex') or ''
+
+local function lavfi_vis_update(src_toggle)
+	-- Sets mpv's --lavfi-complex option based on all lavfi_* vars above
+	-- Optional src_toggle can be passed to toggle lavfi_src_disabled between true/false
+	if src_toggle then lavfi_src_disabled = not lavfi_src_disabled end
+	local lavfi = lavfi_src
+	if lavfi_src_disabled or #lavfi == 0 then lavfi = 'acopy' end
+	if lavfi_vis_disabled
+		then lavfi = '[aid1] '..lavfi..' [ao]'
+		else lavfi = '[aid1] '..lavfi..', '..(lavfi_vis or ' [ao]') end
+	-- mp.msg.info('----- filter: '..lavfi)
+	mp.set_property('options/lavfi-complex', lavfi)
+end
+
+local function lavfi_vis_init(force)
+	---- Inits lavfi_vis filter sting if force=true or other vid/albumart and such are missing
+	if lavfi_vis then return end
+
 	-- Disable filter if there's no vo or it's being used for any other output
 	if not mp.get_property_bool('vo-configured') then return end
-
-	local aid_n, vid_n, art_n = 0, 0, 0
-	local track_n = mp.get_property_number('track-list/count', -1)
-	if track_n <= 0 then return end
-
-	for n = 0, track_n - 1 do
-		if mp.get_property('track-list/'..n..'/type') == 'audio' then aid_n = aid_n + 1
-		elseif mp.get_property('track-list/'..n..'/type') == 'video' then
-			if mp.get_property('track-list/'..n..'/albumart') == 'yes'
-			then art_n = art_n + 1
-			else vid_n = vid_n + 1 end
+	if not force then
+		local aid_n, vid_n, art_n = 0, 0, 0
+		local track_n = mp.get_property_number('track-list/count', -1)
+		if track_n <= 0 then return end
+		for n = 0, track_n - 1 do
+			if mp.get_property('track-list/'..n..'/type') == 'audio' then aid_n = aid_n + 1
+			elseif mp.get_property('track-list/'..n..'/type') == 'video' then
+				if mp.get_property('track-list/'..n..'/albumart') == 'yes'
+				then art_n = art_n + 1
+				else vid_n = vid_n + 1 end
+			end
 		end
-	end
-
-	if vid_n > 0 then return end
-
-	-- vis - visualization part, src - pre-exising part, src_disabled - flag to toggle the former
-	local lavfi_vis, lavfi_src, lavfi_src_disabled
-	local function lavfi_update(src_toggle)
-		if src_toggle then lavfi_src_disabled = not lavfi_src_disabled end
-		src_toggle = '[aid1]'..(lavfi_src_disabled and '' or lavfi_src or '')..lavfi_vis
-		-- mp.msg.info('----- filter: '..src_toggle)
-		mp.set_property('options/lavfi-complex', src_toggle)
+		if vid_n > 0 then return end
 	end
 
 	-- Check for existing aid1->ao --lavfi-complex filter and include that in resulting pipeline
 	-- Aborts if pipeline looks too complex to include in the resulting filter
-	-- Note the dynamic keybinding for toggling pre-vis filter (if any), it should override input.conf
-	lavfi_src = mp.get_property('options/lavfi-complex') or ''
 	if lavfi_src and #lavfi_src > 0 then
 		lavfi_src = lavfi_src:match('^ *%[ *aid1 *%] *(.-) *%[ *ao *%] *$')
 	end
 	if not lavfi_src then
-		mp.msg.info('Non-trivial --lavfi-complex ("[aid1] ... [ao]") used, audio visualization disabled')
-		return
-	elseif #lavfi_src > 0 then
-		lavfi_src = ' '..lavfi_src..','
-		mp.add_key_binding('y', function() lavfi_update(true) end)
+		if not force then
+			mp.msg.info('Non-trivial --lavfi-complex ("[aid1] ... [ao]") used, audio visualization disabled')
+			return
+		end
+		lavfi_src = ''
 	end
 
 	-- Filter Docs: https://ffmpeg.org/ffmpeg-filters.html
@@ -110,10 +119,49 @@ local function lavfi_vis_for_audio()
 	-- local lavfi = '[aid1] asplit [ao][vis]; [vis]'..filter..'[vo]'
 	-- local lavfi = '[aid1] asplit=3 [ao][a1][a2]; [a1]'..filter1..'[v1]; [a2]'..filter2..'[v2]; [v1][v2] vstack [vo]'
 
-	lavfi_update()
+	lavfi_vis_update()
 end
 
+local function lavfi_vis_toggle(state)
+	-- Enables/disables visualization, initializing filter string if necessary
+	if state ~= nil then lavfi_vis_disabled = not state
+		else lavfi_vis_disabled = not lavfi_vis_disabled end
+	if not lavfi_vis_disabled and not lavfi_vis then lavfi_vis_init(true) else lavfi_vis_update() end
+end
+
+
+---- Signals to tweak vis via hotkeys or player frontend (see e.g. emacs-setup/core/fg_emms.el)
+---- Hotkey spec example: shift+y script-message fg.lavfi-audio-vis.af.src
+mp.register_script_message('fg.lavfi-audio-vis.on', function() lavfi_vis_toggle(true) end)
+mp.register_script_message('fg.lavfi-audio-vis.off', function() lavfi_vis_toggle(false) end)
+mp.register_script_message('fg.lavfi-audio-vis.toggle', function() lavfi_vis_toggle() end)
+mp.register_script_message('fg.lavfi-audio-vis.af.src', function() lavfi_vis_update(true) end)
+
+
+---- Extra --lavfi-complex audio filters to toggle
+local lavfi_src_orig = lavfi_src
+
+-- "Sound through wall" filter, leaving only low-freq thuds and some resonating mid-range freqs
+-- Much lower volume overall, but retaining rythm, so can be used instead of full mute
+-- Resulting firequalizer plot: dumpfile=test.plot (e.g. after multi=on) + gnuplot -p -e
+--  'set xlabel "freq"; set ylabel "gain"; set grid; set xrange [20:2000]; set logscale x 10; plot "test.plot" index 1'
+local lavfi_src_wall = "firequalizer=gain='cubic_interpolate(f)' : gain_entry='entry(20,-10);entry(50,2);"..
+	"entry(90,6);entry(140,5);entry(380,-10);entry(500,-16);entry(1000,-14);entry(2500,-26);entry(5000,-50)'"..
+	" : multi=on, compand=.3|.3:.8|.8:-70/-70|-60/-20|1/0:delay=.3"
+
+mp.register_script_message('fg.lavfi-audio-vis.af.wall', function()
+	lavfi_src_disabled = false
+	if lavfi_src ~= lavfi_src_wall then lavfi_src = lavfi_src_wall else lavfi_src = lavfi_src_orig end
+	lavfi_vis_update()
+end)
+
+
+
+---- Initial state, depending on --vo/--force-window + --vid and such in lavfi_vis_init(force=nil)
 if str_split(mp.get_property('vo'), '[^,]+')[1] ~= 'null'
 	and ({yes=1, immediate=1})[mp.get_property('force-window')]
-then mp.add_hook('on_preloaded', 50, lavfi_vis_for_audio) end
+then
+	lavfi_vis_disabled = false
+	mp.add_hook('on_preloaded', 50, lavfi_vis_init)
 -- else mp.msg.error('audio-vis disabled') end
+end
