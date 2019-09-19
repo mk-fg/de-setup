@@ -152,6 +152,13 @@ stream in it (album art don't count).
 
 I.e. some fancy dynamic swarming/flowing colors instead of just blank black square.
 
+Also includes client events to toggle visualization and other --lavfi-complex
+filtering (if any) on/off explicitly, regardless of whether it was enabled on start.
+
+Can be used for key bindings, e.g. via something like ``y script-message
+fg.lavfi-audio-vis.on`` in input.conf, and I'm using that in a player frontend
+(`emms <https://github.com/mk-fg/emacs-setup/blob/master/core/fg_emms.el>`_).
+
 
 xbindkeys
 ---------
@@ -168,6 +175,9 @@ bin
 ---
 
 Mostly-obsolete scripts for whatever startup/init functionality and key bindings.
+
+See `fgtk repo <https://github.com/mk-fg/fgtk>`_ for much more of these,
+incl. a ton of generic DE-independent desktop-related stuff.
 
 Somewhat notable stuff:
 
