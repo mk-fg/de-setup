@@ -89,12 +89,6 @@ local function lavfi_vis_init(force)
 
 	local size_bg, size_fg = '960x768', '960x200'
 	local filter_bg = lavfi_filter_string{
-		-- 'firequalizer', {
-		-- 	-- dumpfile = 'test.plot',
-		-- 	gain = "'20/log(10)*log(1.4884e8 * f*f*f"..
-		-- 		" / (f*f + 424.36) / (f*f + 1.4884e8) / sqrt(f*f + 25122.25))'",
-		-- 	accuracy = 1000,
-		-- 	zero_phase = 'on' },
 		'showcqt', {
 			fps = 30,
 			size = size_bg,
@@ -165,7 +159,7 @@ local lavfi_src_wall = lavfi_filter_string{
 		gain_entry = "'entry(20,-10);entry(50,-2);entry(90,0);entry(140,-4)"..
 			";entry(380,-18);entry(500,-20);entry(1000,-16);entry(2500,-26);entry(5000,-50)'",
 		multi = 'on' },
-	'compand', {attacks='.3|.3', decays='.8|.8', points='-70/-70|-60/-20|1/0', delay='.3'} }
+	'compand', {attacks='.3 .3', decays='.8 .8', points='-70/-70 -60/-20 1/0', gain=-6, delay=.3} }
 
 mp.register_script_message('fg.lavfi-audio-vis.af.wall', function()
 	lavfi_src_disabled = false
