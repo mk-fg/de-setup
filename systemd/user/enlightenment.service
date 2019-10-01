@@ -11,4 +11,4 @@ KillMode=none
 StandardOutput=null
 StandardError=null
 Environment=E_START=enlightenment
-ExecStart=/bin/bash -c "exec svlogd -r _ -ttt %h/.e/logs < <(exec enlightenment -locked)"
+ExecStart=/bin/bash -c "exec busybox svlogd -r _ -ttt %h/.e/logs < <(exec enlightenment -locked)"
