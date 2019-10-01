@@ -1,0 +1,3 @@
+[Slice]
+MemoryHigh=700M
+MemoryMax=1500M

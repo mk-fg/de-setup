@@ -1,0 +1,5 @@
+[Slice]
+CPUWeight=10
+IOWeight=10
+MemoryHigh=500M
+MemoryMax=1G
