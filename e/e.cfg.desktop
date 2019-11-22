@@ -1661,6 +1661,14 @@ group "E_Config_Bindings" struct {
             value "action" string: "exec";
             value "any_mod" uchar: 0;
             value "context" int: 9;
+            value "key" string: "apostrophe";
+            value "modifiers" int: 10;
+            value "params" string: "media.sound-test";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
             value "key" string: "bar";
             value "modifiers" int: 11;
             value "params" string: "pa_tweak -m media.role:music vol-set=0.4079";
