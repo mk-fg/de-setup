@@ -1,8 +1,8 @@
 [Service]
 Type=exec
-ExecStart=/usr/bin/env redirector -b cane:8888
+ExecStart=/usr/bin/env redirector
 
-Restart=on-failure
-RestartSec=5
-StartLimitInterval=60
-StartLimitBurst=5
+# Restart=on-failure
+# RestartSec=5
+# StartLimitInterval=60
+# StartLimitBurst=5
