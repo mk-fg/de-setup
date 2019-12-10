@@ -1,6 +1,6 @@
 [Service]
 Type=exec
-ExecStart=/usr/bin/env redirector
+ExecStart=/usr/bin/env redirector -t 3600
 
 # Restart=on-failure
 # RestartSec=5
