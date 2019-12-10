@@ -2065,7 +2065,7 @@ group "E_Config_Bindings" struct {
             value "context" int: 9;
             value "key" string: "f";
             value "modifiers" int: 8;
-            value "params" string: "chromium ~/bin/wrappers/chromium";
+            value "params" string: "Navigator ~/bin/wrappers/waterfox";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_jump_to_or_start";
