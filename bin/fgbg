@@ -1,11 +1,63 @@
 #!/usr/bin/env python
 
-import os, sys, itertools as it
+import os, sys, ctypes as ct, itertools as it
 
 
-def set_bg_image(path, monitor=0, dx=None, dy=None):
-	import os, ctypes as ct
+class adict(dict):
+	def __init__(self, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.__dict__ = self
 
+def dpy_info():
+	# Simplified randr module from https://github.com/rr-/screeninfo/
+	def make_struct(name, fields):
+		fields = fields.split()
+		for n, fs in enumerate(fields):
+			k, t = fs.split(':', 1)
+			try: fields[n] = k, getattr(ct, t := f'c_{t}')
+			except AttributeError:
+				if not t.endswith('_p'): raise
+				fields[n] = k, ct.POINTER(getattr(ct, t[:-2]))
+		return type(name, (ct.Structure,), dict(_fields_=fields))
+
+	XRRCrtcInfo = make_struct('XRRCrtcInfo', 'ts:ulong x:int y:int w:int h:int')
+	XRRScreenResources = make_struct( 'XRRScreenResources',
+		'ts:ulong ts_conf:ulong nctrc:int nctrcs:ulong_p nout:int out:ulong_p' )
+	XRROutputInfo = make_struct( 'XRROutputInfo',
+		'ts:ulong crtc:ulong name:char_p name_len:int w_mm:ulong h_mm:ulong conn:ushort' )
+
+	xlib, xrandr = ct.CDLL('libX11.so'), ct.CDLL('libXrandr.so')
+	xlib.XOpenDisplay.argtypes = [ct.c_char_p]
+	xlib.XOpenDisplay.restype = ct.POINTER(ct.c_void_p)
+	xrandr.XRRGetScreenResourcesCurrent.restype = ct.POINTER(XRRScreenResources)
+	xrandr.XRRGetOutputInfo.restype = ct.POINTER(XRROutputInfo)
+	xrandr.XRRGetCrtcInfo.restype = ct.POINTER(XRRCrtcInfo)
+
+	dpy = xlib.XOpenDisplay(b'')
+	if not dpy: raise RuntimeError('XOpenDisplay failed')
+	try:
+		root_win = xlib.XDefaultRootWindow(dpy)
+		res = xrandr.XRRGetScreenResourcesCurrent(dpy, root_win)
+		for n in range(res.contents.nout):
+			out = ( out_raw := xrandr
+				.XRRGetOutputInfo(dpy, res, res.contents.out[n]) ).contents
+			if out.conn != 0: continue # RR_Connected=0
+			if not out.crtc: continue
+			try:
+				crtc = (crtc_raw := xrandr
+					.XRRGetCrtcInfo(dpy, ct.byref(out_raw), out.crtc)).contents
+				try:
+					yield adict(
+						x=crtc.x, y=crtc.y, w=crtc.w, h=crtc.h,
+						w_mm=out.w_mm, h_mm=out.h_mm,
+						name=out.name.decode(sys.getfilesystemencoding()) )
+				finally: xrandr.XRRFreeCrtcInfo(crtc_raw)
+			finally: xrandr.XRRFreeOutputInfo(out_raw)
+	finally: xlib.XCloseDisplay(dpy)
+dpy_info = lambda *,_f=dpy_info: list(_f())
+
+
+def set_bg_image(path, mon=0, dx=None, dy=None):
 	class sd_bus(ct.Structure): pass
 	class sd_bus_error(ct.Structure):
 		_fields_ = [ ('name', ct.c_char_p),
@@ -27,6 +79,7 @@ def set_bg_image(path, monitor=0, dx=None, dy=None):
 	error = sd_bus_error()
 	reply = ct.POINTER(sd_bus_msg)()
 	try:
+		if isinstance(mon, int): mon = [mon]
 		if isinstance(dx, int): dx = [dx]
 		if isinstance(dy, int): dy = [dy]
 
@@ -53,7 +106,7 @@ def set_bg_image(path, monitor=0, dx=None, dy=None):
 			if not dx: dx = list(range(dxc.value))
 			if not dy: dy = list(range(dyc.value))
 
-		for x, y in it.product(dx, dy):
+		for m, x, y in it.product(mon, dx, dy):
 			run( 'sd_bus_call_method',
 				bus,
 				b'org.enlightenment.wm.service',
@@ -62,7 +115,7 @@ def set_bg_image(path, monitor=0, dx=None, dy=None):
 				b'Add',
 				ct.byref(error),
 				ct.byref(reply),
-				b'iiis', monitor, x, y, path.encode(),
+				b'iiis', m, x, y, path.encode(),
 				sig=[
 					ct.POINTER(sd_bus),
 					ct.c_char_p, ct.c_char_p, ct.c_char_p, ct.c_char_p,
@@ -79,8 +132,9 @@ def main(args=None):
 		description='Set E desktop background via DBus API.' )
 	parser.add_argument('path', help='Background image path.')
 	parser.add_argument('-m', '--monitor',
-		type=int, default=0, metavar='n',
-		help='Physical monitor offset number to set bg on (default: %(default)s).')
+		action='append', type=int, metavar='n',
+		help='Physical monitor offset number to set'
+			' bg on (default: all). Can be specified multiple times.')
 	parser.add_argument('-x', '--desktop-x',
 		action='append', type=int, metavar='n',
 		help='Desktop X offset to set bg on. Can be specified multiple times.'
@@ -89,8 +143,15 @@ def main(args=None):
 		action='append', type=int, metavar='n',
 		help='Desktop Y offset to set bg on. Can be specified multiple times.'
 			' If not specified, all Y values will be used (default).')
+	# XXX: can add some image manipulation here, based on dpy_info
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
-	set_bg_image(opts.path, opts.monitor, opts.desktop_x, opts.desktop_y)
+	p, mon_list, dx, dy = opts.path, opts.monitor, opts.desktop_x, opts.desktop_y
+
+	if not mon_list:
+		mon_list = dpy_info()
+		mon_list = list(range(len(mon_list)))
+
+	set_bg_image(p, mon_list, dx, dy)
 
 if __name__ == '__main__': sys.exit(main())
