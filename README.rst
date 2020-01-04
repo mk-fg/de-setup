@@ -181,9 +181,12 @@ incl. a ton of generic DE-independent desktop-related stuff.
 
 Somewhat notable stuff:
 
-- `fgrun <https://github.com/mk-fg/de-setup/blob/master/bin/fgrun>`_ - python3
-  wrapper for dmenu, preserving and deduplicating history, as well as
-  scraping/caching list of binaries for selection there.
+- `fgrun <https://github.com/mk-fg/de-setup/blob/master/bin/fgrun>`_ -
+  python3 wrapper for dmenu, preserving and deduplicating history,
+  as well as scraping/caching list of binaries for selection there.
+
+- `fgbg <https://github.com/mk-fg/de-setup/blob/master/bin/fgbg>`_ -
+  py3/ctypes/sd-bus script to set background in whatever current DE.
 
 - xclipc - obsoleted but useful key-bound script, for adding some processing to
   some "copy to clipboard" operations, as well as making these more universal
