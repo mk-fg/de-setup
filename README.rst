@@ -216,18 +216,22 @@ their own styles, and I spend almost all in just these few apps.
 Used in claws-mail_ and dialog windows (e.g. rare "Select File" in browser) and
 context menus.
 
-- Theme - `L4ki/Inspiration`_
+- Theme - `gnome-look.org/Breeze-Inspiration-Dark`_ (`L4ki/Inspiration`_)
 
   Has some diffs between gtk2/gtk3 versions, with gtk2 one (still used in
   claws-mail) having proper distinct borders but bogus highlighted-text color.
 
   Tweaks:
 
-  - gtk.css: #131521 -> #1e3c61.
+  - gtk.css: #131521 -> #1e3c61
   - gtkrc: "selected_fg_color:#bbe6f2"
 
-- Common Icons - `L4ki/Breeze-Inspiration-Icons`_
+- Common icons - `L4ki/Breeze-Inspiration-Icons`_ (same gnome-look.org set)
+
+- claws-mail_ icons - `PapirusDevelopmentTeam/papirus-claws-mail-theme`_ (dark-bg version)
 
 .. _claws-mail: https://www.claws-mail.org/
+.. _gnome-look.org/Breeze-Inspiration-Dark: https://www.gnome-look.org/p/1342928/
 .. _L4ki/Inspiration: https://github.com/L4ki/Inspiration-GTK-3-Theme
 .. _L4ki/Breeze-Inspiration-Icons: https://github.com/L4ki/Breeze-Inspiration-Icons
+.. _PapirusDevelopmentTeam/papirus-claws-mail-theme: https://github.com/PapirusDevelopmentTeam/papirus-claws-mail-theme
