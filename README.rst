@@ -21,12 +21,13 @@ separate "virtual desktops" anyway. And where I don't (e.g. floating skype,
 terminals), just bind a key to position things at some fixed location/size
 and/or set these to be persistent for specific app windows.
 
-Don't use DE menu(s?) - either have a key to start what I need
-(on a constant virtual desktop), use `dmenu <http://tools.suckless.org/dmenu/>`_
-to launch more rare stuff or just run it from one of the terminals -
-`yeahconsole <http://phrat.de/yeahtools.html>`_ on top
-or generic terminal window that's always open on desktop-1.
+Don't use DE menu(s?) - either have a key to start what I need (on a constant
+virtual desktop), use dmenu_ to launch more rare stuff or just run it from one
+of the terminals - yeahconsole_ on top or generic terminal window that's always
+open on desktop-1.
 
+.. _dmenu: http://tools.suckless.org/dmenu/
+.. _yeahconsole: http://phrat.de/yeahtools.html
 
 
 Specific components
@@ -43,21 +44,23 @@ Don't have any \*dm (as in GDM, KDM, etc), simply starting WM with screen locker
 physical user here anyway.
 
 ``systemd --user`` + systemd-logind session setup without \*dm is a bit
-unorthodox in general, and in my case started through a custom `pam-run
-<https://github.com/mk-fg/fgtk/#pam-run>`_ pam-session-wrapper binary, with
-Xorg, WM and everything DE-related started in user\@1000 daemon's
-"startx.target" - see stuff under "systemd" for more info.
+unorthodox in general, and in my case started through a custom pam-run_
+pam-session-wrapper binary, with Xorg, WM and everything DE-related started in
+user\@1000 daemon's "startx.target" - see stuff under "systemd" for more info.
+
+.. _pam-run: https://github.com/mk-fg/fgtk/#pam-run
 
 
 Enlightenment configs (e/e.cfg.*)
 ---------------------------------
 
-Created/processed by `e_config_backup
-<https://github.com/mk-fg/fgtk/#e-config-backup>`_ tool (`yapps2-based parser
-<http://blog.fraggod.net/2013/01/21/pyparsing-vs-yapps.html>`_), and used to
-detect any new options between version upgrades, or (super-rare) `migrations between config schemas
-<http://blog.fraggod.net/2013/01/16/migrating-configuration-settings-to-e17-enlightenment-0170-from-older-e-versions.html>`_,
-if necessary.
+Created/processed by `e_config_backup`_ tool (`yapps2-based parser`_), and used
+to detect any new options between version upgrades, or (super-rare) `migrations
+between config schemas`_, if necessary.
+
+.. _e_config_backup: https://github.com/mk-fg/fgtk/#e-config-backup
+.. _yapps2-based parser: http://blog.fraggod.net/2013/01/21/pyparsing-vs-yapps.html
+.. _migrations between config schemas: http://blog.fraggod.net/2013/01/16/migrating-configuration-settings-to-e17-enlightenment-0170-from-older-e-versions.html
 
 
 Enlightenment Edje Themes (e/themes)
@@ -110,8 +113,9 @@ Use "make" to build it.
 
   <img src="http://blog.fraggod.net/images/conky_sensors.jpg" height="600px">
 
-`Displaying any lm_sensors data in conky
-<http://blog.fraggod.net/2014/05/19/displaying-any-lm_sensors-data-temperature-fan-speeds-voltage-etc-in-conky.html>`_ blog post has more details on how it all works.
+`Displaying any lm_sensors data in conky`_ blog post has more details on how it all works.
+
+.. _Displaying any lm_sensors data in conky: http://blog.fraggod.net/2014/05/19/displaying-any-lm_sensors-data-temperature-fan-speeds-voltage-etc-in-conky.html
 
 
 mpv
@@ -166,37 +170,64 @@ xbindkeys
 Config used to debounce middle-button clicks on a Razer mouse that I have -
 apparently common issue with this particular brand.
 
-More info in `Debounce bogus repeated mouse clicks
-<http://blog.fraggod.net/2016/05/15/debounce-bogus-repeated-mouse-clicks-in-xorg-with-xbindkeys.html>`_
-blog post.
+More info in `Debounce bogus repeated mouse clicks`_ blog post.
+
+.. _Debounce bogus repeated mouse clicks: http://blog.fraggod.net/2016/05/15/debounce-bogus-repeated-mouse-clicks-in-xorg-with-xbindkeys.html
 
 
 bin
 ---
 
-Mostly-obsolete scripts for whatever startup/init functionality and key bindings.
+Somewhat-obsolete scripts for whatever startup/init functionality and key bindings.
 
 See `fgtk repo <https://github.com/mk-fg/fgtk>`_ for much more of these,
 incl. a ton of generic DE-independent desktop-related stuff.
 
 Somewhat notable stuff:
 
-- `fgrun <https://github.com/mk-fg/de-setup/blob/master/bin/fgrun>`_ -
+- `fgrun <bin/fgrun>`_ -
   python3 wrapper for dmenu, preserving and deduplicating history,
   as well as scraping/caching list of binaries for selection there.
 
-- `fgbg <https://github.com/mk-fg/de-setup/blob/master/bin/fgbg>`_ -
+- `fgbg <bin/fgbg>`_ -
   py3/ctypes/sd-bus script to set background in whatever current DE.
 
-- xclipc - obsoleted but useful key-bound script, for adding some processing to
-  some "copy to clipboard" operations, as well as making these more universal
-  wrt diff X selection buffers.
+- `xclipc <bin/xclipc>`_ - obsoleted but useful key-bound script, for adding
+  some processing to some "copy to clipboard" operations, as well as making
+  these more universal wrt diff X selection buffers.
 
-  `exclip <http://blog.fraggod.net/2018/04/10/linux-x-desktop-clipboard-keys-via-exclip-tool.html>`_
-  is a more modern, fast and robust replacement for that hack.
+  exclip_ is a more modern, fast and robust replacement for that hack.
 
 - xinitrc.\* - tweaks for various X input/display parameters like keyboard rates
   and layouts, dpms, mouse/touchpad stuff, xmodmap, etc.
 
   Useful to keep these outside of xorg.conf to be able to change re-apply them
   at any time without having to restart anything or remember all the commands again.
+
+.. _exclip: http://blog.fraggod.net/2018/04/10/linux-x-desktop-clipboard-keys-via-exclip-tool.html
+
+
+Themes
+------
+
+Don't really need much from these, as browser, mpv, emacs and terminal have
+their own styles, and I spend almost all in just these few apps.
+
+Used in claws-mail_ and dialog windows (e.g. rare "Select File" in browser) and
+context menus.
+
+- Theme - `L4ki/Inspiration`_
+
+  Has some diffs between gtk2/gtk3 versions, with gtk2 one (still used in
+  claws-mail) having proper distinct borders but bogus highlighted-text color.
+
+  Tweaks:
+
+  - gtk.css: #131521 -> #1e3c61.
+  - gtkrc: "selected_fg_color:#bbe6f2"
+
+- Common Icons - `L4ki/Breeze-Inspiration-Icons`_
+
+.. _claws-mail: https://www.claws-mail.org/
+.. _L4ki/Inspiration: https://github.com/L4ki/Inspiration-GTK-3-Theme
+.. _L4ki/Breeze-Inspiration-Icons: https://github.com/L4ki/Breeze-Inspiration-Icons
