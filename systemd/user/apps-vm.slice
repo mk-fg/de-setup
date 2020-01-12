@@ -1,0 +1,4 @@
+[Slice]
+MemoryHigh=4G
+MemoryMax=5G
+IOWeight=20
