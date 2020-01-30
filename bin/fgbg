@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-import os, sys, ctypes as ct, itertools as it
+import ctypes as ct, itertools as it, pathlib as pl
+import os, sys, re, random
 
 
 class adict(dict):
@@ -57,7 +58,7 @@ def dpy_info():
 dpy_info = lambda *,_f=dpy_info: list(_f())
 
 
-def set_bg_image(path, mon=0, dx=None, dy=None):
+def set_bg_image(p_list, mon=0, dx=None, dy=None):
 	class sd_bus(ct.Structure): pass
 	class sd_bus_error(ct.Structure):
 		_fields_ = [ ('name', ct.c_char_p),
@@ -106,7 +107,13 @@ def set_bg_image(path, mon=0, dx=None, dy=None):
 			if not dx: dx = list(range(dxc.value))
 			if not dy: dy = list(range(dyc.value))
 
-		for m, x, y in it.product(mon, dx, dy):
+		mxy = list(it.product(mon, dx, dy))
+		mxy_paths = list(p_list)
+		while len(mxy_paths) < len(mxy):
+			mxy_paths.append(random.choice(p_list))
+		mxy_paths.sort(key=lambda x,_f=random.random: _f())
+
+		for (m, x, y), p in zip(mxy, mxy_paths):
 			run( 'sd_bus_call_method',
 				bus,
 				b'org.enlightenment.wm.service',
@@ -115,7 +122,7 @@ def set_bg_image(path, mon=0, dx=None, dy=None):
 				b'Add',
 				ct.byref(error),
 				ct.byref(reply),
-				b'iiis', m, x, y, path.encode(),
+				b'iiis', m, x, y, str(p).encode(),
 				sig=[
 					ct.POINTER(sd_bus),
 					ct.c_char_p, ct.c_char_p, ct.c_char_p, ct.c_char_p,
@@ -130,7 +137,11 @@ def main(args=None):
 	import argparse
 	parser = argparse.ArgumentParser(
 		description='Set E desktop background via DBus API.' )
-	parser.add_argument('path', help='Background image path.')
+	parser.add_argument('path',
+		help='Background image path.'
+			' If path is a directory, images get matches by'
+				' bmp/png/jpe?g/webp extension (case-insensitive)'
+				' and get picked at random (with no repeats if possible).')
 	parser.add_argument('-m', '--monitor',
 		action='append', type=int, metavar='n',
 		help='Physical monitor offset number to set'
@@ -146,12 +157,21 @@ def main(args=None):
 	# XXX: can add some image manipulation here, based on dpy_info
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
-	p, mon_list, dx, dy = opts.path, opts.monitor, opts.desktop_x, opts.desktop_y
+	p = pl.Path(opts.path)
+	if p.is_dir():
+		p_list = list()
+		for root, dirs, files in os.walk(p, followlinks=True):
+			for name in files:
+				if not re.search(r'(?i)\.(bmp|png|jpe?g|webp)$', name): continue
+				p_list.append(pl.Path(root) / name)
+	else: p_list = [p]
+	if not p_list: parser.error(f'No images matched for path: {p}')
 
+	mon_list, dx, dy = opts.monitor, opts.desktop_x, opts.desktop_y
 	if not mon_list:
 		mon_list = dpy_info()
 		mon_list = list(range(len(mon_list)))
 
-	set_bg_image(p, mon_list, dx, dy)
+	set_bg_image(p_list, mon_list, dx, dy)
 
 if __name__ == '__main__': sys.exit(main())
