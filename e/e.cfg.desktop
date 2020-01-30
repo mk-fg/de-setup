@@ -1499,7 +1499,6 @@ group "E_Config" struct {
     value "transient.raise" int: 1;
     value "transient.resize" int: 0;
     value "transition_change" string: "vswipe";
-    value "transition_desk" string: "crossfade";
     value "transition_start" string: "vswipe";
     value "update.check" uchar: 0;
     value "update.later" uchar: 0;
