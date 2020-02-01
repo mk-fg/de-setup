@@ -9,6 +9,7 @@ class adict(dict):
 		super().__init__(*args, **kwargs)
 		self.__dict__ = self
 
+
 def dpy_info():
 	# Simplified randr module from https://github.com/rr-/screeninfo/
 	def make_struct(name, fields):
@@ -58,7 +59,7 @@ def dpy_info():
 dpy_info = lambda *,_f=dpy_info: list(_f())
 
 
-def set_bg_image(p_list, mon=0, dx=None, dy=None):
+def set_bg_image(images, mon=0, dx=None, dy=None):
 	class sd_bus(ct.Structure): pass
 	class sd_bus_error(ct.Structure):
 		_fields_ = [ ('name', ct.c_char_p),
@@ -107,13 +108,8 @@ def set_bg_image(p_list, mon=0, dx=None, dy=None):
 			if not dx: dx = list(range(dxc.value))
 			if not dy: dy = list(range(dyc.value))
 
-		mxy = list(it.product(mon, dx, dy))
-		mxy_paths = list(p_list)
-		while len(mxy_paths) < len(mxy):
-			mxy_paths.append(random.choice(p_list))
-		mxy_paths.sort(key=lambda x,_f=random.random: _f())
-
-		for (m, x, y), p in zip(mxy, mxy_paths):
+		for m, x, y in it.product(mon, dx, dy):
+			p = images.get(m, x, y)
 			run( 'sd_bus_call_method',
 				bus,
 				b'org.enlightenment.wm.service',
@@ -133,28 +129,48 @@ def set_bg_image(p_list, mon=0, dx=None, dy=None):
 	finally: run('sd_bus_flush_close_unref', bus, check=False)
 
 
+class ImagePicker:
+
+	def __init__(self, p_list, opts=None):
+		self.p_list, self.opts = p_list, opts or adict()
+		self.shuffle, self.cache = None, dict()
+
+	def get(self, m, x, y):
+		if not self.shuffle:
+			self.shuffle = sorted(self.p_list, key=lambda x,_f=random.random: _f())
+		if self.opts.get('ds'):
+			p = self.cache.get(('ds', m))
+			if not p: p = self.cache['ds', m] = self.shuffle.pop()
+		else: p = self.shuffle.pop()
+		return p
+
+
 def main(args=None):
 	import argparse
 	parser = argparse.ArgumentParser(
 		description='Set E desktop background via DBus API.' )
 	parser.add_argument('path',
-		help='Background image path.'
+		help='Background image or directory path.'
 			' If path is a directory, images get matches by'
 				' bmp/png/jpe?g/webp extension (case-insensitive)'
 				' and get picked at random (with no repeats if possible).')
-	parser.add_argument('-m', '--monitor',
+
+	group = parser.add_argument_group('Monitor and virtual desktop')
+	group.add_argument('-m', '--monitor',
 		action='append', type=int, metavar='n',
 		help='Physical monitor offset number to set'
 			' bg on (default: all). Can be specified multiple times.')
-	parser.add_argument('-x', '--desktop-x',
+	group.add_argument('-x', '--desktop-x',
 		action='append', type=int, metavar='n',
 		help='Desktop X offset to set bg on. Can be specified multiple times.'
 			' If not specified, all X values will be used (default).')
-	parser.add_argument('-y', '--desktop-y',
+	group.add_argument('-y', '--desktop-y',
 		action='append', type=int, metavar='n',
 		help='Desktop Y offset to set bg on. Can be specified multiple times.'
 			' If not specified, all Y values will be used (default).')
-	# XXX: can add some image manipulation here, based on dpy_info
+	group.add_argument('-s', '--desktop-same', action='store_true',
+		help='Pick and use same one image for all virtual desktops within monitor.')
+
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
 	p = pl.Path(opts.path)
@@ -172,6 +188,7 @@ def main(args=None):
 		mon_list = dpy_info()
 		mon_list = list(range(len(mon_list)))
 
-	set_bg_image(p_list, mon_list, dx, dy)
+	images = ImagePicker(p_list, adict(ds=opts.desktop_same))
+	set_bg_image(images, mon_list, dx, dy)
 
 if __name__ == '__main__': sys.exit(main())
