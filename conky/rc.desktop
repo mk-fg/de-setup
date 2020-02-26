@@ -105,7 +105,6 @@ ${template0 gray 10}
 $stippled_hr
 ${template1 root / 20}
 ${template1 home /home 20}
-${template1 volatiles /var/volatiles 10}
 ${template1 machines /var/lib/machines 20}
 ${template1 dump /mnt/volatiles 10}
 ${template1 tmp /tmp 30}
