@@ -3,6 +3,6 @@
 CPUWeight=30
 IOWeight=30
 
-MemoryHigh=5G
-MemoryMax=8G
+MemoryHigh=9500M
+MemoryMax=11G
 MemorySwapMax=1G
