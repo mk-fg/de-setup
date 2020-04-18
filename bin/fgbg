@@ -1,16 +1,15 @@
 #!/usr/bin/env python
 
-import ctypes as ct, itertools as it, pathlib as pl
+import ctypes as ct, itertools as it, pathlib as pl, dataclasses as dc
 import os, sys, re, random, math, time, signal
 
 
 p_err = lambda tpl,*a,**k: print(tpl, *a, **k, file=sys.stderr, flush=True)
 
-class adict(dict):
-	def __init__(self, *args, **kwargs):
-		super().__init__(*args, **kwargs)
-		self.__dict__ = self
 
+@dc.dataclass
+class DisplayInfo:
+	x:int; y:int; w:int; h:int; w_mm:int; h_mm:int; name:str
 
 def dpy_info():
 	# Simplified randr module from https://github.com/rr-/screeninfo/
@@ -51,7 +50,7 @@ def dpy_info():
 				crtc = (crtc_raw := xrandr
 					.XRRGetCrtcInfo(dpy, ct.byref(out_raw), out.crtc)).contents
 				try:
-					yield adict(
+					yield DisplayInfo(
 						x=crtc.x, y=crtc.y, w=crtc.w, h=crtc.h,
 						w_mm=out.w_mm, h_mm=out.h_mm,
 						name=out.name.decode(sys.getfilesystemencoding()) )
@@ -130,17 +129,23 @@ def set_bg_image(images, mon=0, dx=None, dy=None):
 	finally: run('sd_bus_flush_close_unref', bus, check=False)
 
 
+
+@dc.dataclass
+class ImagePickerOpts:
+	desktop_same: bool
+
 class ImagePicker:
 
 	def __init__(self, p_list, opts=None):
-		self.p_list, self.opts, self.shuffle = p_list, opts or adict(), None
+		self.p_list, self.shuffle = p_list, None
+		self.opts = opts or ImagePickerOpts()
 
 	def get_iter(self, mon_list, dx, dy):
 		cache = dict()
 		for m, x, y in it.product(mon_list, dx, dy):
 			if not self.shuffle: # loops images as well here
 				self.shuffle = sorted(self.p_list, key=lambda x,_f=random.random: _f())
-			if self.opts.get('ds'):
+			if self.opts.desktop_same:
 				p = cache.get(('ds', m))
 				if not p: p = cache['ds', m] = self.shuffle.pop()
 			else: p = self.shuffle.pop()
@@ -272,7 +277,7 @@ def main(args=None):
 					if not re.search(r'(?i)\.(bmp|png|jpe?g|webp)$', name): continue
 					p_list.append(pl.Path(root) / name)
 	if not p_list: parser.error(f'No images matched for path(s): {opts.path}')
-	images = ImagePicker(p_list, adict(ds=opts.desktop_same))
+	images = ImagePicker(p_list, ImagePickerOpts(desktop_same=opts.desktop_same))
 
 	daemon = False
 	if opts.daemon:
