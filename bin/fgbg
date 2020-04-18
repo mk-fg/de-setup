@@ -3,7 +3,6 @@
 import ctypes as ct, itertools as it, pathlib as pl, dataclasses as dc
 import os, sys, re, random, math, time, signal
 
-
 p_err = lambda tpl,*a,**k: print(tpl, *a, **k, file=sys.stderr, flush=True)
 
 
@@ -129,7 +128,6 @@ def set_bg_image(images, mon=0, dx=None, dy=None):
 	finally: run('sd_bus_flush_close_unref', bus, check=False)
 
 
-
 @dc.dataclass
 class ImagePickerOpts:
 	desktop_same: bool
@@ -140,15 +138,22 @@ class ImagePicker:
 		self.p_list, self.shuffle = p_list, None
 		self.opts = opts or ImagePickerOpts()
 
+	def get_random_image(self):
+		'Return random image path and remove it from current shuffle.'
+		# Keeps simple list and pops uniformly-random element from it,
+		#  without any kind of expensive and unreliable sort up-front
+		if not self.shuffle: self.shuffle = self.p_list.copy()
+		n = random.randint(0, len(self.shuffle) - 1)
+		p, self.shuffle[n] = self.shuffle[n], self.shuffle.pop()
+		return p
+
 	def get_iter(self, mon_list, dx, dy):
 		cache = dict()
 		for m, x, y in it.product(mon_list, dx, dy):
-			if not self.shuffle: # loops images as well here
-				self.shuffle = sorted(self.p_list, key=lambda x,_f=random.random: _f())
 			if self.opts.desktop_same:
 				p = cache.get(('ds', m))
-				if not p: p = cache['ds', m] = self.shuffle.pop()
-			else: p = self.shuffle.pop()
+				if not p: p = cache['ds', m] = self.get_random_image()
+			else: p = self.get_random_image()
 			yield p, m, x, y
 
 
