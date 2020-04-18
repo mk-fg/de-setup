@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 
 import ctypes as ct, itertools as it, pathlib as pl
-import os, sys, re, random
+import os, sys, re, random, math, time, signal
 
+
+p_err = lambda tpl,*a,**k: print(tpl, *a, **k, file=sys.stderr, flush=True)
 
 class adict(dict):
 	def __init__(self, *args, **kwargs):
@@ -108,8 +110,7 @@ def set_bg_image(images, mon=0, dx=None, dy=None):
 			if not dx: dx = list(range(dxc.value))
 			if not dy: dy = list(range(dyc.value))
 
-		for m, x, y in it.product(mon, dx, dy):
-			p = images.get(m, x, y)
+		for p, m, x, y in images.get_iter(mon, dx, dy):
 			run( 'sd_bus_call_method',
 				bus,
 				b'org.enlightenment.wm.service',
@@ -132,25 +133,99 @@ def set_bg_image(images, mon=0, dx=None, dy=None):
 class ImagePicker:
 
 	def __init__(self, p_list, opts=None):
-		self.p_list, self.opts = p_list, opts or adict()
-		self.shuffle, self.cache = None, dict()
+		self.p_list, self.opts, self.shuffle = p_list, opts or adict(), None
 
-	def get(self, m, x, y):
-		if not self.shuffle:
-			self.shuffle = sorted(self.p_list, key=lambda x,_f=random.random: _f())
-		if self.opts.get('ds'):
-			p = self.cache.get(('ds', m))
-			if not p: p = self.cache['ds', m] = self.shuffle.pop()
-		else: p = self.shuffle.pop()
-		return p
+	def get_iter(self, mon_list, dx, dy):
+		cache = dict()
+		for m, x, y in it.product(mon_list, dx, dy):
+			if not self.shuffle: # loops images as well here
+				self.shuffle = sorted(self.p_list, key=lambda x,_f=random.random: _f())
+			if self.opts.get('ds'):
+				p = cache.get(('ds', m))
+				if not p: p = cache['ds', m] = self.shuffle.pop()
+			else: p = self.shuffle.pop()
+			yield p, m, x, y
+
+
+class SDDaemon:
+
+	def _time_diff_str( self, ts, ts0=None, now='now', ext=None,
+			_units=dict( h=3600, m=60, s=1,
+				y=365.25*86400, mo=30.5*86400, w=7*86400, d=1*86400 ) ):
+		res, s = list(), abs( (ts - ts0) if ts0 is not None
+			and not getattr(ts, 'total_seconds', False) else ts )
+		if not isinstance(s, (int, float)): s = s.total_seconds()
+		if s <= 0: return now
+		for unit, unit_s in sorted(_units.items(), key=lambda v: v[1], reverse=True):
+			val = math.floor(s / float(unit_s))
+			if not val: continue
+			res.append('{:.0f}{}'.format(val, unit))
+			if len(res) >= 2: break
+			s -= val * unit_s
+		if not res: return now
+		if ext: res.append(ext)
+		return ' '.join(res)
+
+	def __init__(self, wakeup_interval=None, fork=False, sd_status_tpl='Wakeup in {delta_str}'):
+		'fork=True would only do double-fork if not under systemd Type=notify control.'
+		self.fork, self.wu_interval = fork, wakeup_interval
+		self.sd_ready, self.sd_status_tpl = None, sd_status_tpl
+		self.wu_next = time.monotonic() + self.wu_interval
+		if os.environ.get('NOTIFY_SOCKET'): self.init_systemd()
+
+	def init_systemd(self):
+		import systemd.daemon
+		self.daemon = systemd.daemon
+		self.sd_ready = self.sd_ping_ts = self.sd_ping_interval = False
+		sd_pid, sd_usec = (os.environ.get(k) for k in ['WATCHDOG_PID', 'WATCHDOG_USEC'])
+		if sd_pid and sd_pid.isdigit() and int(sd_pid) == os.getpid():
+			self.sd_ping_interval = float(sd_usec) * 0.45 / 1e6 # ~ half of interval in seconds
+			if self.sd_ping_interval <= 0:
+				raise RuntimeError('Passed WATCHDOG_USEC interval <= 0')
+		if self.sd_ping_interval: self.sd_ping_ts = time.monotonic() + self.sd_ping_interval
+
+	def ping(self, status=None, ts=None):
+		'''Sends systemd ready/watchdog/status updates.
+			Returns delay before next required call if watchdog is enabled.
+			Can be called at any time, will only ping when necessary.'''
+		if self.sd_ready is None: return
+		if not self.sd_ready:
+			self.daemon.notify('READY=1')
+			if not status: status = 'Running...'
+			self.daemon.notify(f'STATUS={status}')
+			self.sd_ready = True
+		elif status: self.daemon.notify(f'STATUS={status}')
+		if self.sd_ping_ts:
+			if not ts: ts = time.monotonic()
+			delay = self.sd_ping_ts - ts
+			if delay <= 0:
+				self.daemon.notify('WATCHDOG=1')
+				while self.sd_ping_ts <= ts: self.sd_ping_ts += self.sd_ping_interval
+				delay = self.sd_ping_ts - ts
+			return delay
+
+	def check_wakeup(self):
+		if self.fork and self.sd_ready is None:
+			for n in range(2):
+				pid = os.fork()
+				if pid: os._exit(0)
+		ts = time.monotonic()
+		wakeup_event, delay_wu = False, self.wu_next - ts
+		while self.wu_next <= ts:
+			wakeup_event = True
+			self.wu_next += self.wu_interval
+			delay_wu = self.wu_next - ts
+		status = ( None if not self.sd_status_tpl else
+			self.sd_status_tpl.format(delta_str=self._time_diff_str(delay_wu)) )
+		return wakeup_event, min(self.ping(status, ts) or delay_wu, delay_wu)
 
 
 def main(args=None):
 	import argparse
 	parser = argparse.ArgumentParser(
 		description='Set E desktop background via DBus API.' )
-	parser.add_argument('path',
-		help='Background image or directory path.'
+	parser.add_argument('path', nargs='+',
+		help='Background image or directory path(s).'
 			' If path is a directory, images get matches by'
 				' bmp/png/jpe?g/webp extension (case-insensitive)'
 				' and get picked at random (with no repeats if possible).')
@@ -171,24 +246,49 @@ def main(args=None):
 	group.add_argument('-s', '--desktop-same', action='store_true',
 		help='Pick and use same one image for all virtual desktops within monitor.')
 
-	opts = parser.parse_args(sys.argv[1:] if args is None else args)
+	group = parser.add_argument_group('Continuous operation mode')
+	group.add_argument('-d', '--daemon', action='store_true',
+		help='Run in continous daemon mode, setting new background on interval.')
+	group.add_argument('-i', '--interval', metavar='((hh:)mm:)ss', default='4:23:47',
+		help='Interval between switching to a new background image(s). Default: %(default)s')
+	group.add_argument('--fork', action='store_true',
+		help='Fork or indicate systemd startup only after setting initial background.')
+	group.add_argument('--initial-delay', action='store_true',
+		help='Only set initial background after first interval of time passes.')
 
-	p = pl.Path(opts.path)
-	if p.is_dir():
-		p_list = list()
-		for root, dirs, files in os.walk(p, followlinks=True):
-			for name in files:
-				if not re.search(r'(?i)\.(bmp|png|jpe?g|webp)$', name): continue
-				p_list.append(pl.Path(root) / name)
-	else: p_list = [p]
-	if not p_list: parser.error(f'No images matched for path: {p}')
+	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
 	mon_list, dx, dy = opts.monitor, opts.desktop_x, opts.desktop_y
 	if not mon_list:
 		mon_list = dpy_info()
 		mon_list = list(range(len(mon_list)))
 
+	p_list = list()
+	for p in map(pl.Path, opts.path):
+		if not p.is_dir(): p_list.append(p)
+		else:
+			for root, dirs, files in os.walk(p, followlinks=True):
+				for name in files:
+					if not re.search(r'(?i)\.(bmp|png|jpe?g|webp)$', name): continue
+					p_list.append(pl.Path(root) / name)
+	if not p_list: parser.error(f'No images matched for path(s): {opts.path}')
 	images = ImagePicker(p_list, adict(ds=opts.desktop_same))
-	set_bg_image(images, mon_list, dx, dy)
+
+	daemon = False
+	if opts.daemon:
+		interval = sum(a*b for a,b in zip(
+			[1, 60, 3600], reversed(list(map(float, opts.interval.split(':', 2)))) ))
+		for sig in 'int term'.upper().split():
+			signal.signal(getattr(signal, f'SIG{sig}'), lambda sig,frm: sys.exit(0))
+		daemon = SDDaemon( interval, opts.fork,
+			sd_status_tpl='Next background cycle in {delta_str}' )
+		if not opts.fork: daemon.ping() # send "ready" immediately
+
+	bg_cycle, delay = not daemon or not opts.initial_delay, 0
+	while True:
+		if bg_cycle: set_bg_image(images, mon_list, dx, dy)
+		if not daemon: break
+		if delay: time.sleep(delay)
+		bg_cycle, delay = daemon.check_wakeup()
 
 if __name__ == '__main__': sys.exit(main())

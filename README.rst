@@ -192,6 +192,9 @@ Somewhat notable stuff:
 - `fgbg <bin/fgbg>`_ -
   py3/ctypes/sd-bus script to set background in whatever current DE.
 
+  Has continuous operation mode to run as desktop session daemon and cycle images,
+  as well as some options to scale/position/tweak them for DE-background purposes.
+
 - `xclipc <bin/xclipc>`_ - obsoleted but useful key-bound script, for adding
   some processing to some "copy to clipboard" operations, as well as making
   these more universal wrt diff X selection buffers.
