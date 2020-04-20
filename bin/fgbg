@@ -1,15 +1,34 @@
 #!/usr/bin/env python
 
-import ctypes as ct, itertools as it, pathlib as pl, dataclasses as dc
-import os, sys, re, random, math, time, signal
+import itertools as it, functools as ft, ctypes as ct, pathlib as pl
+import subprocess as sp, dataclasses as dc, hashlib as hl
+import os, sys, re, random, math, time, signal, base64
 
 p_err = lambda tpl,*a,**k: print(tpl, *a, **k, file=sys.stderr, flush=True)
+image_ext_re = re.compile(r'(?i)\.(bmp|png|jpe?g|webp)$')
+gather_wrap = lambda t: (lambda func: (lambda *a,**k: t(func(*a,**k))))
+
+def hash_str(s, c=None, person='fgbg'):
+	if not isinstance(s, bytes):
+		s = hl.blake2s(s.encode(), person=person.encode()).digest()
+	s = base64.urlsafe_b64encode(s).decode().replace('-', '').replace('_', '').replace('=', '')
+	if c is None: return s
+	if len(s) < c: s = str_hash(s, c, person)
+	return s[:c]
+
+def hash_file(p, c=None, person='fgbg', chunk=1*2**20):
+	p_hash = hl.blake2s(person=person.encode())
+	with p.open('rb') as src:
+		for chunk in iter(ft.partial(src.read, chunk), b''): p_hash.update(chunk)
+	return hash_str(p_hash.digest(), c, person)
+
 
 
 @dc.dataclass
 class DisplayInfo:
-	x:int; y:int; w:int; h:int; w_mm:int; h_mm:int; name:str
+	n:int; index:int; x:int; y:int; w:int; h:int; w_mm:int; h_mm:int; name:str
 
+@gather_wrap(list)
 def dpy_info():
 	# Simplified randr module from https://github.com/rr-/screeninfo/
 	def make_struct(name, fields):
@@ -39,27 +58,27 @@ def dpy_info():
 	if not dpy: raise RuntimeError('XOpenDisplay failed')
 	try:
 		root_win = xlib.XDefaultRootWindow(dpy)
-		res = xrandr.XRRGetScreenResourcesCurrent(dpy, root_win)
-		for n in range(res.contents.nout):
+		n, res = 0, xrandr.XRRGetScreenResourcesCurrent(dpy, root_win)
+		for out_idx in range(res.contents.nout):
 			out = ( out_raw := xrandr
-				.XRRGetOutputInfo(dpy, res, res.contents.out[n]) ).contents
+				.XRRGetOutputInfo(dpy, res, res.contents.out[out_idx]) ).contents
 			if out.conn != 0: continue # RR_Connected=0
 			if not out.crtc: continue
 			try:
 				crtc = (crtc_raw := xrandr
 					.XRRGetCrtcInfo(dpy, ct.byref(out_raw), out.crtc)).contents
 				try:
-					yield DisplayInfo(
+					yield DisplayInfo( n=n, index=out_idx,
 						x=crtc.x, y=crtc.y, w=crtc.w, h=crtc.h,
 						w_mm=out.w_mm, h_mm=out.h_mm,
 						name=out.name.decode(sys.getfilesystemencoding()) )
+					n += 1
 				finally: xrandr.XRRFreeCrtcInfo(crtc_raw)
 			finally: xrandr.XRRFreeOutputInfo(out_raw)
 	finally: xlib.XCloseDisplay(dpy)
-dpy_info = lambda *,_f=dpy_info: list(_f())
 
 
-def set_bg_image(images, mon=0, dx=None, dy=None):
+def set_bg_image(images, dpy_list, dx=None, dy=None):
 	class sd_bus(ct.Structure): pass
 	class sd_bus_error(ct.Structure):
 		_fields_ = [ ('name', ct.c_char_p),
@@ -81,7 +100,6 @@ def set_bg_image(images, mon=0, dx=None, dy=None):
 	error = sd_bus_error()
 	reply = ct.POINTER(sd_bus_msg)()
 	try:
-		if isinstance(mon, int): mon = [mon]
 		if isinstance(dx, int): dx = [dx]
 		if isinstance(dy, int): dy = [dy]
 
@@ -108,7 +126,7 @@ def set_bg_image(images, mon=0, dx=None, dy=None):
 			if not dx: dx = list(range(dxc.value))
 			if not dy: dy = list(range(dyc.value))
 
-		for p, m, x, y in images.get_iter(mon, dx, dy):
+		for p, dpy, x, y in images.get_iter(dpy_list, dx, dy):
 			run( 'sd_bus_call_method',
 				bus,
 				b'org.enlightenment.wm.service',
@@ -117,7 +135,7 @@ def set_bg_image(images, mon=0, dx=None, dy=None):
 				b'Add',
 				ct.byref(error),
 				ct.byref(reply),
-				b'iiis', m, x, y, str(p).encode(),
+				b'iiis', dpy.n, x, y, str(p).encode(),
 				sig=[
 					ct.POINTER(sd_bus),
 					ct.c_char_p, ct.c_char_p, ct.c_char_p, ct.c_char_p,
@@ -129,32 +147,172 @@ def set_bg_image(images, mon=0, dx=None, dy=None):
 
 
 @dc.dataclass
+class ImageMagickOpts:
+	label_font_path: str; label_font_size: int
+	label_color_font: str; label_color_outline: str
+	def opts_hash(self): return '\0'.join(map(str, dc.astuple(self)))
+
+def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
+	'''Process image from source path
+			into a desktop background with specified parameters.
+		Uses ImageMagick and requires wand-py module.'''
+	from wand.image import Image
+	from wand.drawing import Drawing
+
+	@dc.dataclass
+	class Box:
+		x1:int; y1:int; x2:int; y2:int
+		def __post_init__(self):
+			for k, v in dc.asdict(self).items(): setattr(self, k, round(v))
+
+	def _pset(ctx, *base, **props):
+		'Set specified attributes on ctx, checking that they exist first'
+		if base:
+			props, props_update = base[0].copy(), props
+			for update in base[1:]: props.update(update)
+			props.update(props_update)
+		for k,v in props.items():
+			getattr(ctx, k) # make sure prop name is valid
+			setattr(ctx, k, v)
+
+	def _crop_resize(img, dpy):
+		# XXX: add half-screen algo here
+		aspect, aspect_dpy = (round(a, 2) for a in [img.width / img.height, dpy.w / dpy.h])
+		if aspect == aspect_dpy: img.resize(dpy.w, dpy.h)
+		elif aspect > aspect_dpy:
+			# Wider than display - cut vertical stripe from the middle
+			crop_w = round(img.height * aspect_dpy)
+			img.crop(round((img.width - crop_w)/2), 0, width=crop_w, height=img.height)
+			img.resize(dpy.w, dpy.h)
+		else:
+			# Taller than display - cut horizontal stripe from the middle
+			crop_h = round(img.width * aspect_dpy)
+			img.crop(0, round((img.height - crop_h)/2), width=img.width, height=crop_h)
+			img.resize(dpy.w, dpy.h)
+
+	def _add_text_label( img, x, y, label,
+			text_color, outline_color, outline_hard, outline_blur, font_size, font_path ):
+		'Note: x/y are for top-left corner of the text box'
+		with Drawing() as ctx,\
+				Image(width=img.width, height=img.height) as img_text:
+
+			# Calculate text position within cropped img_text box
+			# Cropping is done to avoid expensive
+			#  operations like blur being performed on full-sized image
+			text_font = dict(font_size=font_size, font=font_path)
+			_pset(ctx, text_font, stroke_width=0)
+			text_box = ctx.get_font_metrics(img_text, label)
+			text_box = Box( # offset of text box corners from its origin point
+				0, -(text_box.ascender+1),
+				text_box.text_width, -(text_box.descender-1) )
+			text_margin = outline_hard + outline_blur
+			text_args = (
+				text_margin - text_box.x1,
+				text_margin - text_box.y1, label )
+			img_text_box = Box(
+				x - text_margin, y - text_margin,
+				x + (text_box.x2 - text_box.x1) + text_margin,
+				y + (text_box.y2 - text_box.y1) + text_margin )
+			img_text.crop(*dc.astuple(img_text_box))
+
+			# Hard inner outline edge
+			_pset( ctx, fill_color=outline_color,
+				stroke_width=outline_hard, stroke_color=outline_color )
+			ctx.text(*text_args)
+			ctx(img_text)
+
+			# Soft (blurred) outer outline edge, aka "glow"
+			with img_text.clone() as img_text_glow:
+				_pset(ctx, stroke_width=outline_hard)
+				ctx.text(*text_args)
+				ctx(img_text_glow)
+				_pset(img_text_glow, background_color=outline_color)
+				img_text_glow.gaussian_blur(outline_blur, outline_blur)
+				img_text.composite(img_text_glow)
+
+			# Actual text on top of outline
+			ctx.clear()
+			_pset(ctx, text_font, fill_color=text_color, stroke_width=0)
+			ctx.text(*text_args)
+			ctx(img_text)
+
+			img.composite(img_text, img_text_box.x1, img_text_box.y1)
+
+	with Image(filename=str(p_src)) as img:
+		# XXX: raise exc if image aspect is too different
+		# XXX: h-flip chance
+		_crop_resize(img, dpy)
+		if opts.label_font_path and opts.label_font_size:
+			_add_text_label( img,
+				x=opts.label_font_size, y=opts.label_font_size,
+				label=image_ext_re.sub('', p_src.name),
+				text_color=opts.label_color_font, outline_color=opts.label_color_outline,
+				outline_hard=1, outline_blur=5,
+				font_size=opts.label_font_size, font_path=opts.label_font_path )
+		img.save(filename=f'png24:{p_dst}')
+
+
+@dc.dataclass
+class ImageProcessingOpts:
+	cache: bool
+	magick: ImageMagickOpts = None
+
+@dc.dataclass
 class ImagePickerOpts:
-	desktop_same: bool
+	desktop_same:bool; proc:ImageProcessingOpts
+	cleanup: bool = True
 
 class ImagePicker:
 
-	def __init__(self, p_list, opts=None):
-		self.p_list, self.shuffle = p_list, None
-		self.opts = opts or ImagePickerOpts()
+	proc_hash_person = 'fgbg.1' # +1 when processing changes
 
-	def get_random_image(self):
+	def __init__(self, p_list, opts):
+		self.p_list, self.opts, self.shuffle = p_list, opts, None
+
+	def __enter__(self):
+		if self.opts.proc and self.opts.proc.cache:
+			self.proc_dir = pl.Path('~/.cache/fgbg').expanduser()
+			self.proc_dir.mkdir(exist_ok=True)
+		else: self.proc_dir = pl.Path(os.environ.get('XDG_RUNTIME_DIR') or '/tmp')
+		self.proc_files = dict()
+		return self
+
+	def __exit__(self, *err):
+		if self.opts.proc and not self.opts.proc.cache and self.opts.cleanup:
+			for p in self.proc_files.values(): p.unlink(missing_ok=True)
+
+	def get_random_image(self, dpy):
 		'Return random image path and remove it from current shuffle.'
 		# Keeps simple list and pops uniformly-random element from it,
 		#  without any kind of expensive and unreliable sort up-front
 		if not self.shuffle: self.shuffle = self.p_list.copy()
 		n = random.randint(0, len(self.shuffle) - 1)
 		p, self.shuffle[n] = self.shuffle[n], self.shuffle.pop()
+
+		if self.opts.proc:
+			img_hash = hash_file(p, person=self.proc_hash_person)
+			img_hash = '\0'.join([ img_hash,
+				self.opts.proc.magick.opts_hash(), *map(str, [dpy.w, dpy.h]) ])
+			img_hash = hash_str(img_hash, 8, self.proc_hash_person)
+			k, k_prev, p_src = f'current.{dpy.n}', f'last.{dpy.n}', p
+			if k in self.proc_files:
+				if self.opts.proc.cache and k_prev in self.proc_files:
+					self.proc_files[k_prev].unlink(missing_ok=True)
+				self.proc_files[k_prev] = self.proc_files[k]
+			p = self.proc_files[k] = self.proc_dir / f'fgbg.{img_hash}.png'
+			if not p.exists(): image_magick(p_src, p, dpy, self.opts.proc.magick)
+			else: p.touch() # XXX: add mtime-based cache cleanup
+
 		return p
 
-	def get_iter(self, mon_list, dx, dy):
+	def get_iter(self, dpy_list, dx, dy):
 		cache = dict()
-		for m, x, y in it.product(mon_list, dx, dy):
+		for dpy, x, y in it.product(dpy_list, dx, dy):
 			if self.opts.desktop_same:
-				p = cache.get(('ds', m))
-				if not p: p = cache['ds', m] = self.get_random_image()
-			else: p = self.get_random_image()
-			yield p, m, x, y
+				p = cache.get(('ds', dpy.n))
+				if not p: p = cache['ds', dpy.n] = self.get_random_image(dpy)
+			else: p = self.get_random_image(dpy)
+			yield p, dpy, x, y
 
 
 class SDDaemon:
@@ -231,14 +389,22 @@ class SDDaemon:
 
 
 def main(args=None):
-	import argparse
+	def_proc_label = 'Liberation Sans-15', '#3d9d80', 'black'
+
+	import argparse, textwrap
+	dd = lambda text: (textwrap.dedent(text).strip('\n') + '\n').replace('\t', '  ')
+	fill = lambda s,w=90,ind='  ',ind_next=None,**k: textwrap.fill(
+		s, w, initial_indent=ind, subsequent_indent=ind if ind_next is None else ind_next, **k )
+
 	parser = argparse.ArgumentParser(
+		usage='%(prog)s [options] path ...',
+		formatter_class=argparse.RawTextHelpFormatter,
 		description='Set E desktop background via DBus API.' )
-	parser.add_argument('path', nargs='+',
-		help='Background image or directory path(s).'
-			' If path is a directory, images get matches by'
-				' bmp/png/jpe?g/webp extension (case-insensitive)'
-				' and get picked at random (with no repeats if possible).')
+	parser.add_argument('path', nargs='+', help=dd('''
+			Background image or directory path(s).
+			If path is a directory, images get matches by
+				bmp/png/jpe?g/webp extension (case-insensitive)
+				and get picked at random (with no repeats if possible).'''))
 
 	group = parser.add_argument_group('Monitor and virtual desktop')
 	group.add_argument('-m', '--monitor',
@@ -246,13 +412,13 @@ def main(args=None):
 		help='Physical monitor offset number to set'
 			' bg on (default: all). Can be specified multiple times.')
 	group.add_argument('-x', '--desktop-x',
-		action='append', type=int, metavar='n',
-		help='Desktop X offset to set bg on. Can be specified multiple times.'
-			' If not specified, all X values will be used (default).')
+		action='append', type=int, metavar='n', help=dd('''
+			Desktop X offset to set bg on. Can be specified multiple times.
+			If not specified, all X values will be used (default).'''))
 	group.add_argument('-y', '--desktop-y',
-		action='append', type=int, metavar='n',
-		help='Desktop Y offset to set bg on. Can be specified multiple times.'
-			' If not specified, all Y values will be used (default).')
+		action='append', type=int, metavar='n', help=dd('''
+			Desktop Y offset to set bg on. Can be specified multiple times.
+			If not specified, all Y values will be used (default).'''))
 	group.add_argument('-s', '--desktop-same', action='store_true',
 		help='Pick and use same one image for all virtual desktops within monitor.')
 
@@ -266,12 +432,23 @@ def main(args=None):
 	group.add_argument('--initial-delay', action='store_true',
 		help='Only set initial background after first interval of time passes.')
 
+	group = parser.add_argument_group('Image processing options',
+		description='Enabling this requires ImageMagick and wand-py bindings for it.')
+	group.add_argument('-p', '--process', action='store_true', help=dd('''
+		Enable processing for image to desktop background using ImageMagick/wand-py.
+		This includes smart scaling, adding text label to the corner and such stuff.'''))
+	group.add_argument('--no-cache', action='store_true',
+		help='Disable using ~/.cache/fgbg for caching processed images.')
+	group.add_argument('--label-style',
+		metavar='font-spec(:color)(:outline)', default=':'.join(def_proc_label), help=dd('''
+			Font specification for fontconfig.
+			Use command like "fc-match -b \'sans-15\'" to check what it\'d resolve to.
+			Special value "none" disables it. Default: %(default)s'''))
+
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
-	mon_list, dx, dy = opts.monitor, opts.desktop_x, opts.desktop_y
-	if not mon_list:
-		mon_list = dpy_info()
-		mon_list = list(range(len(mon_list)))
+	dpy_list, dx, dy = dpy_info(), opts.desktop_x, opts.desktop_y
+	if opts.monitor: dpy_list = list(dpy_list[n] for n in opts.monitor)
 
 	p_list = list()
 	for p in map(pl.Path, opts.path):
@@ -279,26 +456,43 @@ def main(args=None):
 		else:
 			for root, dirs, files in os.walk(p, followlinks=True):
 				for name in files:
-					if not re.search(r'(?i)\.(bmp|png|jpe?g|webp)$', name): continue
+					if not image_ext_re.search(name): continue
 					p_list.append(pl.Path(root) / name)
 	if not p_list: parser.error(f'No images matched for path(s): {opts.path}')
-	images = ImagePicker(p_list, ImagePickerOpts(desktop_same=opts.desktop_same))
 
-	daemon = False
-	if opts.daemon:
-		interval = sum(a*b for a,b in zip(
-			[1, 60, 3600], reversed(list(map(float, opts.interval.split(':', 2)))) ))
-		for sig in 'int term'.upper().split():
-			signal.signal(getattr(signal, f'SIG{sig}'), lambda sig,frm: sys.exit(0))
-		daemon = SDDaemon( interval, opts.fork,
-			sd_status_tpl='Next background cycle in {delta_str}' )
-		if not opts.fork: daemon.ping() # send "ready" immediately
+	image_proc_opts = opts.process
+	if image_proc_opts:
+		font, color_font, color_label = ( (v or v_def)
+			for v, v_def in it.zip_longest(opts.label_style.split(':'), def_proc_label) )
+		if font != 'none':
+			proc = sp.run(['fc-match', '-f', '%{size}\n%{file}\n', font], stdout=sp.PIPE)
+			font_size, font_path = proc.stdout.decode().splitlines()
+		else: font_path, font_size = None, 0
+		image_proc_opts = ImageProcessingOpts(
+			cache=not opts.no_cache,
+			magick=ImageMagickOpts(font_path, int(font_size), color_font, color_label) )
 
-	bg_cycle, delay = not daemon or not opts.initial_delay, 0
-	while True:
-		if bg_cycle: set_bg_image(images, mon_list, dx, dy)
-		if not daemon: break
-		if delay: time.sleep(delay)
-		bg_cycle, delay = daemon.check_wakeup()
+	picker_opts = ImagePickerOpts(
+		desktop_same=opts.desktop_same, proc=image_proc_opts )
+	with ImagePicker(p_list, picker_opts) as images:
+
+		daemon = False
+		if opts.daemon:
+			interval = sum(a*b for a,b in zip(
+				[1, 60, 3600], reversed(list(map(float, opts.interval.split(':', 2)))) ))
+			for sig in 'int term'.upper().split():
+				signal.signal(getattr(signal, f'SIG{sig}'), lambda sig,frm: sys.exit(0))
+			daemon = SDDaemon( interval, opts.fork,
+				sd_status_tpl='Next background cycle in {delta_str}' )
+			if not opts.fork: daemon.ping() # send "ready" immediately
+
+		bg_cycle, delay = not daemon or not opts.initial_delay, 0
+		while True:
+			if bg_cycle: set_bg_image(images, dpy_list, dx, dy)
+			if not daemon:
+				picker_opts.cleanup = False # keep processed files after exit
+				break
+			if delay: time.sleep(delay)
+			bg_cycle, delay = daemon.check_wakeup()
 
 if __name__ == '__main__': sys.exit(main())
