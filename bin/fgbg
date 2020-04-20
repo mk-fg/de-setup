@@ -147,11 +147,13 @@ def set_bg_image(images, dpy_list, dx=None, dy=None):
 	finally: run('sd_bus_flush_close_unref', bus, check=False)
 
 
+class ImageMagickSkip(Exception): pass
+
 @dc.dataclass
 class ImageMagickOpts:
 	label_font_path: str; label_font_size: int
 	label_color_font: str; label_color_outline: str
-	h_flip: bool = False
+	h_flip: bool = False; max_aspect_diff: float = 0.7
 	def opts_hash(self): return '\0'.join(map(str, dc.astuple(self)))
 
 def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
@@ -242,7 +244,8 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 
 	label = re.sub('[_\s]+', ' ', image_ext_re.sub('', p_src.name))
 	with Image(filename=str(p_src)) as img:
-		# XXX: raise exc if image aspect is too different
+		if abs(img.width / img.height - dpy.w / dpy.h) > opts.max_aspect_diff:
+			raise ImageMagickSkip
 		step1 = img.flop if opts.h_flip else lambda: None
 		step2 = ft.partial(_crop_resize, img, dpy.w, dpy.h)
 		if img.width * img.height > dpy.w * dpy.h: step1, step2 = step2, step1
@@ -255,6 +258,8 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 				font_size=opts.label_font_size, font_path=opts.label_font_path )
 		img.save(filename=f'png24:{p_dst}')
 
+
+class ImagePickerError(Exception): pass
 
 @dc.dataclass
 class ImageProcessingOpts:
@@ -271,7 +276,7 @@ class ImagePicker:
 	proc_hash_person = 'fgbg.1' # +1 when processing changes
 
 	def __init__(self, p_list, opts):
-		self.p_list, self.opts, self.shuffle = p_list, opts, None
+		self.p_list, self.p_skip, self.opts, self.shuffle = p_list, set(), opts, None
 
 	def __enter__(self):
 		if self.opts.proc and self.opts.proc.cache:
@@ -305,8 +310,11 @@ class ImagePicker:
 		#  without any kind of expensive and unreliable sort up-front
 		if not self.shuffle: self.shuffle = self.p_list.copy()
 		n = random.randint(0, len(self.shuffle) - 1)
-		if len(self.shuffle) == 1: p = self.shuffle.pop()
-		else: p, self.shuffle[n] = self.shuffle[n], self.shuffle.pop()
+		while self.shuffle:
+			if len(self.shuffle) == 1: p = self.shuffle.pop()
+			else: p, self.shuffle[n] = self.shuffle[n], self.shuffle.pop()
+			if p not in self.p_skip: break
+		else: raise ImagePickerError('No suitable images in the shuffle') from None
 
 		if self.opts.proc:
 			self.opts.proc.magick.h_flip = random.random() < self.opts.proc.flip_chance
@@ -322,7 +330,10 @@ class ImagePicker:
 			p = self.proc_files[k] = self.proc_dir / f'fgbg.{img_hash}.png'
 			if not p.exists():
 				p_tmp = self.proc_files['tmp'] = p.parent / (p.name + '.tmp')
-				image_magick(p_src, p_tmp, dpy, self.opts.proc.magick)
+				try: image_magick(p_src, p_tmp, dpy, self.opts.proc.magick)
+				except ImageMagickSkip:
+					self.p_skip.add(p_src)
+					return self.get_random_image(dpy)
 				p_tmp.rename(p)
 			else: p.touch()
 			if self.opts.cleanup and random.random() < self.opts.cleanup_chance:
