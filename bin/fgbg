@@ -151,6 +151,7 @@ def set_bg_image(images, dpy_list, dx=None, dy=None):
 class ImageMagickOpts:
 	label_font_path: str; label_font_size: int
 	label_color_font: str; label_color_outline: str
+	h_flip: bool = False
 	def opts_hash(self): return '\0'.join(map(str, dc.astuple(self)))
 
 def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
@@ -176,20 +177,20 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 			getattr(ctx, k) # make sure prop name is valid
 			setattr(ctx, k, v)
 
-	def _crop_resize(img, dpy):
+	def _crop_resize(img, w, h):
 		# XXX: add half-screen algo here
-		aspect, aspect_dpy = (round(a, 2) for a in [img.width / img.height, dpy.w / dpy.h])
-		if aspect == aspect_dpy: img.resize(dpy.w, dpy.h)
+		aspect, aspect_dpy = (round(a, 2) for a in [img.width / img.height, w / h])
+		if aspect == aspect_dpy: img.resize(w, h)
 		elif aspect > aspect_dpy:
 			# Wider than display - cut vertical stripe from the middle
 			crop_w = round(img.height * aspect_dpy)
 			img.crop(round((img.width - crop_w)/2), 0, width=crop_w, height=img.height)
-			img.resize(dpy.w, dpy.h)
+			img.resize(w, h)
 		else:
 			# Taller than display - cut horizontal stripe from the middle
 			crop_h = round(img.width * aspect_dpy)
 			img.crop(0, round((img.height - crop_h)/2), width=img.width, height=crop_h)
-			img.resize(dpy.w, dpy.h)
+			img.resize(w, h)
 
 	def _add_text_label( img, x, y, label,
 			text_color, outline_color, outline_hard, outline_blur, font_size, font_path ):
@@ -242,8 +243,10 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 	label = re.sub('[_\s]+', ' ', image_ext_re.sub('', p_src.name))
 	with Image(filename=str(p_src)) as img:
 		# XXX: raise exc if image aspect is too different
-		# XXX: h-flip chance
-		_crop_resize(img, dpy)
+		step1 = img.flop if opts.h_flip else lambda: None
+		step2 = ft.partial(_crop_resize, img, dpy.w, dpy.h)
+		if img.width * img.height > dpy.w * dpy.h: step1, step2 = step2, step1
+		step1(); step2()
 		if opts.label_font_path and opts.label_font_size:
 			_add_text_label( img,
 				x=opts.label_font_size, y=opts.label_font_size, label=label,
@@ -255,7 +258,7 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 
 @dc.dataclass
 class ImageProcessingOpts:
-	cache: bool
+	cache: bool; flip_chance: float = 0.5
 	magick: ImageMagickOpts = None
 
 @dc.dataclass
@@ -302,9 +305,11 @@ class ImagePicker:
 		#  without any kind of expensive and unreliable sort up-front
 		if not self.shuffle: self.shuffle = self.p_list.copy()
 		n = random.randint(0, len(self.shuffle) - 1)
-		p, self.shuffle[n] = self.shuffle[n], self.shuffle.pop()
+		if len(self.shuffle) == 1: p = self.shuffle.pop()
+		else: p, self.shuffle[n] = self.shuffle[n], self.shuffle.pop()
 
 		if self.opts.proc:
+			self.opts.proc.magick.h_flip = random.random() < self.opts.proc.flip_chance
 			img_hash = hash_file(p, person=self.proc_hash_person)
 			img_hash = '\0'.join([ img_hash,
 				self.opts.proc.magick.opts_hash(), *map(str, [dpy.w, dpy.h]) ])
