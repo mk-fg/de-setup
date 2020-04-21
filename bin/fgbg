@@ -321,7 +321,7 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 
 		else:
 			# Normal crop/scale, flipping smaller image, if enabled
-			step1, step2 = flip, ft.partial(_crop_resize, img, dpy.w, dpy.h)
+			step1, step2 = img_flip, ft.partial(_crop_resize, img, dpy.w, dpy.h)
 			if asp_img > asp_dpy: step1, step2 = step2, step1
 			step1(); step2()
 
@@ -431,6 +431,8 @@ class SDDaemon:
 	def _time_diff_str( self, ts, ts0=None, now='now', ext=None,
 			_units=dict( h=3600, m=60, s=1,
 				y=365.25*86400, mo=30.5*86400, w=7*86400, d=1*86400 ) ):
+		import threading
+		self.sleep_event = threading.Event()
 		res, s = list(), abs( (ts - ts0) if ts0 is not None
 			and not getattr(ts, 'total_seconds', False) else ts )
 		if not isinstance(s, (int, float)): s = s.total_seconds()
@@ -483,7 +485,7 @@ class SDDaemon:
 				delay = self.sd_ping_ts - ts
 			return delay
 
-	def check_wakeup(self):
+	def wakeup_check(self):
 		if self.fork and self.sd_ready is None:
 			for n in range(2):
 				pid = os.fork()
@@ -496,11 +498,24 @@ class SDDaemon:
 			delay_wu = self.wu_next - ts
 		status = ( None if not self.sd_status_tpl else
 			self.sd_status_tpl.format(delta_str=self._time_diff_str(delay_wu)) )
-		return wakeup_event, min(self.ping(status, ts) or delay_wu, delay_wu)
+		ts_next = ts + min(self.ping(status, ts) or delay_wu, delay_wu)
+		return wakeup_event, ts_next
+
+	def wakeup_sleep(self, ts_next):
+		'sleep() until ts_next, which can be interrupted by wakeup_signal call.'
+		if not ts_next: return
+		delay = ts_next - time.monotonic()
+		if delay > 0:
+			self.sleep_event.clear()
+			if self.sleep_event.wait(delay): return True
+
+	def wakeup_signal(self, *sig_args):
+		self.wu_next = time.monotonic()
+		self.sleep_event.set()
 
 
 def main(args=None):
-	def_proc_label = 'Liberation Sans-22', '#baebf9', 'black'
+	def_proc_label = 'Liberation Sans-16', '#baebf9', 'black'
 
 	import argparse, textwrap
 	dd = lambda text: (textwrap.dedent(text).strip('\n') + '\n').replace('\t', '  ')
@@ -535,7 +550,8 @@ def main(args=None):
 
 	group = parser.add_argument_group('Continuous operation mode')
 	group.add_argument('-d', '--daemon', action='store_true',
-		help='Run in continous daemon mode, setting new background on interval.')
+		help=fill('Run in continous daemon mode,'
+			' setting new background on interval or when receiving HUP/QUIT signal.'))
 	group.add_argument('-i', '--interval', metavar='((hh:)mm:)ss', default='4:23:47',
 		help='Interval between switching to a new background image(s). Default: %(default)s')
 	group.add_argument('--fork', action='store_true',
@@ -594,19 +610,21 @@ def main(args=None):
 		if opts.daemon:
 			interval = sum(a*b for a,b in zip(
 				[1, 60, 3600], reversed(list(map(float, opts.interval.split(':', 2)))) ))
-			for sig in 'int term'.upper().split():
-				signal.signal(getattr(signal, f'SIG{sig}'), lambda sig,frm: sys.exit(0))
 			daemon = SDDaemon( interval, opts.fork,
 				sd_status_tpl='Next background cycle in {delta_str}' )
+			for sig in 'int term'.upper().split():
+				signal.signal(getattr(signal, f'SIG{sig}'), lambda sig,frm: sys.exit(0))
+			for sig in 'hup quit'.upper().split():
+				signal.signal(getattr(signal, f'SIG{sig}'), daemon.wakeup_signal)
 			if not opts.fork: daemon.ping() # send "ready" immediately
 
-		bg_cycle, delay = not daemon or not opts.initial_delay, 0
+		bg_cycle, ts_next = not daemon or not opts.initial_delay, None
 		while True:
 			if bg_cycle: set_bg_image(images, dpy_list, dx, dy)
 			if not daemon:
 				picker_opts.cleanup = False # keep processed files after exit
 				break
-			if delay: time.sleep(delay)
-			bg_cycle, delay = daemon.check_wakeup()
+			daemon.wakeup_sleep(ts_next)
+			bg_cycle, ts_next = daemon.wakeup_check()
 
 if __name__ == '__main__': sys.exit(main())
