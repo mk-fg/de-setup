@@ -24,7 +24,6 @@ def hash_file(p, c=None, person=b'fgbg', chunk=1*2**20):
 	return hash_str(p_hash.digest(), c, person)
 
 
-
 @dc.dataclass
 class DisplayInfo:
 	n:int; index:int; x:int; y:int; w:int; h:int; w_mm:int; h_mm:int; name:str
@@ -526,7 +525,7 @@ def main(args=None):
 		usage='%(prog)s [options] path ...',
 		formatter_class=argparse.RawTextHelpFormatter,
 		description='Set E desktop background via DBus API.' )
-	parser.add_argument('path', nargs='+', help=dd('''
+	parser.add_argument('path', nargs='*', help=dd('''
 		Background image or directory path(s).
 		If path is a directory, images get matches by
 			bmp/png/jpe?g/webp extension (case-insensitive)
@@ -554,6 +553,8 @@ def main(args=None):
 			' setting new background on interval or when receiving HUP/QUIT signal.'))
 	group.add_argument('-i', '--interval', metavar='((hh:)mm:)ss', default='4:23:47',
 		help='Interval between switching to a new background image(s). Default: %(default)s')
+	group.add_argument('-n', '--next', action='store_true',
+		help='Find running daemon pid(s) in /proc by script name, send SIGHUP and exit.')
 	group.add_argument('--fork', action='store_true',
 		help='Fork or indicate systemd startup only after setting initial background.')
 	group.add_argument('--initial-delay', action='store_true',
@@ -571,11 +572,30 @@ def main(args=None):
 			Font specification for fontconfig.
 			Use command like "fc-match -b \'sans-15\'" to check what it\'d resolve to.
 			Special value "none" disables it. Default: %(default)s'''))
-	parser.add_argument('--random-name', action='store_true',
+	group.add_argument('--random-name', action='store_true',
 		help=fill('Generate randomized filename instead of predictable one.'))
 
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
+	if opts.next:
+		def _find_pids(name, self_pid):
+			self_pid = str(self_pid)
+			for p in pl.Path('/proc').glob('*/cmdline'):
+				try: cmd = p.read_bytes()
+				except OSError: pass
+				for cmd in cmd.decode().split('\0'):
+					if cmd.rsplit('/')[-1] == name:
+						pid = p.parent.name
+						if pid == self_pid or not pid.isdigit(): break
+						yield int(pid)
+		name = pl.Path(sys.argv[0]).name
+		pid_set = set(_find_pids(name, os.getpid()))
+		if not pid_set: parser.error( 'Failed to find'
+			f' running daemon pid(s) by script name: {name!r}' )
+		for pid in pid_set: os.kill(pid, signal.SIGHUP)
+		return
+
+	if not opts.path: parser.error('At least one image file/dir path argument is required')
 	dpy_list, dx, dy = dpy_info(), opts.desktop_x, opts.desktop_y
 	if opts.monitor: dpy_list = list(dpy_list[n] for n in opts.monitor)
 

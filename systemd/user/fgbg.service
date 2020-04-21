@@ -7,7 +7,10 @@ PartOf=background.target
 [Service]
 SyslogIdentifier=%p
 Type=notify
-ExecStart=env fgbg --desktop-same -di 4:23:47 \
+ExecReload=kill -HUP $MAINPID
+
+ExecStart=env fgbg -di 4:23:47 \
+	--desktop-same --process \
 	/mnt/volatiles/images ${HOME}/media/bgz
 
 WatchdogSec=300
@@ -15,4 +18,3 @@ Restart=on-failure
 RestartSec=20
 StartLimitInterval=10min
 StartLimitBurst=5
-
