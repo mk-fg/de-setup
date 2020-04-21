@@ -9,16 +9,16 @@ p_err = lambda tpl,*a,**k: print(tpl, *a, **k, file=sys.stderr, flush=True)
 image_ext_re = re.compile(r'(?i)\.(bmp|png|jpe?g|webp)$')
 gather_wrap = lambda t: (lambda func: (lambda *a,**k: t(func(*a,**k))))
 
-def hash_str(s, c=None, person='fgbg'):
+def hash_str(s, c=None, person=b'fgbg'):
 	if not isinstance(s, bytes):
-		s = hl.blake2s(s.encode(), person=person.encode()).digest()
+		s = hl.blake2s(s.encode(), person=person).digest()
 	s = base64.urlsafe_b64encode(s).decode().replace('-', '').replace('_', '').replace('=', '')
 	if c is None: return s
 	if len(s) < c: s = str_hash(s, c, person)
 	return s[:c]
 
-def hash_file(p, c=None, person='fgbg', chunk=1*2**20):
-	p_hash = hl.blake2s(person=person.encode())
+def hash_file(p, c=None, person=b'fgbg', chunk=1*2**20):
+	p_hash = hl.blake2s(person=person)
 	with p.open('rb') as src:
 		for chunk in iter(ft.partial(src.read, chunk), b''): p_hash.update(chunk)
 	return hash_str(p_hash.digest(), c, person)
@@ -150,11 +150,20 @@ def set_bg_image(images, dpy_list, dx=None, dy=None):
 class ImageMagickSkip(Exception): pass
 
 @dc.dataclass
+class ImageMagickTallScale:
+	gravity: float = 1/4 # 0-1.0, <0 to disable
+	bg_color: str = '#000' # empty - disabled
+	edge_blend: int = 25 # scaled/blended edge width in px
+	edge_stretch_opacity: float = 0.7 # 0-1.0, 0 - disable
+	edge_stretch_blur: float = 3.0 # 0 - disable
+
+@dc.dataclass
 class ImageMagickOpts:
 	label_font_path: str; label_font_size: int
 	label_color_font: str; label_color_outline: str
 	h_flip: bool = False; max_aspect_diff: float = 0.7
-	def opts_hash(self): return '\0'.join(map(str, dc.astuple(self)))
+	tall_scale: any = ImageMagickTallScale() # None - disabled
+	def opts_hash(self): return str(dc.astuple(self))
 
 def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 	'''Process image from source path
@@ -169,6 +178,14 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 		def __post_init__(self):
 			for k, v in dc.asdict(self).items(): setattr(self, k, round(v))
 
+	ts_last = None
+	def _print_ts_delta(label): # to benchmark various ops
+		nonlocal ts_last
+		ts = time.monotonic()
+		if ts_last is None: ts_last = ts
+		ts_last, delta = ts, ts - ts_last
+		print(f'--- {label}: {delta:.3f}', flush=True)
+
 	def _pset(ctx, *base, **props):
 		'Set specified attributes on ctx, checking that they exist first'
 		if base:
@@ -179,18 +196,67 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 			getattr(ctx, k) # make sure prop name is valid
 			setattr(ctx, k, v)
 
+	def _tall_scale(img, opts, w, h, img_flip):
+		if img.height > h: img_flip = img_flip() and None
+		img.resize(round(img.width * (h / img.height)), h)
+		if img_flip: img_flip()
+		canvas = img
+		with canvas.clone() as img: # scaled image
+			edge_w = min(img.width, opts.edge_blend)
+			x0 = round(max(0, min(
+				w - img.width, w * opts.gravity - (img.width / 2) )))
+			x1 = x0 + img.width
+
+			img.alpha_channel = 'opaque'
+			canvas.extent(w, h, x0)
+			canvas.alpha_channel = 'transparent' # basically clear it
+			if opts.bg_color: canvas.colorize(opts.bg_color, '#fff')
+
+			if opts.edge_stretch_opacity:
+				def _edge_stretch(img, ew, w, blur):
+					img.crop(0 if ew > 0 else img.width + ew, width=abs(ew))
+					img.resize(w + abs(ew), img.height)
+					if blur: img.gaussian_blur(blur, blur)
+				canvas_add = ft.partial( canvas.composite,
+					operator='blend', arguments=f'{round(opts.edge_stretch_opacity * 100)}%' )
+				with img.clone() as pad:
+					_edge_stretch( pad,
+						edge_w, x0, opts.edge_stretch_blur )
+					canvas_add(pad, gravity='west')
+				with img.clone() as pad:
+					_edge_stretch( pad,
+						-edge_w, w - x1, opts.edge_stretch_blur )
+					canvas_add(pad, gravity='east')
+
+			if opts.edge_blend:
+				with Image(width=img.width, height=img.height, colorspace='gray') as mask:
+					def _edge_blend(mask, ew):
+						with Image(colorspace='gray') as grad:
+							grad.options['gradient:vector'] = f'-1,0,{abs(ew)},0'
+							grad_dir, pos = ('black-white', 'west') if ew > 0 else ('white-black', 'east')
+							grad.pseudo(abs(ew), img.height, f'gradient:{grad_dir}')
+							mask.composite(grad, gravity=pos)
+					mask.alpha_channel = 'off'
+					mask.colorize('#fff', '#fff')
+					if x0 > 0: _edge_blend(mask, edge_w)
+					if x1 < canvas.width: _edge_blend(mask, -edge_w)
+					img.composite(mask, operator='copy_alpha')
+
+			canvas.composite(img, x0, 0)
+
 	def _crop_resize(img, w, h):
-		# XXX: add half-screen algo here
-		aspect, aspect_dpy = (round(a, 2) for a in [img.width / img.height, w / h])
-		if aspect == aspect_dpy: img.resize(w, h)
-		elif aspect > aspect_dpy:
+		# XXX: just scale/lqr if aspect is close enough, without cropping
+		if img.width == w and img.height == h: return
+		asp_img, asp_dpy = (round(a, 2) for a in [img.width / img.height, w / h])
+		if asp_img == asp_dpy: img.resize(w, h)
+		elif asp_img > asp_dpy:
 			# Wider than display - cut vertical stripe from the middle
-			crop_w = round(img.height * aspect_dpy)
+			crop_w = round(img.height * asp_dpy)
 			img.crop(round((img.width - crop_w)/2), 0, width=crop_w, height=img.height)
 			img.resize(w, h)
 		else:
 			# Taller than display - cut horizontal stripe from the middle
-			crop_h = round(img.width * aspect_dpy)
+			crop_h = round(img.width * asp_dpy)
 			img.crop(0, round((img.height - crop_h)/2), width=img.width, height=crop_h)
 			img.resize(w, h)
 
@@ -244,18 +310,29 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 
 	label = re.sub('[_\s]+', ' ', image_ext_re.sub('', p_src.name))
 	with Image(filename=str(p_src)) as img:
-		if abs(img.width / img.height - dpy.w / dpy.h) > opts.max_aspect_diff:
-			raise ImageMagickSkip
-		step1 = img.flop if opts.h_flip else lambda: None
-		step2 = ft.partial(_crop_resize, img, dpy.w, dpy.h)
-		if img.width * img.height > dpy.w * dpy.h: step1, step2 = step2, step1
-		step1(); step2()
+
+		img_flip = img.flop if opts.h_flip else lambda: None
+		asp_img, asp_dpy = img.width / img.height, dpy.w / dpy.h
+		if abs(asp_img - asp_dpy) > opts.max_aspect_diff:
+			# Special scaling to one screen side or skip
+			if opts.tall_scale and asp_img - asp_dpy < 0:
+				_tall_scale(img, opts.tall_scale, dpy.w, dpy.h, img_flip)
+			else: raise ImageMagickSkip
+
+		else:
+			# Normal crop/scale, flipping smaller image, if enabled
+			step1, step2 = flip, ft.partial(_crop_resize, img, dpy.w, dpy.h)
+			if asp_img > asp_dpy: step1, step2 = step2, step1
+			step1(); step2()
+
 		if opts.label_font_path and opts.label_font_size:
+			# Text label
 			_add_text_label( img,
 				x=opts.label_font_size, y=opts.label_font_size, label=label,
 				text_color=opts.label_color_font, outline_color=opts.label_color_outline,
 				outline_hard=1, outline_blur=5,
 				font_size=opts.label_font_size, font_path=opts.label_font_path )
+
 		img.save(filename=f'png24:{p_dst}')
 
 
@@ -263,17 +340,15 @@ class ImagePickerError(Exception): pass
 
 @dc.dataclass
 class ImageProcessingOpts:
-	cache: bool; flip_chance: float = 0.5
-	magick: ImageMagickOpts = None
+	cache:bool; hash_person:str
+	flip_chance: float=0.5; magick:any=None
 
 @dc.dataclass
 class ImagePickerOpts:
-	desktop_same:bool; proc:ImageProcessingOpts
+	desktop_same: bool; proc: any
 	cleanup: bool = True; cleanup_chance: float = 0.05; cleanup_size: int = 1000 * 2**20
 
 class ImagePicker:
-
-	proc_hash_person = 'fgbg.1' # +1 when processing changes
 
 	def __init__(self, p_list, opts):
 		self.p_list, self.p_skip, self.opts, self.shuffle = p_list, set(), opts, None
@@ -318,10 +393,10 @@ class ImagePicker:
 
 		if self.opts.proc:
 			self.opts.proc.magick.h_flip = random.random() < self.opts.proc.flip_chance
-			img_hash = hash_file(p, person=self.proc_hash_person)
+			img_hash = hash_file(p, person=self.opts.proc.hash_person)
 			img_hash = '\0'.join([ img_hash,
 				self.opts.proc.magick.opts_hash(), *map(str, [dpy.w, dpy.h]) ])
-			img_hash = hash_str(img_hash, 16, self.proc_hash_person)
+			img_hash = hash_str(img_hash, 16, self.opts.proc.hash_person)
 			k, k_prev, p_src = f'current.{dpy.n}', f'last.{dpy.n}', p
 			if k in self.proc_files:
 				if self.opts.proc.cache and k_prev in self.proc_files:
@@ -437,10 +512,10 @@ def main(args=None):
 		formatter_class=argparse.RawTextHelpFormatter,
 		description='Set E desktop background via DBus API.' )
 	parser.add_argument('path', nargs='+', help=dd('''
-			Background image or directory path(s).
-			If path is a directory, images get matches by
-				bmp/png/jpe?g/webp extension (case-insensitive)
-				and get picked at random (with no repeats if possible).'''))
+		Background image or directory path(s).
+		If path is a directory, images get matches by
+			bmp/png/jpe?g/webp extension (case-insensitive)
+			and get picked at random (with no repeats if possible).'''))
 
 	group = parser.add_argument_group('Monitor and virtual desktop')
 	group.add_argument('-m', '--monitor',
@@ -480,6 +555,8 @@ def main(args=None):
 			Font specification for fontconfig.
 			Use command like "fc-match -b \'sans-15\'" to check what it\'d resolve to.
 			Special value "none" disables it. Default: %(default)s'''))
+	parser.add_argument('--random-name', action='store_true',
+		help=fill('Generate randomized filename instead of predictable one.'))
 
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
@@ -504,8 +581,9 @@ def main(args=None):
 			proc = sp.run(['fc-match', '-f', '%{size}\n%{file}\n', font], stdout=sp.PIPE)
 			font_size, font_path = proc.stdout.decode().splitlines()
 		else: font_path, font_size = None, 0
+		proc_hash_person = 'fgbg.1'.encode() if not opts.random_name else os.urandom(8)
 		image_proc_opts = ImageProcessingOpts(
-			cache=not opts.no_cache,
+			cache=not opts.no_cache, hash_person=proc_hash_person,
 			magick=ImageMagickOpts(font_path, int(font_size), color_font, color_label) )
 
 	picker_opts = ImagePickerOpts(

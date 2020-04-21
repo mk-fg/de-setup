@@ -192,8 +192,17 @@ Somewhat notable stuff:
 - `fgbg <bin/fgbg>`_ -
   py3/ctypes/sd-bus script to set background in whatever current DE.
 
-  Has continuous operation mode to run as desktop session daemon and cycle images,
-  as well as some options to scale/position/tweak them for DE-background purposes.
+  Has continuous operation mode to run as desktop session daemon and cycle
+  images, as well as some options to scale/position/process them for
+  DE-background purposes using ImageMagick_ (via `wand-py`_ module).
+
+  Image processing is actually quite complicated (mostly copied from earlier
+  aura_ background-setter project atm), and has plenty of scale/opacity/offset/blur
+  and such options in ImageMagickOpts and ImageMagickTallScale dataclasses.
+
+  .. _ImageMagick: https://www.imagemagick.org/
+  .. _wand-py: https://docs.wand-py.org/
+  .. _aura: https://github.com/mk-fg/aura
 
 - `xclipc <bin/xclipc>`_ - obsoleted but useful key-bound script, for adding
   some processing to some "copy to clipboard" operations, as well as making
