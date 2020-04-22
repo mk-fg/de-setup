@@ -307,7 +307,6 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 
 			img.composite(img_text, img_text_box.x1, img_text_box.y1)
 
-	label = re.sub('[_\s]+', ' ', image_ext_re.sub('', p_src.name))
 	with Image(filename=str(p_src)) as img:
 
 		img_flip = img.flop if opts.h_flip else lambda: None
@@ -327,7 +326,7 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 		if opts.label_font_path and opts.label_font_size:
 			# Text label
 			_add_text_label( img,
-				x=opts.label_font_size, y=opts.label_font_size, label=label,
+				x=opts.label_font_size, y=opts.label_font_size, label=p_src.name,
 				text_color=opts.label_color_font, outline_color=opts.label_color_outline,
 				outline_hard=1, outline_blur=5,
 				font_size=opts.label_font_size, font_path=opts.label_font_path )
