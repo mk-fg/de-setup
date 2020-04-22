@@ -432,8 +432,6 @@ class SDDaemon:
 	def _time_diff_str( self, ts, ts0=None, now='now', ext=None,
 			_units=dict( h=3600, m=60, s=1,
 				y=365.25*86400, mo=30.5*86400, w=7*86400, d=1*86400 ) ):
-		import threading
-		self.sleep_event = threading.Event()
 		res, s = list(), abs( (ts - ts0) if ts0 is not None
 			and not getattr(ts, 'total_seconds', False) else ts )
 		if not isinstance(s, (int, float)): s = s.total_seconds()
@@ -450,6 +448,8 @@ class SDDaemon:
 
 	def __init__(self, wakeup_interval=None, fork=False, sd_status_tpl='Wakeup in {delta_str}'):
 		'fork=True would only do double-fork if not under systemd Type=notify control.'
+		import threading
+		self.sleep_event = threading.Event()
 		self.fork, self.wu_interval = fork, wakeup_interval
 		self.sd_ready, self.sd_status_tpl = None, sd_status_tpl
 		self.wu_next = time.monotonic() + self.wu_interval
@@ -486,7 +486,7 @@ class SDDaemon:
 				delay = self.sd_ping_ts - ts
 			return delay
 
-	def wakeup_check(self):
+	def wakeup_check(self, status=None):
 		if self.fork and self.sd_ready is None:
 			for n in range(2):
 				pid = os.fork()
@@ -497,19 +497,20 @@ class SDDaemon:
 			wakeup_event = True
 			self.wu_next += self.wu_interval
 			delay_wu = self.wu_next - ts
-		status = ( None if not self.sd_status_tpl else
-			self.sd_status_tpl.format(delta_str=self._time_diff_str(delay_wu)) )
+		if not status:
+			status = ( None if not self.sd_status_tpl else
+				self.sd_status_tpl.format(delta_str=self._time_diff_str(delay_wu)) )
 		ts_next = ts + min(self.ping(status, ts) or delay_wu, delay_wu)
 		return wakeup_event, ts_next
 
 	def wakeup_sleep(self, ts_next, delay_max=None):
-		'sleep() until ts_next, which can be interrupted by wakeup_signal call.'
+		'sleep() until ts_next. Can be interrupted by wakeup_signal, returning True in that case.'
 		if not ts_next: return
 		delay = ts_next - time.monotonic()
 		if delay_max is not None: delay = min(delay, delay_max)
 		if delay > 0:
 			self.sleep_event.clear()
-			self.sleep_event.wait(delay)
+			return self.sleep_event.wait(delay)
 
 	def wakeup_signal(self, *sig_args):
 		self.wu_next = time.monotonic()
@@ -665,10 +666,13 @@ def main(args=None):
 						except (OSError, ValueError): xidle = 0
 						if xidle > idle_interval: ts_idle = ts + idle_interval / 2
 				if not ts_idle: set_bg_image(images, dpy_list, dx, dy)
+
 			if not daemon:
 				picker_opts.cleanup = False # keep processed files after exit, if any
 				break
-			daemon.wakeup_sleep(ts_next, delay_max)
-			bg_cycle, ts_next = daemon.wakeup_check()
+
+			if daemon.wakeup_sleep(ts_next, delay_max): ts_idle = None
+			status = None if not ts_idle else 'DE is idle, will update background after activity'
+			bg_cycle, ts_next = daemon.wakeup_check(status)
 
 if __name__ == '__main__': sys.exit(main())
