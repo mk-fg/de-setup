@@ -500,13 +500,14 @@ class SDDaemon:
 		ts_next = ts + min(self.ping(status, ts) or delay_wu, delay_wu)
 		return wakeup_event, ts_next
 
-	def wakeup_sleep(self, ts_next):
+	def wakeup_sleep(self, ts_next, delay_max=None):
 		'sleep() until ts_next, which can be interrupted by wakeup_signal call.'
 		if not ts_next: return
 		delay = ts_next - time.monotonic()
+		if delay_max is not None: delay = min(delay, delay_max)
 		if delay > 0:
 			self.sleep_event.clear()
-			if self.sleep_event.wait(delay): return True
+			self.sleep_event.wait(delay)
 
 	def wakeup_signal(self, *sig_args):
 		self.wu_next = time.monotonic()
@@ -559,6 +560,11 @@ def main(args=None):
 		help='Fork or indicate systemd startup only after setting initial background.')
 	group.add_argument('--initial-delay', action='store_true',
 		help='Only set initial background after first interval of time passes.')
+	group.add_argument('--xprintidle-interval',
+		metavar='((hh:)mm:)ss', default='30:00', help=dd('''
+			Run "xprintidle" tool to check for activity, if it is available,
+				and only change backgrounds if something happened within specified interval.
+			Specify 0 or "-" to explicitly disable these checks. Default: %(default)s'''))
 
 	group = parser.add_argument_group('Image processing options',
 		description='Enabling this requires ImageMagick and wand-py bindings for it.')
@@ -628,23 +634,39 @@ def main(args=None):
 
 		daemon = False
 		if opts.daemon:
-			interval = sum(a*b for a,b in zip(
-				[1, 60, 3600], reversed(list(map(float, opts.interval.split(':', 2)))) ))
-			daemon = SDDaemon( interval, opts.fork,
-				sd_status_tpl='Next background cycle in {delta_str}' )
+			parse_interval = lambda spec: sum(a*b for a,b in zip(
+				[1, 60, 3600], reversed(list(map(float, spec.split(':', 2)))) ))
+			daemon = SDDaemon( parse_interval(opts.interval),
+				opts.fork, sd_status_tpl='Next background cycle in {delta_str}' )
 			for sig in 'int term'.upper().split():
 				signal.signal(getattr(signal, f'SIG{sig}'), lambda sig,frm: sys.exit(0))
 			for sig in 'hup quit'.upper().split():
 				signal.signal(getattr(signal, f'SIG{sig}'), daemon.wakeup_signal)
 			if not opts.fork: daemon.ping() # send "ready" immediately
+			idle_interval = None
+			if opts.xprintidle_interval and '-' not in opts.xprintidle_interval:
+				try: sp.run(['xprintidle'], stdout=sp.PIPE, check=True) # check if available
+				except (OSError, sp.CalledProcessError): pass
+				else: idle_interval = parse_interval(opts.xprintidle_interval)
 
-		bg_cycle, ts_next = not daemon or not opts.initial_delay, None
+		bg_cycle = not daemon or not opts.initial_delay
+		ts_next = ts_idle = delay_max = None
 		while True:
-			if bg_cycle: set_bg_image(images, dpy_list, dx, dy)
+			if bg_cycle or ts_idle:
+				if daemon and idle_interval:
+					ts = time.monotonic()
+					if ts_idle: # in "idle delay" mode
+						if ts >= ts_idle: ts_idle = delay_max = None
+						else: delay_max = ts_idle - ts
+					if not ts_idle: # check and maybe set ts_idle for when to check next
+						try: xidle = int(sp.run(['xprintidle'], stdout=sp.PIPE).stdout) / 1000
+						except (OSError, ValueError): xidle = 0
+						if xidle > idle_interval: ts_idle = ts + idle_interval / 2
+				if not ts_idle: set_bg_image(images, dpy_list, dx, dy)
 			if not daemon:
-				picker_opts.cleanup = False # keep processed files after exit
+				picker_opts.cleanup = False # keep processed files after exit, if any
 				break
-			daemon.wakeup_sleep(ts_next)
+			daemon.wakeup_sleep(ts_next, delay_max)
 			bg_cycle, ts_next = daemon.wakeup_check()
 
 if __name__ == '__main__': sys.exit(main())
