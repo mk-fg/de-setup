@@ -246,11 +246,10 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 		asp_img, asp_dpy = (round(a, 2) for a in [img.width / img.height, w / h])
 		if asp_img == asp_dpy: img.resize(w, h)
 		elif abs(asp_img - asp_dpy) < opts.max_aspect_diff_scale:
-			# Aspect is close-enough - do lqr scaling
-			if img.width * img.height > w * h: # pre-shrink with aspect to make lqr faster
-				w1, h1, w2, h2 = map(round, [h * asp_img, h, w, w / asp_img])
-				if w1*h1 > w2*h2: img.resize(w1, h1)
-				else: img.resize(w2, h2)
+			# Aspect is close-enough - do resize with aspect + lqr scaling
+			w1, h1, w2, h2 = map(round, [h * asp_img, h, w, w / asp_img])
+			if w1*h1 > w2*h2: img.resize(w1, h1)
+			else: img.resize(w2, h2)
 			img.liquid_rescale(w, h, delta_x=round(math.sqrt(w*h)/400))
 		elif asp_img > asp_dpy:
 			# Wider than display - cut vertical stripe from the middle
