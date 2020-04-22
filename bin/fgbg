@@ -516,6 +516,9 @@ class SDDaemon:
 		self.wu_next = time.monotonic()
 		self.sleep_event.set()
 
+	def wakeup_reset(self):
+		self.wu_next = time.monotonic() + self.wu_interval
+
 
 def main(args=None):
 	def_proc_label = 'Liberation Sans-16', '#baebf9', 'black'
@@ -657,14 +660,15 @@ def main(args=None):
 		while True:
 			if bg_cycle or ts_idle:
 				if daemon and idle_interval:
-					ts = time.monotonic()
+					ts, ts_idle_old = time.monotonic(), True
 					if ts_idle: # in "idle delay" mode
-						if ts >= ts_idle: ts_idle = delay_max = None
+						if ts >= ts_idle: ts_idle = ts_idle_old = delay_max = None
 						else: delay_max = ts_idle - ts
 					if not ts_idle: # check and maybe set ts_idle for when to check next
 						try: xidle = int(sp.run(['xprintidle'], stdout=sp.PIPE).stdout) / 1000
 						except (OSError, ValueError): xidle = 0
 						if xidle > idle_interval: ts_idle = ts + idle_interval / 2
+					if not ts_idle and not ts_idle_old: daemon.wakeup_reset() # new interval from now
 				if not ts_idle: set_bg_image(images, dpy_list, dx, dy)
 
 			if not daemon:
