@@ -258,7 +258,7 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 			img.resize(w, h)
 		else:
 			# Taller than display - cut horizontal stripe from the middle
-			crop_h = round(img.width * asp_dpy)
+			crop_h = round(img.height * (asp_img / asp_dpy))
 			img.crop(0, round((img.height - crop_h)/2), width=img.width, height=crop_h)
 			img.resize(w, h)
 
