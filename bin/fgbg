@@ -418,6 +418,8 @@ class ImagePicker:
 		return p
 
 	def get_iter(self, dpy_list, dx, dy):
+		'''Returns iterator of scaled image paths
+			for specified displays and x/y count of virtual desktops.'''
 		cache = dict()
 		for dpy, x, y in it.product(dpy_list, dx, dy):
 			if self.opts.desktop_same:
@@ -428,6 +430,8 @@ class ImagePicker:
 
 
 class SDDaemon:
+	'''Small daemon framework to manage
+		sleep/wakeup cycles and forking/systemd integration.'''
 
 	def _time_diff_str( self, ts, ts0=None, now='now', ext=None,
 			_units=dict( h=3600, m=60, s=1,
@@ -453,9 +457,9 @@ class SDDaemon:
 		self.fork, self.wu_interval = fork, wakeup_interval
 		self.sd_ready, self.sd_status_tpl = None, sd_status_tpl
 		self.wu_next = time.monotonic() + self.wu_interval
-		if os.environ.get('NOTIFY_SOCKET'): self.init_systemd()
+		if os.environ.get('NOTIFY_SOCKET'): self._init_systemd()
 
-	def init_systemd(self):
+	def _init_systemd(self):
 		import systemd.daemon
 		self.daemon = systemd.daemon
 		self.sd_ready = self.sd_ping_ts = self.sd_ping_interval = False
@@ -487,6 +491,8 @@ class SDDaemon:
 			return delay
 
 	def wakeup_check(self, status=None):
+		'''Returns whether wakeup should be triggered and next check timestamp.
+			Also sets systemd status and pings sd watchdog if necessary.'''
 		if self.fork and self.sd_ready is None:
 			for n in range(2):
 				pid = os.fork()
@@ -513,10 +519,12 @@ class SDDaemon:
 			return self.sleep_event.wait(delay)
 
 	def wakeup_signal(self, *sig_args):
+		'Sets wakeup to trigger on next check and stops wakeup_sleep().'
 		self.wu_next = time.monotonic()
 		self.sleep_event.set()
 
 	def wakeup_reset(self):
+		'Reschedules wakeup after wakeup_interval from now.'
 		self.wu_next = time.monotonic() + self.wu_interval
 
 
@@ -525,7 +533,7 @@ def main(args=None):
 
 	import argparse, textwrap
 	dd = lambda text: (textwrap.dedent(text).strip('\n') + '\n').replace('\t', '  ')
-	fill = lambda s,w=90,ind='  ',ind_next=None,**k: textwrap.fill(
+	fill = lambda s,w=90,ind='',ind_next='  ',**k: textwrap.fill(
 		s, w, initial_indent=ind, subsequent_indent=ind if ind_next is None else ind_next, **k )
 
 	parser = argparse.ArgumentParser(
@@ -585,7 +593,7 @@ def main(args=None):
 			Use command like "fc-match -b \'sans-15\'" to check what it\'d resolve to.
 			Special value "none" disables it. Default: %(default)s'''))
 	group.add_argument('--random-name', action='store_true',
-		help=fill('Generate randomized filename instead of predictable one.'))
+		help='Generate randomized filename instead of predictable one.')
 
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
