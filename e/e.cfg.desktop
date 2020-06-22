@@ -1660,12 +1660,50 @@ group "E_Config_Bindings" struct {
             value "modifiers" int: 10;
         }
         group "E_Config_Binding_Key" struct {
+            value "action" string: "window_zone_move_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "a";
+            value "modifiers" int: 10;
+            value "params" string: "-1";
+        }
+        group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
             value "any_mod" uchar: 0;
             value "context" int: 9;
             value "key" string: "apostrophe";
             value "modifiers" int: 10;
             value "params" string: "media.sound-test";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_maximized_toggle";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "c";
+            value "modifiers" int: 10;
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_zone_move_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "d";
+            value "modifiers" int: 10;
+            value "params" string: "1";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "screen_send_by";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "q";
+            value "modifiers" int: 10;
+            value "params" string: "1";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_kill";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "x";
+            value "modifiers" int: 10;
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -1700,12 +1738,11 @@ group "E_Config_Bindings" struct {
             value "params" string: "emacs ~/bin/wrappers/emacs";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "window_maximized_toggle";
+            value "action" string: "window_fullscreen_toggle";
             value "any_mod" uchar: 0;
             value "context" int: 9;
-            value "key" string: "s";
+            value "key" string: "c";
             value "modifiers" int: 12;
-            value "params" string: "default horizontal";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -1714,21 +1751,6 @@ group "E_Config_Bindings" struct {
             value "key" string: "v";
             value "modifiers" int: 12;
             value "params" string: "exclip --slashes-to-dots";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "window_kill";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "x";
-            value "modifiers" int: 12;
-            value "params" string: "default right";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "window_fullscreen_toggle";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "s";
-            value "modifiers" int: 13;
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "menu_show";
@@ -1809,14 +1831,6 @@ group "E_Config_Bindings" struct {
             value "modifiers" int: 4;
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "desk_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "Down";
-            value "modifiers" int: 5;
-            value "params" string: "0 1";
-        }
-        group "E_Config_Binding_Key" struct {
             value "action" string: "window_maximized_toggle";
             value "any_mod" uchar: 0;
             value "context" int: 9;
@@ -1825,36 +1839,12 @@ group "E_Config_Bindings" struct {
             value "params" string: "default horizontal";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "desk_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "Left";
-            value "modifiers" int: 5;
-            value "params" string: "-1 0";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "desk_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "Right";
-            value "modifiers" int: 5;
-            value "params" string: "1 0";
-        }
-        group "E_Config_Binding_Key" struct {
             value "action" string: "winlist";
             value "any_mod" uchar: 0;
             value "context" int: 9;
             value "key" string: "Tab";
             value "modifiers" int: 5;
             value "params" string: "prev";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "desk_flip_by";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "Up";
-            value "modifiers" int: 5;
-            value "params" string: "0 -1";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "syscon";
@@ -1878,14 +1868,6 @@ group "E_Config_Bindings" struct {
             value "key" string: "2";
             value "modifiers" int: 8;
             value "params" string: "ru";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "window_focus";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "Down";
-            value "modifiers" int: 8;
-            value "params" string: "down";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_iconic_toggle";
@@ -1990,14 +1972,6 @@ group "E_Config_Bindings" struct {
             value "params" string: "8";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "window_focus";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "Left";
-            value "modifiers" int: 8;
-            value "params" string: "left";
-        }
-        group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
             value "any_mod" uchar: 0;
             value "context" int: 9;
@@ -2014,14 +1988,6 @@ group "E_Config_Bindings" struct {
             value "params" string: "fgterm";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "window_focus";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
-            value "key" string: "Right";
-            value "modifiers" int: 8;
-            value "params" string: "right";
-        }
-        group "E_Config_Binding_Key" struct {
             value "action" string: "winlist";
             value "any_mod" uchar: 0;
             value "context" int: 9;
@@ -2033,17 +1999,9 @@ group "E_Config_Bindings" struct {
             value "action" string: "window_focus";
             value "any_mod" uchar: 0;
             value "context" int: 9;
-            value "key" string: "Up";
-            value "modifiers" int: 8;
-            value "params" string: "up";
-        }
-        group "E_Config_Binding_Key" struct {
-            value "action" string: "exec";
-            value "any_mod" uchar: 0;
-            value "context" int: 9;
             value "key" string: "a";
             value "modifiers" int: 8;
-            value "params" string: "de.mouse_remove";
+            value "params" string: "left";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -2060,6 +2018,14 @@ group "E_Config_Bindings" struct {
             value "key" string: "c";
             value "modifiers" int: 8;
             value "params" string: "default right";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_focus";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "d";
+            value "modifiers" int: 8;
+            value "params" string: "right";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_jump_to_or_start";
@@ -2086,11 +2052,20 @@ group "E_Config_Bindings" struct {
             value "params" string: "fgrun";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "window_maximized_toggle";
+            value "action" string: "exec";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "q";
+            value "modifiers" int: 8;
+            value "params" string: "de.mouse_remove";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_focus";
             value "any_mod" uchar: 0;
             value "context" int: 9;
             value "key" string: "s";
             value "modifiers" int: 8;
+            value "params" string: "down";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
@@ -2124,20 +2099,28 @@ group "E_Config_Bindings" struct {
             value "params" string: "exclip --verbatim";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "exec";
+            value "action" string: "window_focus";
+            value "any_mod" uchar: 0;
+            value "context" int: 9;
+            value "key" string: "w";
+            value "modifiers" int: 8;
+            value "params" string: "up";
+        }
+        group "E_Config_Binding_Key" struct {
+            value "action" string: "window_push";
             value "any_mod" uchar: 0;
             value "context" int: 9;
             value "key" string: "A";
             value "modifiers" int: 9;
-            value "params" string: "de.mouse_remove 2";
+            value "params" string: "left";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "window_move_by";
+            value "action" string: "window_push";
             value "any_mod" uchar: 0;
             value "context" int: 9;
-            value "key" string: "Down";
+            value "key" string: "D";
             value "modifiers" int: 9;
-            value "params" string: "0 10";
+            value "params" string: "right";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "window_desk_move_to";
@@ -2220,20 +2203,20 @@ group "E_Config_Bindings" struct {
             value "params" string: "8 0";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "window_move_by";
+            value "action" string: "screen_send_by";
             value "any_mod" uchar: 0;
             value "context" int: 9;
-            value "key" string: "Left";
+            value "key" string: "Q";
             value "modifiers" int: 9;
-            value "params" string: "-10 0";
+            value "params" string: "1";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "window_move_by";
+            value "action" string: "window_push";
             value "any_mod" uchar: 0;
             value "context" int: 9;
-            value "key" string: "Right";
+            value "key" string: "S";
             value "modifiers" int: 9;
-            value "params" string: "10 0";
+            value "params" string: "down";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "winlist";
@@ -2244,12 +2227,12 @@ group "E_Config_Bindings" struct {
             value "params" string: "prev";
         }
         group "E_Config_Binding_Key" struct {
-            value "action" string: "window_move_by";
+            value "action" string: "window_push";
             value "any_mod" uchar: 0;
             value "context" int: 9;
-            value "key" string: "Up";
+            value "key" string: "W";
             value "modifiers" int: 9;
-            value "params" string: "0 -10";
+            value "params" string: "up";
         }
         group "E_Config_Binding_Key" struct {
             value "action" string: "exec";
