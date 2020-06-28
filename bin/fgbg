@@ -6,7 +6,6 @@ import os, sys, re, random, math, time, signal, base64
 
 
 p_err = lambda tpl,*a,**k: print(tpl, *a, **k, file=sys.stderr, flush=True)
-image_ext_re = re.compile(r'(?i)\.(bmp|png|jpe?g|webp)$')
 gather_wrap = lambda t: (lambda func: (lambda *a,**k: t(func(*a,**k))))
 
 def hash_str(s, c=None, person=b'fgbg'):
@@ -22,6 +21,9 @@ def hash_file(p, c=None, person=b'fgbg', chunk=1*2**20):
 	with p.open('rb') as src:
 		for chunk in iter(ft.partial(src.read, chunk), b''): p_hash.update(chunk)
 	return hash_str(p_hash.digest(), c, person)
+
+parse_time_delta = lambda spec: sum(a*b for a,b in zip(
+	[1, 60, 3600], reversed(list(map(float, spec.split(':', 2)))) ))
 
 
 @dc.dataclass
@@ -341,18 +343,21 @@ class ImagePickerError(Exception): pass
 
 @dc.dataclass
 class ImageProcessingOpts:
-	cache:bool; hash_person:str
-	flip_chance: float=0.5; magick:any=None
+	cache: bool; hash_person: str
+	flip_chance: float = 0.5; magick: any = None
 
 @dc.dataclass
 class ImagePickerOpts:
-	desktop_same: bool; proc: any
+	desktop_same: bool; proc: any; dir_refresh_interval: float
 	cleanup: bool = True; cleanup_chance: float = 0.05; cleanup_size: int = 1000 * 2**20
 
 class ImagePicker:
 
-	def __init__(self, p_list, opts):
-		self.p_list, self.p_skip, self.opts, self.shuffle = p_list, set(), opts, None
+	image_ext_re = re.compile(r'(?i)\.(bmp|png|jpe?g|webp)$')
+
+	def __init__(self, paths, opts):
+		self.p_skip, self.opts = set(), opts
+		self._p_list_init(paths)
 
 	def __enter__(self):
 		if self.opts.proc and self.opts.proc.cache:
@@ -365,6 +370,47 @@ class ImagePicker:
 	def __exit__(self, *err):
 		if self.opts.proc and not self.opts.proc.cache and self.opts.cleanup:
 			for p in self.proc_files.values(): p.unlink(missing_ok=True)
+
+	def _p_list_init(self, paths):
+		self.p_list, self.p_map, self.p_map_mtimes = list(), dict(), dict()
+		for p in map(pl.Path, paths): self._p_list_refresh(p)
+		self.p_map_ts = time.monotonic()
+		self.p_list.extend(it.chain.from_iterable(self.p_map.values()))
+		if not self.p_list: raise ImagePickerError(f'No images matched for path(s): {paths}')
+
+	def _p_list_refresh(self, p):
+		self.p_map.pop(p, None)
+		if not p.is_dir(): return self.p_map.setdefault(None, list()).append(p)
+		for root, dirs, files in os.walk(p, followlinks=True):
+			root = pl.Path(root).resolve()
+			if root not in self.p_map: self.p_map[root] = set()
+			self.p_map_mtimes[root] = root.stat().st_mtime
+			for name in files:
+				if not self.image_ext_re.search(name): continue
+				self.p_map[root].add(root / name)
+		self.p_list.clear()
+
+	def _p_list_get(self):
+		p_list_updated, delta = False, self.opts.dir_refresh_interval
+		if delta and self.p_map_ts < time.monotonic() - delta:
+			for p, mtime in self.p_map_mtimes.items():
+				if p is None: continue
+				try: mtime_new = p.stat().st_mtime
+				except OSError: continue # assuming temporarily unavailable
+				if mtime != mtime_new: self._p_list_refresh(p)
+				self.p_map_ts = time.monotonic()
+		while True:
+			if not self.p_list and not p_list_updated:
+				self.p_list.extend(it.chain.from_iterable(self.p_map.values()))
+				p_list_updated = True
+			if not self.p_list and p_list_updated:
+				raise ImagePickerError('No suitable images in the shuffle') from None
+			if len(self.p_list) == 1: p = self.p_list.pop()
+			else:
+				n = random.randint(0, len(self.p_list) - 1)
+				p, self.p_list[n] = self.p_list[n], self.p_list.pop()
+			if p not in self.p_skip: break
+		return p
 
 	def _cache_dir_cleanup(self):
 		files, files_keep = list(), set(self.proc_files.values())
@@ -382,16 +428,7 @@ class ImagePicker:
 
 	def get_random_image(self, dpy):
 		'Return random image path and remove it from current shuffle.'
-		# Keeps simple list and pops uniformly-random element from it,
-		#  without any kind of expensive and unreliable sort up-front
-		if not self.shuffle: self.shuffle = self.p_list.copy()
-		n = random.randint(0, len(self.shuffle) - 1)
-		while self.shuffle:
-			if len(self.shuffle) == 1: p = self.shuffle.pop()
-			else: p, self.shuffle[n] = self.shuffle[n], self.shuffle.pop()
-			if p not in self.p_skip: break
-		else: raise ImagePickerError('No suitable images in the shuffle') from None
-
+		p = self._p_list_get()
 		if self.opts.proc:
 			self.opts.proc.magick.h_flip = random.random() < self.opts.proc.flip_chance
 			img_hash = hash_file(p, person=self.opts.proc.hash_person)
@@ -414,7 +451,6 @@ class ImagePicker:
 			else: p.touch()
 			if self.opts.cleanup and random.random() < self.opts.cleanup_chance:
 				self._cache_dir_cleanup()
-
 		return p
 
 	def get_iter(self, dpy_list, dx, dy):
@@ -579,6 +615,11 @@ def main(args=None):
 			Run "xprintidle" tool to check for activity, if it is available,
 				and only change backgrounds if something happened within specified interval.
 			Specify 0 or "-" to explicitly disable these checks. Default: %(default)s'''))
+	group.add_argument('--dir-refresh-interval',
+		metavar='((hh:)mm:)ss', default='12:00:00', help=dd('''
+			Min interval between checking mtime values on directories under specified paths.
+			It's checked before bg changes to detect any new images.
+			Can be set to zero to disable this check entirely. Default: %(default)s'''))
 
 	group = parser.add_argument_group('Image processing options',
 		description='Enabling this requires ImageMagick and wand-py bindings for it.')
@@ -619,16 +660,6 @@ def main(args=None):
 	dpy_list, dx, dy = dpy_info(), opts.desktop_x, opts.desktop_y
 	if opts.monitor: dpy_list = list(dpy_list[n] for n in opts.monitor)
 
-	p_list = list()
-	for p in map(pl.Path, opts.path):
-		if not p.is_dir(): p_list.append(p)
-		else:
-			for root, dirs, files in os.walk(p, followlinks=True):
-				for name in files:
-					if not image_ext_re.search(name): continue
-					p_list.append(pl.Path(root) / name)
-	if not p_list: parser.error(f'No images matched for path(s): {opts.path}')
-
 	image_proc_opts = opts.process
 	if image_proc_opts:
 		font, color_font, color_label = ( (v or v_def)
@@ -643,14 +674,15 @@ def main(args=None):
 			magick=ImageMagickOpts(font_path, int(font_size), color_font, color_label) )
 
 	picker_opts = ImagePickerOpts(
-		desktop_same=opts.desktop_same, proc=image_proc_opts )
-	with ImagePicker(p_list, picker_opts) as images:
+		proc=image_proc_opts, desktop_same=opts.desktop_same,
+		dir_refresh_interval=parse_time_delta(opts.dir_refresh_interval) )
+	try: images = ImagePicker(opts.path, picker_opts)
+	except ImagePickerError as err: parser.error(str(err))
+	with images:
 
 		daemon = False
 		if opts.daemon:
-			parse_interval = lambda spec: sum(a*b for a,b in zip(
-				[1, 60, 3600], reversed(list(map(float, spec.split(':', 2)))) ))
-			daemon = SDDaemon( parse_interval(opts.interval),
+			daemon = SDDaemon( parse_time_delta(opts.interval),
 				opts.fork, sd_status_tpl='Next background cycle in {delta_str}' )
 			for sig in 'int term'.upper().split():
 				signal.signal(getattr(signal, f'SIG{sig}'), lambda sig,frm: sys.exit(0))
@@ -661,7 +693,7 @@ def main(args=None):
 			if opts.xprintidle_interval and '-' not in opts.xprintidle_interval:
 				try: sp.run(['xprintidle'], stdout=sp.PIPE, check=True) # check if available
 				except (OSError, sp.CalledProcessError): pass
-				else: idle_interval = parse_interval(opts.xprintidle_interval)
+				else: idle_interval = parse_time_delta(opts.xprintidle_interval)
 
 		bg_cycle = not daemon or not opts.initial_delay
 		ts_next = ts_idle = delay_max = None
