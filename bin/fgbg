@@ -2,7 +2,7 @@
 
 import itertools as it, functools as ft, ctypes as ct, pathlib as pl
 import subprocess as sp, dataclasses as dc, hashlib as hl
-import os, sys, re, random, math, time, signal, base64
+import os, sys, re, random, math, time, signal, base64, copy
 
 
 p_err = lambda tpl,*a,**k: print(tpl, *a, **k, file=sys.stderr, flush=True)
@@ -372,43 +372,49 @@ class ImagePicker:
 			for p in self.proc_files.values(): p.unlink(missing_ok=True)
 
 	def _p_list_init(self, paths):
-		self.p_list, self.p_map, self.p_map_mtimes = list(), dict(), dict()
+		self.p_shuffle, self.p_map, self.p_map_mtimes = dict(), dict(), dict()
 		for p in map(pl.Path, paths): self._p_list_refresh(p)
 		self.p_map_ts = time.monotonic()
-		self.p_list.extend(it.chain.from_iterable(self.p_map.values()))
-		if not self.p_list: raise ImagePickerError(f'No images matched for path(s): {paths}')
+		if not any(it.chain.from_iterable(self.p_map.values())):
+			raise ImagePickerError(f'No images matched for path(s): {paths}')
 
 	def _p_list_refresh(self, p):
-		self.p_map.pop(p, None)
+		dir_updates = dict()
 		if not p.is_dir(): return self.p_map.setdefault(None, list()).append(p)
 		for root, dirs, files in os.walk(p, followlinks=True):
 			root = pl.Path(root).resolve()
-			if root not in self.p_map: self.p_map[root] = set()
-			self.p_map_mtimes[root] = root.stat().st_mtime
+			if (ts := root.stat().st_mtime) == self.p_map_mtimes.get(root): continue
+			dir_updates[root] = self.p_map.get(root, set())
+			self.p_map[root], self.p_map_mtimes[root] = set(), ts
 			for name in files:
 				if not self.image_ext_re.search(name): continue
 				self.p_map[root].add(root / name)
-		self.p_list.clear()
+		for root, p_set in dir_updates.items():
+			self.p_shuffle.setdefault(root, set()).update(self.p_map[root] - p_set)
 
 	def _p_list_get(self):
-		p_list_updated, delta = False, self.opts.dir_refresh_interval
+		delta = self.opts.dir_refresh_interval
 		if delta and self.p_map_ts < time.monotonic() - delta:
 			for p, mtime in self.p_map_mtimes.items():
-				if p is None: continue
-				try: mtime_new = p.stat().st_mtime
+				if p is None: continue # direct file paths
+				try:
+					if mtime != p.stat().st_mtime: self._p_list_refresh(p)
 				except OSError: continue # assuming temporarily unavailable
-				if mtime != mtime_new: self._p_list_refresh(p)
 				self.p_map_ts = time.monotonic()
+		p_list_iter = lambda: it.chain.from_iterable(
+			zip(it.repeat(root), p_set) for root, p_set in self.p_shuffle.items() )
+		p_list, p_list_updated = list(p_list_iter()), False
 		while True:
-			if not self.p_list and not p_list_updated:
-				self.p_list.extend(it.chain.from_iterable(self.p_map.values()))
+			if not p_list and not p_list_updated:
+				self.p_shuffle = copy.deepcopy(self.p_map)
+				p_list.extend(p_list_iter())
 				p_list_updated = True
-			if not self.p_list and p_list_updated:
+			if not p_list and p_list_updated:
 				raise ImagePickerError('No suitable images in the shuffle') from None
-			if len(self.p_list) == 1: p = self.p_list.pop()
-			else:
-				n = random.randint(0, len(self.p_list) - 1)
-				p, self.p_list[n] = self.p_list[n], self.p_list.pop()
+			n = random.randint(0, len(p_list) - 1)
+			if n == len(p_list) - 1: root, p = p_list.pop()
+			else: (root, p), p_list[n] = p_list[n], p_list.pop()
+			self.p_shuffle[root].remove(p)
 			if p not in self.p_skip: break
 		return p
 
