@@ -210,13 +210,25 @@ Somewhat notable stuff:
 
   exclip_ is a more modern, fast and robust replacement for that hack.
 
+  .. _exclip: http://blog.fraggod.net/2018/04/10/linux-x-desktop-clipboard-keys-via-exclip-tool.html
+
 - xinitrc.\* - tweaks for various X input/display parameters like keyboard rates
   and layouts, dpms, mouse/touchpad stuff, xmodmap, etc.
 
   Useful to keep these outside of xorg.conf to be able to change re-apply them
   at any time without having to restart anything or remember all the commands again.
 
-.. _exclip: http://blog.fraggod.net/2018/04/10/linux-x-desktop-clipboard-keys-via-exclip-tool.html
+- `e_config_backup <bin/e_config_backup>`_
+
+  Yapps2_-based (grammar as-is in \*.g file) parser script for Enlightenment (E17)
+  config file(s) (doing eet-decoding beforehand) to backup these under e/ dir here.
+
+  Whole purpose of decoding/encoding dance is to sort the sections
+  (which E orders arbitrarily) and detect/filter-out irrelevant changes like
+  remembered window positions or current (transient) wallpaper path.
+
+  .. _Yapps2: https://github.com/mk-fg/yapps
+
 
 
 Themes
