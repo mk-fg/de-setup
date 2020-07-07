@@ -54,12 +54,9 @@ user\@1000 daemon's "startx.target" - see stuff under "systemd" for more info.
 Enlightenment configs (e/e.cfg.*)
 ---------------------------------
 
-Created/processed by `e_config_backup`_ tool (`yapps2-based parser`_), and used
-to detect any new options between version upgrades, or (super-rare) `migrations
-between config schemas`_, if necessary.
+Created/processed by `e-config-backup <bin/e-config-backup>`_ tool (eet/TextX-based parser),
+and used to detect any new options between version upgrades, or (rare) `migrations between config schemas`_.
 
-.. _e_config_backup: https://github.com/mk-fg/fgtk/#e-config-backup
-.. _yapps2-based parser: http://blog.fraggod.net/2013/01/21/pyparsing-vs-yapps.html
 .. _migrations between config schemas: http://blog.fraggod.net/2013/01/16/migrating-configuration-settings-to-e17-enlightenment-0170-from-older-e-versions.html
 
 
@@ -218,16 +215,16 @@ Somewhat notable stuff:
   Useful to keep these outside of xorg.conf to be able to change re-apply them
   at any time without having to restart anything or remember all the commands again.
 
-- `e_config_backup <bin/e_config_backup>`_
+- `e-config-backup <bin/e_config_backup>`_
 
-  Yapps2_-based (grammar as-is in \*.g file) parser script for Enlightenment (E17)
-  config file(s) (doing eet-decoding beforehand) to backup these under e/ dir here.
+  Python3 + eet (EFL lib/tool) + TextX_-based parser script for Enlightenment (E17+)
+  config file(s), to backup these under e/ dir here.
 
   Whole purpose of decoding/encoding dance is to sort the sections
-  (which E orders arbitrarily) and detect/filter-out irrelevant changes like
-  remembered window positions or current (transient) wallpaper path.
+  (which E orders arbitrarily) and detect/filter-out irrelevant changes
+  like remembered window positions or current (transient) wallpaper path.
 
-  .. _Yapps2: https://github.com/mk-fg/yapps
+  .. _TextX: http://textx.github.io/textX/
 
 
 

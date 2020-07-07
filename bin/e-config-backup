@@ -1,0 +1,144 @@
+#!/usr/bin/env python3
+
+import itertools as it, operator as op, functools as ft
+import pathlib as pl, subprocess as sp, dataclasses as dc, contextlib as cl
+import os, sys, re, io, tempfile
+
+import textx as tx # pip3 install --user textx
+
+
+eet_cfg = tx.metamodel_from_str(r'''
+config: blocks*=block;
+
+block: block_group | block_value | block_key | block_count;
+block_group: 'group' name=str type=group_type '{' blocks*=block '}';
+block_key: 'key' value=str ';';
+block_count: 'count' value=num ';';
+block_value: 'value' name=str type=value_type value=value ';';
+
+group_type: 'struct' | 'list' | 'hash' | 'array';
+value_type: vt=/\w+/ ':';
+
+value: str | num;
+num: n=/[+\-]?[\d.]+/;
+// Complex regexp below matches escaped double-quotes in strings
+str: '"' s=/(?:(?<!\\)(?:\\{2})*\\"|[^"])*(?<!\\)(?:\\{2})*/ '"';
+''')
+
+@dc.dataclass
+class AST:
+	group: list; value: list; elm: list
+	value_str = staticmethod( lambda val:
+		 f'"{val.s}"' if val._tx_fqn == 'str' else val.n )
+
+@dc.dataclass
+class ASTGroup: name:str; t:str; sub: list
+
+def ast_parse(blocks):
+	ast = AST(list(), list(), list())
+	for block in blocks:
+		t = block._tx_fqn[6:]
+		if t == 'group':
+			block = ASTGroup(block.name, block.type, ast_parse(block.blocks))
+		elif t in {'key', 'count'}: t, block = 'elm', (t, ast.value_str(block.value))
+		getattr(ast, t).append(block)
+	for lst in ast.group, ast.value: lst.sort(key=lambda v: v.name.s)
+	if len(ast.elm) > 1: raise ValueError(ast)
+	return ast
+
+def ast_dump(ast, level=0, stream=None):
+	stream_return = False
+	if stream is None: stream = stream_return = io.StringIO()
+	pre, p = '  '*level, ft.partial(print, file=stream)
+	for t, s in ast.elm: p(f'{pre}{t} {s};')
+	for b in ast.group:
+		name = b.name.s
+		if name in {
+			'E_Config_Desklock_Background', 'E_Config_Desktop_Background',
+			'E_Remember', 'Comp_Match', 'E_Exehist_Item', 'History_Types',
+			'E_Config_Randr', 'E_Config_Randr2', 'E_Exe_List', 'Fileman_Path' }: continue
+		p(f'{pre}group "{name}" {b.t} {{')
+		ast_dump(b.sub, level=level+1, stream=stream)
+		p(f'{pre}}}')
+	for b in ast.value:
+		name, t = b.name.s, b.type.vt
+		v = ( '<cut>' if re.search( r'geom\.((pos|size|res)_?)?'
+			r'[whxy]?|startup_id', name ) and t in {'int', 'double'} else ast.value_str(b.value) )
+		p(f'{pre}value "{name}" {t} {v};')
+	if stream_return: return stream.getvalue()
+
+def clean_file(p):
+	if p.name == 'profile.cfg': # special case - just a profile name string
+		src = sp.run(['eet', '-x', p, 'config'], check=True, stdout=sp.PIPE)
+		return f'{src.stdout.decode()}\n'
+	src = sp.run(['eet', '-d', p, 'config'], check=True, stdout=sp.PIPE)
+	conf = eet_cfg.model_from_str(src.stdout.decode())
+	ast = ast_parse(conf.blocks)
+	return ast_dump(ast)
+
+
+def find_cfg_files(*paths):
+	files = list()
+	for p in paths:
+		try: p_real = p.expanduser().resolve(strict=True)
+		except FileNotFoundError: continue
+		p_len, p_prefix = len(p_str := str(p_real)), str(p)
+		for root, dirs, fns in os.walk(p_real, followlinks=True):
+			if not root.startswith(p_str): raise RuntimeError(p, p_str, root)
+			fn_root = f'{p_prefix}{root[p_len:]}/'
+			for fn in fns:
+				if not re.search(r'(?<!\.[0-9])\.cfg$', fn): continue
+				files.append(f'{fn_root}{fn}')
+	return files
+
+def main(args=None):
+	import argparse, textwrap
+	dd = lambda text: (textwrap.dedent(text).strip('\n') + '\n').replace('\t', '  ')
+	fill = lambda s,w=90,ind='',ind_next='  ',**k: textwrap.fill(
+		s, w, initial_indent=ind, subsequent_indent=ind if ind_next is None else ind_next, **k )
+
+	parser = argparse.ArgumentParser(
+		formatter_class=argparse.RawTextHelpFormatter,
+		description=dd('''
+			Tool to backup and compare Enlightenment (E17+) configuration file(s).
+			Decodes cfg files using eet binary, sorts keys/values in there,
+				and strips ones that are too volatile (e.g. window positions) for cleaner git diffs.'''))
+	parser.add_argument('file', nargs='*', help=dd('''
+		Path to a file(s) to decode.
+		Default is to look for all non-backup .cfg files under ~/.e dir.'''))
+	parser.add_argument('-o', '--output', metavar='file', help=dd('''
+		Path to an output file. Default is to use stdout.'''))
+	opts = parser.parse_args(sys.argv[1:] if args is None else args)
+
+	files = opts.file
+	if not files: files = find_cfg_files(pl.Path('~/.e'))
+	if not files: parser.error('No files to decode')
+	files.sort()
+	file_headers = len(files) > 1
+
+	try:
+		out = sys.stdout
+		if opts.output:
+			p_out = pl.Path(opts.output)
+			out = tempfile.NamedTemporaryFile(
+				mode='w', dir=p_out.parent, prefix=f'{p_out.name}.', delete=False )
+			p_out_tmp = pl.Path(out.name)
+
+		print_func = lambda *line: print(*line, end='', file=out)
+		for p_str in files:
+			p_real = pl.Path(p_str).expanduser()
+			try: conf_str = clean_file(p_real)
+			except Exception as err:
+				print(f'Failed to process file: {p_str}', file=sys.stderr)
+				raise
+			if file_headers: print_func(f'----- file: {p_str}\n')
+			print_func(conf_str)
+
+	except BaseException as err:
+		if opts.output: p_out_tmp = p_out_tmp.unlink()
+		if isinstance(err, (KeyboardInterrupt, BrokenPipeError)): return
+		raise
+	finally:
+		if opts.output and p_out_tmp: p_out_tmp.rename(p_out)
+
+if __name__ == '__main__': sys.exit(main())
