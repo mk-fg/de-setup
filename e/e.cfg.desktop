@@ -2738,6 +2738,14 @@ group "E_Config_Bindings" struct {
       value "params" string "1";
     }
     group "E_Config_Binding_Key" struct {
+      value "action" string "exec";
+      value "any_mod" uchar 0;
+      value "context" int 9;
+      value "key" string "v";
+      value "modifiers" int 10;
+      value "params" string "exclip --verbatim --tabs-to-spaces 2";
+    }
+    group "E_Config_Binding_Key" struct {
       value "action" string "window_kill";
       value "any_mod" uchar 0;
       value "context" int 9;
@@ -2829,6 +2837,14 @@ group "E_Config_Bindings" struct {
       value "button" uchar 1;
       value "context" int 2;
       value "modifiers" int 8;
+    }
+    group "E_Config_Binding_Mouse" struct {
+      value "action" string "window_shaded_toggle";
+      value "any_mod" uchar 0;
+      value "button" uchar 1;
+      value "context" int 2;
+      value "modifiers" int 10;
+      value "params" string "up";
     }
     group "E_Config_Binding_Mouse" struct {
       value "action" string "menu_show";
@@ -3860,7 +3876,7 @@ group "Config" struct {
 }
 ----- file: ~/.e/e/config/standard/systray.cfg
 group "Systray_Config" struct {
-  value "dbus" string ":1.1";
+  value "dbus" string ":1.3";
 }
 ----- file: ~/.e/elementary/config/default/base.cfg
 group "Elm_Config" struct {
