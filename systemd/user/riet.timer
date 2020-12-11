@@ -1,0 +1,6 @@
+[Unit]
+After=xorg.target background.target notification-thing.service
+PartOf=startx.target
+
+[Timer]
+OnActiveSec=30

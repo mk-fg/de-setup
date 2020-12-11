@@ -4,4 +4,4 @@ PartOf=startx.target
 
 [Service]
 SyslogIdentifier=%i
-ExecStart=/usr/bin/env %i
+ExecStart=env %i

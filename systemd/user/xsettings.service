@@ -6,5 +6,5 @@ PartOf=startx.target
 Type=oneshot
 RemainAfterExit=yes
 SyslogIdentifier=%p
-ExecStart=/usr/bin/env xinitrc.input
-ExecStart=/usr/bin/env xinitrc.misc
+ExecStart=env xinitrc.input
+ExecStart=env xinitrc.misc

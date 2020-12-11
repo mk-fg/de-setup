@@ -6,7 +6,7 @@ PartOf=startx.target
 [Service]
 SyslogIdentifier=%p
 Restart=always
-ExecStart=/usr/bin/env notify.logtail\
- -i ${HOME}/media/appz/icons/biohazard_48x.png\
- -x ${XDG_RUNTIME_DIR}/logtail_notify.db\
- -f 7:18 /var/log/syslog/stripped.log
+ExecStart=env notify.logtail \
+	-i ${HOME}/media/appz/icons/biohazard_48x.png \
+	-x ${XDG_RUNTIME_DIR}/logtail_notify.db \
+	-f 7:18 /var/log/syslog/stripped.log

@@ -6,4 +6,4 @@ PartOf=startx.target
 SyslogIdentifier=%p
 Restart=on-failure
 RestartSec=5
-ExecStart=/usr/bin/env xbindkeys -n
+ExecStart=env xbindkeys -n

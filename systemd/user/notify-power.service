@@ -1,2 +1,2 @@
 [Service]
-ExecStart=/usr/local/bin/notify.power
+ExecStart=env notify.power

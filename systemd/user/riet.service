@@ -1,9 +1,12 @@
 [Unit]
 After=xorg.target background.target notification-thing.service
-Before=conky.service
 PartOf=startx.target
 
 [Service]
 SyslogIdentifier=%p
-Restart=on-abort
-ExecStart=/usr/bin/env riet.conky -d 3020
+ExecStart=env riet.conky -d 3020
+
+Restart=on-failure
+RestartSec=60
+StartLimitInterval=10min
+StartLimitBurst=3
