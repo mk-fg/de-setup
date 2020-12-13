@@ -1260,466 +1260,316 @@ group "E_Config" struct {
   }
   group "modules" list {
     group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "gadman";
-      value "priority" int 100;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "xkbswitch";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "winlist";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 1;
-      value "name" string "time";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 0;
-      value "name" string "temperature";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "teamwork";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 1;
-      value "name" string "tasks";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 1;
-      value "name" string "systray";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "sysinfo";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "syscon";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 0;
-      value "name" string "start";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "shot";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 1;
-      value "name" string "pager_plain";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 0;
-      value "name" string "pager";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 0;
-      value "name" string "notification";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 1;
-      value "name" string "msgbus";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 0;
-      value "name" string "mixer";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "luncher";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 1;
-      value "name" string "lokker";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "ibox";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "ibar";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 0;
-      value "name" string "fileman_opinfo";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 0;
-      value "name" string "fileman";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "dropshadow";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 0;
-      value "name" string "cpufreq";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_window_remembers";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_window_manipulation";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_theme";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_shelves";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_randr";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_performance";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_paths";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_menus";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_intl";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_interaction";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_display";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_dialogs";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_bindings";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf_applications";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "conf";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "clock";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
-      value "enabled" uchar 1;
-      value "name" string "battery";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 1;
       value "enabled" uchar 0;
       value "name" string "backlight";
-      value "priority" int 0;
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 1;
+      value "enabled" uchar 1;
+      value "name" string "battery";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "clock";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_applications";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_bindings";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_dialogs";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_display";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_interaction";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_intl";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_menus";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_paths";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_performance";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_randr";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_shelves";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_theme";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_window_manipulation";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "conf_window_remembers";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "cpufreq";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "dropshadow";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
       value "name" string "everything";
-      value "priority" int -1000;
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
       value "enabled" uchar 0;
-      value "name" string "time";
-      value "priority" int 0;
+      value "name" string "fileman";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
       value "enabled" uchar 0;
-      value "name" string "tasks";
-      value "priority" int 0;
+      value "name" string "fileman_opinfo";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
+      value "enabled" uchar 1;
+      value "name" string "gadman";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "ibar";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "ibox";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "lokker";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "luncher";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 0;
-      value "name" string "systray";
-      value "priority" int 0;
+      value "name" string "mixer";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
+      value "enabled" uchar 1;
+      value "name" string "msgbus";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "notification";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "pager";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 0;
       value "name" string "pager_plain";
-      value "priority" int 0;
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
       value "enabled" uchar 0;
-      value "name" string "msgbus";
-      value "priority" int 0;
+      value "name" string "polkit";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "lokker";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "gadman";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "xkbswitch";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "winlist";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "sysinfo";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "syscon";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
+      value "enabled" uchar 1;
       value "name" string "shot";
-      value "priority" int 0;
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
       value "enabled" uchar 0;
-      value "name" string "luncher";
-      value "priority" int 0;
+      value "name" string "start";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
+      value "enabled" uchar 1;
+      value "name" string "syscon";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "sysinfo";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "systray";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "tasks";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 0;
-      value "name" string "ibox";
-      value "priority" int 0;
+      value "name" string "teamwork";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
       value "enabled" uchar 0;
-      value "name" string "ibar";
-      value "priority" int 0;
+      value "name" string "temperature";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_window_remembers";
-      value "priority" int 0;
+      value "enabled" uchar 1;
+      value "name" string "time";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_window_manipulation";
-      value "priority" int 0;
+      value "enabled" uchar 1;
+      value "name" string "winlist";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_theme";
-      value "priority" int 0;
+      value "enabled" uchar 1;
+      value "name" string "xkbswitch";
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_shelves";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_randr";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_performance";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_paths";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_menus";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_intl";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_interaction";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_display";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_dialogs";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_bindings";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf_applications";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "conf";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
-      value "enabled" uchar 0;
-      value "name" string "clock";
-      value "priority" int 0;
-    }
-    group "E_Config_Module" struct {
-      value "delayed" uchar 0;
       value "enabled" uchar 0;
       value "name" string "battery";
-      value "priority" int 0;
     }
     group "E_Config_Module" struct {
-      value "delayed" uchar 0;
+      value "enabled" uchar 0;
+      value "name" string "clock";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_applications";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_bindings";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_dialogs";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_display";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_interaction";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_intl";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_menus";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_paths";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_performance";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_randr";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_shelves";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_theme";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_window_manipulation";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_window_remembers";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 0;
       value "name" string "everything";
-      value "priority" int 0;
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "gadman";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "ibar";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "ibox";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "lokker";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "luncher";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "msgbus";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "pager";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "shot";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "syscon";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "sysinfo";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "systray";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "tasks";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "time";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "winlist";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "xkbswitch";
     }
   }
   group "remembers" list {
@@ -1731,8 +1581,8 @@ group "E_Config" struct {
       value "desk_show_mode" int 0;
       value "fit_along" uchar 1;
       value "fit_size" uchar 0;
-      value "hide_duration" float 1.0000000000000000000000000;
-      value "hide_timeout" float 1.0000000000000000000000000;
+      value "hide_duration" float 0.2000000029802322387695312;
+      value "hide_timeout" float 0.4000000059604644775390625;
       value "id" int 1;
       value "layer" int 250;
       value "name" string "shelf";
@@ -1816,6 +1666,7 @@ group "E_Config" struct {
   value "always_click_to_focus" int 1;
   value "always_click_to_raise" int 1;
   value "auto_raise_delay" double 0.5000000000000000000000000;
+  value "backlight.battery_timer" double 0.0000000000000000000000000;
   value "backlight.dim" double 0.2999999999999999888977698;
   value "backlight.idle_dim" uchar 0;
   value "backlight.normal" double 1.0000000000000000000000000;
@@ -1833,7 +1684,7 @@ group "E_Config" struct {
   value "border_shade_speed" double 6400.0000000000000000000000000;
   value "border_shade_transition" int 3;
   value "cfgdlg_auto_apply" int 0;
-  value "cfgdlg_default_mode" int 0;
+  value "cfgdlg_default_mode" int 1;
   value "cfgdlg_normal_wins" uchar 0;
   value "clientlist_group_by" int 1;
   value "clientlist_include_all_zones" int 1;
@@ -1845,7 +1696,7 @@ group "E_Config" struct {
   value "clientlist_warp_to_iconified_desktop" int 0;
   value "cnfmdlg_disabled" int 0;
   value "config_type" uint 3;
-  value "config_version" int 1000027;
+  value "config_version" int 1000030;
   value "cursor_size" int 32;
   value "default_system_menu" string "/usr/etc/xdg/menus/enlightenment.menu";
   value "desk_auto_switch" int 0;
@@ -1897,7 +1748,6 @@ group "E_Config" struct {
   value "focus_revert_on_hide_or_close" int 1;
   value "focus_setting" int 3;
   value "font_hinting" int 1;
-  value "framerate" double 130.0000000000000000000000000;
   value "fullscreen_flip" int 1;
   value "fullscreen_policy" int 0;
   value "gadget_resist" int 32;
@@ -1935,7 +1785,6 @@ group "E_Config" struct {
   value "move_info_visible" int 1;
   value "multiscreen_flip" int 0;
   value "no_dpms_on_fullscreen" uchar 0;
-  value "no_module_delay" int 0;
   value "null_container_win" uchar 0;
   value "pass_click_on" int 1;
   value "ping_clients" int 1;
@@ -2236,7 +2085,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "f";
       value "modifiers" int 8;
-      value "params" string "Navigator ~/bin/wrappers/waterfox";
+      value "params" string "Chromium ~/bin/wrappers/chromium";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "window_jump_to_or_start";
@@ -3136,13 +2985,8 @@ group "Comp_Config" struct {
   }
   group "match.popups" list {
   }
-  value "disable_screen_effects" uchar 0;
   value "enable_advanced_features" uchar 0;
   value "engine" int 2;
-  value "fast_borders" uchar 1;
-  value "fast_menus" uchar 1;
-  value "fast_overrides" uchar 1;
-  value "fast_popups" uchar 1;
   value "first_draw_delay" double 0.1499999999999999944488849;
   value "fps_average_range" int 60;
   value "fps_corner" uchar 0;
@@ -3150,11 +2994,6 @@ group "Comp_Config" struct {
   value "grab" uchar 0;
   value "indirect" uchar 0;
   value "lock_fps" uchar 0;
-  value "match.disable_borders" uchar 0;
-  value "match.disable_menus" uchar 0;
-  value "match.disable_objects" uchar 0;
-  value "match.disable_overrides" uchar 0;
-  value "match.disable_popups" uchar 0;
   value "max_unmapped_time" int 36000;
   value "min_unmapped_time" int 300;
   value "nocomp_fs" uchar 1;
@@ -3768,7 +3607,9 @@ group "Pager_Config" struct {
   value "btn_noplace" uchar 1;
   value "drag_resist" uint 3;
   value "flip_desk" uchar 0;
-  value "popup" uint 1;
+  value "permanent_plain" uchar 0;
+  value "plain" uchar 0;
+  value "popup" uint 0;
   value "popup_act_height" int 60;
   value "popup_height" int 60;
   value "popup_speed" double 1.0000000000000000000000000;
@@ -3876,7 +3717,7 @@ group "Config" struct {
 }
 ----- file: ~/.e/e/config/standard/systray.cfg
 group "Systray_Config" struct {
-  value "dbus" string ":1.3";
+  value "dbus" string ":1.2";
 }
 ----- file: ~/.e/elementary/config/default/base.cfg
 group "Elm_Config" struct {
@@ -6906,7 +6747,7 @@ group "Elm_Config" struct {
           value "params" string "";
         }
       }
-      value "name" string "Elm_Button";
+      value "name" string "Efl.Ui.Button";
     }
     group "Elm_Config_Bindings_Widget" struct {
       group "key_bindings" list {
@@ -7005,8 +6846,121 @@ group "Elm_Config" struct {
           value "key" string "KP_Down";
           value "params" string "down";
         }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "activate";
+          value "context" int 0;
+          value "key" string "Return";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "activate";
+          value "context" int 0;
+          value "key" string "KP_Enter";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "activate";
+          value "context" int 0;
+          value "key" string "space";
+          value "params" string "";
+        }
       }
       value "name" string "Elm_Calendar";
+    }
+    group "Elm_Config_Bindings_Widget" struct {
+      group "key_bindings" list {
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "Prior";
+          value "params" string "prior";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "KP_Prior";
+          value "params" string "prior";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "Next";
+          value "params" string "next";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "KP_Next";
+          value "params" string "next";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "Left";
+          value "params" string "left";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "KP_Left";
+          value "params" string "left";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "Right";
+          value "params" string "right";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "KP_Right";
+          value "params" string "right";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "Up";
+          value "params" string "up";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "KP_Up";
+          value "params" string "up";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "Down";
+          value "params" string "down";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "move";
+          value "context" int 0;
+          value "key" string "KP_Down";
+          value "params" string "down";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "activate";
+          value "context" int 0;
+          value "key" string "Return";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "activate";
+          value "context" int 0;
+          value "key" string "KP_Enter";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "activate";
+          value "context" int 0;
+          value "key" string "space";
+          value "params" string "";
+        }
+      }
+      value "name" string "Efl.Ui.Calendar";
     }
     group "Elm_Config_Bindings_Widget" struct {
       group "key_bindings" list {
@@ -7029,7 +6983,7 @@ group "Elm_Config" struct {
           value "params" string "";
         }
       }
-      value "name" string "Elm_Check";
+      value "name" string "Efl.Ui.Check";
     }
     group "Elm_Config_Bindings_Widget" struct {
       group "key_bindings" list {
@@ -7080,6 +7034,12 @@ group "Elm_Config" struct {
           value "context" int 0;
           value "key" string "KP_Down";
           value "params" string "down";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "activate";
+          value "context" int 0;
+          value "key" string "Return";
+          value "params" string "";
         }
       }
       value "name" string "Elm_Colorselector";
@@ -8265,6 +8225,12 @@ group "Elm_Config" struct {
           value "key" string "BackSpace";
           value "params" string "";
         }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "item_pop";
+          value "context" int 0;
+          value "key" string "Escape";
+          value "params" string "";
+        }
       }
       value "name" string "Elm_Naviframe";
     }
@@ -8324,7 +8290,7 @@ group "Elm_Config" struct {
           value "params" string "";
         }
       }
-      value "name" string "Elm_Radio";
+      value "name" string "Efl.Ui.Radio";
     }
     group "Elm_Config_Bindings_Widget" struct {
       group "key_bindings" list {
@@ -8479,6 +8445,112 @@ group "Elm_Config" struct {
         }
       }
       value "name" string "Elm_Slider";
+    }
+    group "Elm_Config_Bindings_Widget" struct {
+      group "key_bindings" list {
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "Left";
+          value "params" string "left";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "KP_Left";
+          value "params" string "left";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "Right";
+          value "params" string "right";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "KP_Right";
+          value "params" string "right";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "Up";
+          value "params" string "up";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "KP_Up";
+          value "params" string "up";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "Down";
+          value "params" string "down";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "KP_Down";
+          value "params" string "down";
+        }
+      }
+      value "name" string "Efl.Ui.Slider";
+    }
+    group "Elm_Config_Bindings_Widget" struct {
+      group "key_bindings" list {
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "Left";
+          value "params" string "left";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "KP_Left";
+          value "params" string "left";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "Right";
+          value "params" string "right";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "KP_Right";
+          value "params" string "right";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "Up";
+          value "params" string "up";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "KP_Up";
+          value "params" string "up";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "Down";
+          value "params" string "down";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "drag";
+          value "context" int 0;
+          value "key" string "KP_Down";
+          value "params" string "down";
+        }
+      }
+      value "name" string "Efl.Ui.Slider_Interval";
     }
     group "Elm_Config_Bindings_Widget" struct {
       group "key_bindings" list {
@@ -8668,6 +8740,52 @@ group "Elm_Config" struct {
         }
       }
       value "name" string "Elm_Toolbar";
+    }
+    group "Elm_Config_Bindings_Widget" struct {
+      group "key_bindings" list {
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "select";
+          value "context" int 0;
+          value "key" string "Return";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "select";
+          value "context" int 0;
+          value "key" string "KP_Enter";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "select";
+          value "context" int 0;
+          value "key" string "space";
+          value "params" string "";
+        }
+      }
+      value "name" string "Efl.Ui.Item";
+    }
+    group "Elm_Config_Bindings_Widget" struct {
+      group "key_bindings" list {
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "select";
+          value "context" int 0;
+          value "key" string "Return";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "select";
+          value "context" int 0;
+          value "key" string "KP_Enter";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "select";
+          value "context" int 0;
+          value "key" string "space";
+          value "params" string "";
+        }
+      }
+      value "name" string "Efl.Ui.Tab_Bar";
     }
     group "Elm_Config_Bindings_Widget" struct {
       group "key_bindings" list {
@@ -8884,322 +9002,6 @@ group "Elm_Config" struct {
         }
       }
       value "name" string "Efl.Ui.Win";
-    }
-    group "Elm_Config_Bindings_Widget" struct {
-      group "key_bindings" list {
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "Return";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "KP_Enter";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "space";
-          value "params" string "";
-        }
-      }
-      value "name" string "Efl.Ui.Button";
-    }
-    group "Elm_Config_Bindings_Widget" struct {
-      group "key_bindings" list {
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "Prior";
-          value "params" string "prior";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "KP_Prior";
-          value "params" string "prior";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "Next";
-          value "params" string "next";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "KP_Next";
-          value "params" string "next";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "Left";
-          value "params" string "left";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "KP_Left";
-          value "params" string "left";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "Right";
-          value "params" string "right";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "KP_Right";
-          value "params" string "right";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "Up";
-          value "params" string "up";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "KP_Up";
-          value "params" string "up";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "Down";
-          value "params" string "down";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "move";
-          value "context" int 0;
-          value "key" string "KP_Down";
-          value "params" string "down";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "Return";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "KP_Enter";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "space";
-          value "params" string "";
-        }
-      }
-      value "name" string "Efl.Ui.Calendar";
-    }
-    group "Elm_Config_Bindings_Widget" struct {
-      group "key_bindings" list {
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "Return";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "KP_Enter";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "space";
-          value "params" string "";
-        }
-      }
-      value "name" string "Efl.Ui.Check";
-    }
-    group "Elm_Config_Bindings_Widget" struct {
-      group "key_bindings" list {
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "Return";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "KP_Enter";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "activate";
-          value "context" int 0;
-          value "key" string "space";
-          value "params" string "";
-        }
-      }
-      value "name" string "Efl.Ui.Radio";
-    }
-    group "Elm_Config_Bindings_Widget" struct {
-      group "key_bindings" list {
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "Left";
-          value "params" string "left";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "KP_Left";
-          value "params" string "left";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "Right";
-          value "params" string "right";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "KP_Right";
-          value "params" string "right";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "Up";
-          value "params" string "up";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "KP_Up";
-          value "params" string "up";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "Down";
-          value "params" string "down";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "KP_Down";
-          value "params" string "down";
-        }
-      }
-      value "name" string "Efl.Ui.Slider";
-    }
-    group "Elm_Config_Bindings_Widget" struct {
-      group "key_bindings" list {
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "Left";
-          value "params" string "left";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "KP_Left";
-          value "params" string "left";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "Right";
-          value "params" string "right";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "KP_Right";
-          value "params" string "right";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "Up";
-          value "params" string "up";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "KP_Up";
-          value "params" string "up";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "Down";
-          value "params" string "down";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "drag";
-          value "context" int 0;
-          value "key" string "KP_Down";
-          value "params" string "down";
-        }
-      }
-      value "name" string "Efl.Ui.Slider_Interval";
-    }
-    group "Elm_Config_Bindings_Widget" struct {
-      group "key_bindings" list {
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "select";
-          value "context" int 0;
-          value "key" string "Return";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "select";
-          value "context" int 0;
-          value "key" string "KP_Enter";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "select";
-          value "context" int 0;
-          value "key" string "space";
-          value "params" string "";
-        }
-      }
-      value "name" string "Efl.Ui.Item";
-    }
-    group "Elm_Config_Bindings_Widget" struct {
-      group "key_bindings" list {
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "select";
-          value "context" int 0;
-          value "key" string "Return";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "select";
-          value "context" int 0;
-          value "key" string "KP_Enter";
-          value "params" string "";
-        }
-        group "Elm_Config_Binding_Key" struct {
-          value "action" string "select";
-          value "context" int 0;
-          value "key" string "space";
-          value "params" string "";
-        }
-      }
-      value "name" string "Efl.Ui.Tab_Bar";
     }
     group "Elm_Config_Bindings_Widget" struct {
       group "key_bindings" list {
@@ -9571,6 +9373,53 @@ group "Elm_Config" struct {
       }
       value "name" string "Efl.Ui.Scroller";
     }
+    group "Elm_Config_Bindings_Widget" struct {
+      group "key_bindings" list {
+        group "Elm_Config_Binding_Key" struct {
+          group "modifiers" list {
+            group "Elm_Config_Binding_Modifier" struct {
+              value "flag" uchar 1;
+              value "mod" string "Control";
+            }
+          }
+          value "action" string "copy";
+          value "context" int 0;
+          value "key" string "c";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          group "modifiers" list {
+            group "Elm_Config_Binding_Modifier" struct {
+              value "flag" uchar 1;
+              value "mod" string "Control";
+            }
+          }
+          value "action" string "cut";
+          value "context" int 0;
+          value "key" string "x";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          group "modifiers" list {
+            group "Elm_Config_Binding_Modifier" struct {
+              value "flag" uchar 1;
+              value "mod" string "Control";
+            }
+          }
+          value "action" string "paste";
+          value "context" int 0;
+          value "key" string "v";
+          value "params" string "";
+        }
+        group "Elm_Config_Binding_Key" struct {
+          value "action" string "menu";
+          value "context" int 0;
+          value "key" string "menu";
+          value "params" string "";
+        }
+      }
+      value "name" string "Efl.Ui.Textbox";
+    }
   }
   group "color_palette" list {
     group "Elm_Custom_Palette" struct {
@@ -9728,139 +9577,7 @@ group "Elm_Config" struct {
       value "palette_name" string "painting";
     }
   }
-  group "font_overlays" list {
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "menu_item";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "toolbar_item";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "grid_item";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "list_item";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "title_bar";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "multibuttonentry_item_text_disabled";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "multibuttonentry_item_text_pressed";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "multibuttonentry_item_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "index_item_text_selected";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "index_item_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "index_highlight_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "entry";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "entry_guide_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "entry_text_disabled";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "entry_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "label";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "datetime_separator_text_disabled";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "datetime_separator_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "calendar_day_text_disabled";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "calendar_day_text_today";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "calendar_day_text_holiday";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "calendar_day_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "calendar_weekday_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "calendar_month_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "calendar_year_text";
-    }
-    group "Elm_Font_Overlay" struct {
-      value "font" string "Luxi Sans:style=Regular";
-      value "size" int 11;
-      value "text_class" string "button";
-    }
-  }
-  value "accel_override" uchar 1;
+  value "accel_override" uchar 0;
   value "access_mode" uchar 0;
   value "atspi_mode" uchar 0;
   value "audio_mute_alert" uchar 0;
@@ -9883,7 +9600,7 @@ group "Elm_Config" struct {
   value "cache_flush_poll_interval" int 512;
   value "clouseau_enable" uchar 0;
   value "compositing" int 1;
-  value "config_version" int 131094;
+  value "config_version" int 131096;
   value "context_menu_disabled" uchar 0;
   value "cursor_engine_only" uchar 0;
   value "desktop_entry" uchar 1;
@@ -9894,13 +9611,13 @@ group "Elm_Config" struct {
   value "effect_enable" uchar 1;
   value "engine" string "";
   value "entry_select_allow" uchar 1;
-  value "fileselector_double_tap_navigation_enable" uchar 0;
+  value "fileselector_double_tap_navigation_enable" uchar 1;
   value "fileselector_expand_enable" uchar 1;
-  value "finger_size" int 5;
+  value "finger_size" int 10;
   value "first_item_focus_on_first_focus_in" uchar 0;
   value "focus_autoscroll_mode" uchar 0;
   value "focus_highlight_animate" uchar 0;
-  value "focus_highlight_clip_disable" uchar 0;
+  value "focus_highlight_clip_disable" uchar 1;
   value "focus_highlight_enable" uchar 0;
   value "focus_move_policy" uchar 0;
   value "font_cache" int 512;
@@ -9915,19 +9632,19 @@ group "Elm_Config" struct {
   value "glayer_long_tap_start_timeout" double 1.1999999999999999555910790;
   value "glayer_rotate_angular_tolerance" double 2.0000000000000000000000000;
   value "glayer_rotate_finger_enable" uchar 1;
-  value "glayer_tap_finger_size" int 0;
+  value "glayer_tap_finger_size" int 10;
   value "glayer_zoom_distance_tolerance" double 1.0000000000000000000000000;
   value "glayer_zoom_finger_enable" uchar 1;
   value "glayer_zoom_finger_factor" double 1.0000000000000000000000000;
   value "glayer_zoom_wheel_factor" double 0.0500000000000000027755576;
   value "icon_size" int 32;
-  value "image_cache" int 4096;
+  value "image_cache" int 65536;
   value "inwin_dialogs_enable" uchar 0;
-  value "item_select_on_focus_disable" uchar 0;
+  value "item_select_on_focus_disable" uchar 1;
   value "longpress_timeout" double 1.0000000000000000000000000;
   value "magnifier_enable" uchar 0;
   value "magnifier_scale" double 1.5000000000000000000000000;
-  value "modules" string "prefs>prefs_iface:access_output>access/api:datetime_input_ctxpopup>datetime/api";
+  value "modules" string "prefs>prefs_iface:access_output>access/api:clock_input_ctxpopup>clock/api";
   value "naviframe_prev_btn_auto_pushed" uchar 1;
   value "offline" uchar 0;
   value "page_scroll_friction" double 0.5000000000000000000000000;
@@ -9940,31 +9657,31 @@ group "Elm_Config" struct {
   value "scale" double 1.0000000000000000000000000;
   value "scroll_accel_factor" double 7.0000000000000000000000000;
   value "scroll_animation_disable" uchar 0;
-  value "scroll_smooth_amount" double 0.0000000000000000000000000;
-  value "scroll_smooth_start_enable" uchar 0;
-  value "scroll_smooth_time_window" double 0.0100000000000000002081668;
+  value "scroll_smooth_amount" double 1.0000000000000000000000000;
+  value "scroll_smooth_start_enable" uchar 1;
+  value "scroll_smooth_time_window" double 0.1499999999999999944488849;
   value "selection_clear_enable" uchar 0;
   value "slider_indicator_visible_mode" int 0;
   value "softcursor_mode" uchar 0;
   value "spinner_min_max_filter_enable" uchar 0;
   value "theme" string "elm-efenniht";
-  value "thumbscroll_acceleration_threshold" double 0.0000000000000000000000000;
-  value "thumbscroll_acceleration_time_limit" double 0.0000000000000000000000000;
-  value "thumbscroll_acceleration_weight" double 0.0000000000000000000000000;
+  value "thumbscroll_acceleration_threshold" double 500.0000000000000000000000000;
+  value "thumbscroll_acceleration_time_limit" double 0.6999999999999999555910790;
+  value "thumbscroll_acceleration_weight" double 1.5000000000000000000000000;
   value "thumbscroll_border_friction" double 0.5000000000000000000000000;
   value "thumbscroll_bounce_enable" uchar 0;
   value "thumbscroll_bounce_friction" double 0.5000000000000000000000000;
   value "thumbscroll_enable" uchar 0;
   value "thumbscroll_flick_distance_tolerance" int 1000;
-  value "thumbscroll_friction" double 1.6000000000000000888178420;
-  value "thumbscroll_friction_standard" double 1000.0000000000000000000000000;
-  value "thumbscroll_hold_threshold" int 0;
-  value "thumbscroll_min_friction" double 0.5000000000000000000000000;
-  value "thumbscroll_momentum_animation_duration_max_limit" double 0.0000000000000000000000000;
-  value "thumbscroll_momentum_animation_duration_min_limit" double 0.0000000000000000000000000;
-  value "thumbscroll_momentum_distance_max" int 0;
-  value "thumbscroll_momentum_friction" double 0.0000000000000000000000000;
-  value "thumbscroll_momentum_threshold" double 90.5000000000000000000000000;
+  value "thumbscroll_friction" double 1.0000000000000000000000000;
+  value "thumbscroll_friction_standard" double 2000.0000000000000000000000000;
+  value "thumbscroll_hold_threshold" int 4;
+  value "thumbscroll_min_friction" double 1.0000000000000000000000000;
+  value "thumbscroll_momentum_animation_duration_max_limit" double 1.3000000000000000444089210;
+  value "thumbscroll_momentum_animation_duration_min_limit" double 0.2999999999999999888977698;
+  value "thumbscroll_momentum_distance_max" int 3000;
+  value "thumbscroll_momentum_friction" double 0.9499999999999999555910790;
+  value "thumbscroll_momentum_threshold" double 100.0000000000000000000000000;
   value "thumbscroll_sensitivity_friction" double 0.2500000000000000000000000;
   value "thumbscroll_threshold" int 4;
   value "toolbar_shrink_mode" int 3;
@@ -9978,8 +9695,8 @@ group "Elm_Config" struct {
   value "win_auto_focus_animate" uchar 1;
   value "win_auto_focus_enable" uchar 1;
   value "win_no_border" uchar 0;
-  value "year_max" int 0;
-  value "year_min" int 0;
+  value "year_max" int 137;
+  value "year_min" int 2;
   value "zoom_friction" double 0.5000000000000000000000000;
 }
 ----- file: ~/.e/terminology/config/standard/base.cfg

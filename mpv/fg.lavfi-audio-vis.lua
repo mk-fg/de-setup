@@ -174,6 +174,6 @@ if str_split(mp.get_property('vo'), '[^,]+')[1] ~= 'null'
 	and ({yes=1, immediate=1})[mp.get_property('force-window')]
 then
 	lavfi_vis_disabled = false
-	mp.add_hook('on_preloaded', 50, lavfi_vis_init)
+	mp.add_hook('on_preloaded', 50, function() lavfi_vis_init() end)
 -- else mp.msg.error('audio-vis disabled') end
 end
