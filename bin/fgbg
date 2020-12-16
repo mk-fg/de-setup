@@ -378,7 +378,7 @@ class ImagePicker:
 		if not any(it.chain.from_iterable(self.p_map.values())):
 			raise ImagePickerError(f'No images matched for path(s): {paths}')
 
-	def _p_list_refresh(self, p):
+	def _p_list_refresh(self, p, p_list_nx_cleanup=False):
 		dir_updates = dict()
 		if not p.is_dir(): return self.p_map.setdefault(None, list()).append(p)
 		for root, dirs, files in os.walk(p, followlinks=True):
@@ -389,9 +389,12 @@ class ImagePicker:
 			for name in files:
 				if not self.image_ext_re.search(name): continue
 				self.p_map[root].add(root / name)
-		# Add new files to current p_list shuffle
+		# Add/remove files to/from current p_list shuffle
 		for root, p_set in dir_updates.items():
-			self.p_list.extend(self.p_map[root] - p_set)
+			self.p_list.extend((root, p) for p in (self.p_map[root] - p_set))
+			if p_list_nx_cleanup: # only used when bumping into removed files
+				nx_paths = p_set - self.p_map[root]
+				self.p_list = list(filter((root, p) for root, p in self.p_list if p not in nx_paths))
 
 	def _p_list_get(self):
 		delta, p_list_updated = self.opts.dir_refresh_interval, False
@@ -404,13 +407,17 @@ class ImagePicker:
 				self.p_map_ts = time.monotonic()
 		while True:
 			if not self.p_list and not p_list_updated:
-				self.p_list = list(it.chain.from_iterable(self.p_map.values()))
+				self.p_list = list(it.chain.from_iterable(self.p_map.items()))
 				p_list_updated = True
 			if not self.p_list and p_list_updated:
 				raise ImagePickerError('No suitable images in the shuffle') from None
 			n = random.randint(0, len(self.p_list) - 1)
 			if n == len(self.p_list) - 1: p = self.p_list.pop()
 			else: p, self.p_list[n] = self.p_list[n], self.p_list.pop()
+			p_root, p = p
+			if not p.exists():
+				self._p_list_refresh(p_root, True)
+				continue
 			if p not in self.p_skip: break
 		return p
 
@@ -620,7 +627,7 @@ def main(args=None):
 	group.add_argument('--dir-refresh-interval',
 		metavar='((hh:)mm:)ss', default='12:00:00', help=dd('''
 			Min interval between checking mtime values on directories under specified paths.
-			It's checked before bg changes to detect any new images.
+			It's checked before bg changes to detect any new/removed images.
 			Can be set to zero to disable this check entirely. Default: %(default)s'''))
 
 	group = parser.add_argument_group('Image processing options',
