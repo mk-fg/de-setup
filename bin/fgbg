@@ -666,8 +666,7 @@ def main(args=None):
 		return
 
 	if not opts.path: parser.error('At least one image file/dir path argument is required')
-	dpy_list, dx, dy = dpy_info(), opts.desktop_x, opts.desktop_y
-	if opts.monitor: dpy_list = list(dpy_list[n] for n in opts.monitor)
+	mon_indexes, dx, dy = opts.monitor, opts.desktop_x, opts.desktop_y
 
 	image_proc_opts = opts.process
 	if image_proc_opts:
@@ -718,7 +717,10 @@ def main(args=None):
 						except (OSError, ValueError): xidle = 0
 						if xidle > idle_interval: ts_idle = ts + idle_interval / 2
 					if not ts_idle and not ts_idle_old: daemon.wakeup_reset() # new interval from now
-				if not ts_idle: set_bg_image(images, dpy_list, dx, dy)
+				if not ts_idle:
+					dpy_list = dpy_info()
+					if mon_indexes: dpy_list = list(dpy_list[n] for n in mon_indexes)
+					set_bg_image(images, dpy_list, dx, dy)
 
 			if not daemon:
 				picker_opts.cleanup = False # keep processed files after exit, if any
