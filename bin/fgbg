@@ -380,7 +380,7 @@ class ImagePicker:
 
 	def _p_list_refresh(self, p, p_list_nx_cleanup=False):
 		dir_updates = dict()
-		if not p.is_dir(): return self.p_map.setdefault(None, list()).append(p)
+		if not p.is_dir(): return self.p_map.setdefault(None, set()).add(p)
 		for root, dirs, files in os.walk(p, followlinks=True):
 			root = pl.Path(root).resolve()
 			if (ts := root.stat().st_mtime) == self.p_map_mtimes.get(root): continue
@@ -407,7 +407,8 @@ class ImagePicker:
 				self.p_map_ts = time.monotonic()
 		while True:
 			if not self.p_list and not p_list_updated:
-				self.p_list = list(it.chain.from_iterable(self.p_map.items()))
+				self.p_list = list(it.chain.from_iterable(
+					((root, p) for p in path_set) for root, path_set in self.p_map.items() ))
 				p_list_updated = True
 			if not self.p_list and p_list_updated:
 				raise ImagePickerError('No suitable images in the shuffle') from None
