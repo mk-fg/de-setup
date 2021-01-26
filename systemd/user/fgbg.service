@@ -9,6 +9,8 @@ SyslogIdentifier=%p
 Type=notify
 ExecReload=kill -HUP $MAINPID
 
+# Delay to give E time to adjust display resolutions
+ExecStartPre=sleep 3
 ExecStart=env fgbg -di 4:23:47 \
 	--desktop-same --process \
 	/mnt/volatiles/images ${HOME}/media/bgz
