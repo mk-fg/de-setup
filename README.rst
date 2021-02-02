@@ -72,24 +72,11 @@ i.e. just run "make" to produce ``*.edj`` files from these.
 edj files go to paths like ``~/.e/e/themes/`` or ``~/.config/terminology/themes/``,
 depending on the app.
 
-``*.eet.cfg`` files are extracted using something like::
+Terminology color theme ini files can be installing using ``./data/colorschemes/add_color_scheme.sh``
+script from terminology repo, as described in COLORSCHEMES.md, for example::
 
-  % eet -l ~/.config/terminology/config/standard/base.cfg
-  config
-
-  % eet -d ~/.config/terminology/config/standard/base.cfg config terminology.eet.cfg
-
-To encode these back to eet blobs::
-
-  % eet -e ~/.config/terminology/config/standard/base.cfg config terminology.eet.cfg 0
-
-Terminology needs specific config in addition to edje theme to have contrast
-ISO-6429 colors on top of theme-specific background/features.
-
-``_xterm-colors-to-eet.py`` script can be used to generate ISO-6429 color values
-for terminology eet config file, e.g. from `xresources <xresources>`_ file with
-xterm colors and sync colors between the two without having to enter these
-manually.
+  % ./data/colorschemes/add_color_scheme.sh \
+    eet ~/.config/terminology/colorschemes.eet dark-fir.ini
 
 
 conky
