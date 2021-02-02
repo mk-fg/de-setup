@@ -1,9 +1,9 @@
-color_class { name: "c0";       color: 170 170 170 255; } // COL_DEF
+color_class { name: "c0";       color: 121 254 108 255; } // COL_DEF
 color_class { name: "c1";       color:   0   0   0 255; } // COL_BLACK
 color_class { name: "c2";       color: 204  51  51 255; } // COL_RED
 color_class { name: "c3";       color:  51 204  51 255; } // COL_GREEN
 color_class { name: "c4";       color: 204 136  51 255; } // COL_YELLOW
-color_class { name: "c5";       color:  51  51 204 255; } // COL_BLUE
+color_class { name: "c5";       color:  150  150 224 255; } // COL_BLUE
 color_class { name: "c6";       color: 204  51 204 255; } // COL_MAGENTA
 color_class { name: "c7";       color:  51 204 204 255; } // COL_CYAN
 color_class { name: "c8";       color: 204 204 204 255; } // COL_WHITE
@@ -11,12 +11,12 @@ color_class { name: "c9";       color:   0   0   0   0; } // COL_INVIS
 color_class { name: "c10";      color:  34  34  34 255; } // COL_INVERSE
 color_class { name: "c11";      color: 170 170 170 255; } // COL_INVERSEBG
 
-color_class { name: "c12";      color: 238 238 238 255; } // COL_DEF
-color_class { name: "c13";      color: 102 102 102 255; } // COL_BLACK
+color_class { name: "c12";      color: 12 248 0 255; } // COL_DEF
+color_class { name: "c13";      color: 133 117 117 255; } // COL_BLACK
 color_class { name: "c14";      color: 255 102 102 255; } // COL_RED
-color_class { name: "c15";      color: 102 255 102 255; } // COL_GREEN
+color_class { name: "c15";      color: 0 216 0 255; } // COL_GREEN
 color_class { name: "c16";      color: 255 255 102 255; } // COL_YELLOW
-color_class { name: "c17";      color: 102 102 255 255; } // COL_BLUE
+color_class { name: "c17";      color: 198 169 255 255; } // COL_BLUE
 color_class { name: "c18";      color: 255 102 255 255; } // COL_MAGENTA
 color_class { name: "c19";      color: 102 255 255 255; } // COL_CYAN
 color_class { name: "c20";      color: 255 255 255 255; } // COL_WHITE
