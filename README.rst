@@ -147,6 +147,12 @@ Can be used for key bindings, e.g. via something like ``y script-message
 fg.lavfi-audio-vis.on`` in input.conf, and I'm using that in a player frontend
 (`emms <https://github.com/mk-fg/emacs-setup/blob/master/core/fg_emms.el>`_).
 
+fg.file-rm-key.lua
+``````````````````
+
+Simple script "rm" currently-playing file, useful to cleanup whatever transient
+media files as you go through them, e.g. one-off downloaded stuff.
+
 
 xbindkeys
 ---------
