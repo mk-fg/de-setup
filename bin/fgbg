@@ -4,8 +4,7 @@ import itertools as it, functools as ft, ctypes as ct, pathlib as pl
 import subprocess as sp, dataclasses as dc, hashlib as hl
 import os, sys, re, random, math, time, signal, base64
 
-
-p_err = lambda tpl,*a,**k: print(tpl, *a, **k, file=sys.stderr, flush=True)
+p_err = ft.partial(print, file=sys.stderr, flush=True)
 gather_wrap = lambda t: (lambda func: (lambda *a,**k: t(func(*a,**k))))
 
 def hash_str(s, c=None, person=b'fgbg'):
@@ -162,14 +161,16 @@ class ImageMagickTallScale:
 class ImageMagickOpts:
 	label_font_path: str; label_font_size: int
 	label_color_font: str; label_color_outline: str
+	label_offset_x: int; label_offset_y: int
 	max_aspect_diff: float = 0.7; max_aspect_diff_scale: float = 0.3
 	h_flip: bool = False; tall_scale: any = ImageMagickTallScale() # None - disabled
 	def opts_hash(self): return str(dc.astuple(self))
 
-def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
+def image_magick(p_src, p_dst, opts, dpy, desktop_label=None, dst_fmt='png24'):
 	'''Process image from source path
 			into a desktop background with specified parameters.
-		Uses ImageMagick and requires wand-py module.'''
+		Uses ImageMagick and requires wand-py module.
+		Specifying "desktop_label" will just add that label in the corner.'''
 	from wand.image import Image
 	from wand.drawing import Drawing
 
@@ -264,9 +265,9 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 			img.crop(0, round((img.height - crop_h)/2), width=img.width, height=crop_h)
 			img.resize(w, h)
 
-	def _add_text_label( img, x, y, label,
+	def _add_text_label( img, *, x=None, x_right=None, y, label,
 			text_color, outline_color, outline_hard, outline_blur, font_size, font_path ):
-		'Note: x/y are for top-left corner of the text box'
+		'Note: x/y are for top-left corner of the text box, x_right is for top-right label.'
 		with Drawing() as ctx,\
 				Image(width=img.width, height=img.height) as img_text:
 
@@ -276,6 +277,7 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 			text_font = dict(font_size=font_size, font=font_path)
 			_pset(ctx, text_font, stroke_width=0)
 			text_box = ctx.get_font_metrics(img_text, label)
+			if x_right is not None: x = x_right - text_box.text_width
 			text_box = Box( # offset of text box corners from its origin point
 				0, -(text_box.ascender+1),
 				text_box.text_width, -(text_box.descender-1) )
@@ -284,9 +286,9 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 				text_margin - text_box.x1,
 				text_margin - text_box.y1, label )
 			img_text_box = Box(
-				x - text_margin, y - text_margin,
-				x + (text_box.x2 - text_box.x1) + text_margin,
-				y + (text_box.y2 - text_box.y1) + text_margin )
+				max(0, x - text_margin), max(0, y - text_margin),
+				min(img.width, x + (text_box.x2 - text_box.x1) + text_margin),
+				min(img.height, y + (text_box.y2 - text_box.y1) + text_margin) )
 			img_text.crop(*dc.astuple(img_text_box))
 
 			# Hard inner outline edge
@@ -314,41 +316,52 @@ def image_magick(p_src, p_dst, dpy, opts, dst_fmt='png24'):
 
 	with Image(filename=str(p_src)) as img:
 
-		img_flip = img.flop if opts.h_flip else lambda: None
-		asp_img, asp_dpy = img.width / img.height, dpy.w / dpy.h
-		if abs(asp_img - asp_dpy) > opts.max_aspect_diff:
-			# Special scaling to one screen side or skip
-			if opts.tall_scale and asp_img - asp_dpy < 0:
-				_tall_scale(img, opts.tall_scale, dpy.w, dpy.h, img_flip)
-			else: raise ImageMagickSkip
-
-		else:
-			# Normal crop/scale, flipping smaller image, if enabled
-			step1, step2 = img_flip, ft.partial(_crop_resize, img, dpy.w, dpy.h)
-			if asp_img > asp_dpy: step1, step2 = step2, step1
-			step1(); step2()
-
-		if opts.label_font_path and opts.label_font_size:
-			# Text label
+		if desktop_label:
+			x_right = dpy.w - (opts.label_offset_x or opts.label_font_size)
 			_add_text_label( img,
-				x=opts.label_font_size, y=opts.label_font_size, label=p_src.name,
-				text_color=opts.label_color_font, outline_color=opts.label_color_outline,
-				outline_hard=1, outline_blur=5,
+				x_right=x_right, y=(opts.label_offset_y or opts.label_font_size),
+				label=desktop_label, text_color=opts.label_color_font,
+				outline_color=opts.label_color_outline, outline_hard=1, outline_blur=5,
 				font_size=opts.label_font_size, font_path=opts.label_font_path )
 
-		img.save(filename=f'png24:{p_dst}')
+		else:
+			img_flip = img.flop if opts.h_flip else lambda: None
+			asp_img, asp_dpy = img.width / img.height, dpy.w / dpy.h
+			if abs(asp_img - asp_dpy) > opts.max_aspect_diff:
+				# Special scaling to one screen side or skip
+				if opts.tall_scale and asp_img - asp_dpy < 0:
+					_tall_scale(img, opts.tall_scale, dpy.w, dpy.h, img_flip)
+				else: raise ImageMagickSkip
+
+			else:
+				# Normal crop/scale, flipping smaller image, if enabled
+				step1, step2 = img_flip, ft.partial(_crop_resize, img, dpy.w, dpy.h)
+				if asp_img > asp_dpy: step1, step2 = step2, step1
+				step1(); step2()
+
+			if opts.label_font_path and opts.label_font_size:
+				# Filename text label
+				_add_text_label( img,
+					x=(opts.label_offset_x or opts.label_font_size),
+					y=(opts.label_offset_y or opts.label_font_size),
+					label=p_src.name, text_color=opts.label_color_font,
+					outline_color=opts.label_color_outline, outline_hard=1, outline_blur=5,
+					font_size=opts.label_font_size, font_path=opts.label_font_path )
+
+		img.save(filename=f'{dst_fmt}:{p_dst}')
 
 
 class ImagePickerError(Exception): pass
 
 @dc.dataclass
 class ImageProcessingOpts:
-	cache: bool; hash_person: str
+	cache: bool; hash_person: str; desktop_label: bool
 	flip_chance: float = 0.5; magick: any = None
 
 @dc.dataclass
 class ImagePickerOpts:
-	desktop_same: bool; proc: any; dir_refresh_interval: float
+	desktop_same: bool; proc: any
+	dir_refresh_interval: float = 12*3600; proc_retries: int = 8
 	cleanup: bool = True; cleanup_chance: float = 0.05; cleanup_size: int = 1000 * 2**20
 
 class ImagePicker:
@@ -360,10 +373,14 @@ class ImagePicker:
 		self._p_list_init(paths)
 
 	def __enter__(self):
+		self.proc_dir = None
 		if self.opts.proc and self.opts.proc.cache:
 			self.proc_dir = pl.Path('~/.cache/fgbg').expanduser()
 			self.proc_dir.mkdir(exist_ok=True)
-		else: self.proc_dir = pl.Path(os.environ.get('XDG_RUNTIME_DIR') or '/tmp')
+		self.proc_dir_tmp = pl.Path(os.environ.get('XDG_RUNTIME_DIR') or '/tmp') / 'fgbg'
+		if not self.proc_dir or self.opts.proc.desktop_label:
+			self.proc_dir_tmp.mkdir(0o700, exist_ok=True)
+			if not self.proc_dir: self.proc_dir = self.proc_dir_tmp
 		self.proc_files = dict()
 		return self
 
@@ -438,7 +455,40 @@ class ImagePicker:
 
 	def get_random_image(self, dpy):
 		'Return random image path and remove it from current shuffle.'
-		p = self._p_list_get()
+		for n in range(self.opts.proc_retries):
+			p_src = self._p_list_get()
+			p = self.proc_image_base(p_src, dpy)
+			if p: return p
+			p_err(f'----- [retry count: {n+1} / {self.opts.proc_retries}]')
+		raise ImagePickerError(f'Failed to process bg image(s) after {n+1} attempts')
+
+	def get_iter(self, dpy_list, dx, dy):
+		'''Returns iterator of scaled image paths
+			for specified displays and x/y count of virtual desktops.'''
+		cache, label_fmt = dict(), '{x}x{y}' if len(dy) > 1 else '{x}'
+		for dpy, x, y in it.product(dpy_list, dx, dy):
+			if self.opts.desktop_same:
+				p = cache.get(('ds', dpy.n))
+				if not p: p = cache['ds', dpy.n] = self.get_random_image(dpy)
+			else: p = self.get_random_image(dpy)
+			if self.opts.proc.desktop_label:
+				p = self.proc_desktop_label(p, label_fmt, dpy, x, y)
+				if not p: raise ImagePickerError('Failed to add desktop-id label to pre-processed image')
+			yield p, dpy, x, y
+
+	def _proc_error_wrapper(func):
+		@ft.wraps(func)
+		def _wrapper(self, p, *args, **kws):
+			try: return func(self, p, *args, **kws)
+			except Exception as err:
+				p_err(f'----- ERROR: Failed to process image [ {p} ] - {err}')
+				import traceback
+				traceback.print_exc(file=sys.stderr)
+				sys.stderr.flush()
+		return _wrapper
+
+	@_proc_error_wrapper
+	def proc_image_base(self, p, dpy):
 		if self.opts.proc:
 			self.opts.proc.magick.h_flip = random.random() < self.opts.proc.flip_chance
 			img_hash = hash_file(p, person=self.opts.proc.hash_person)
@@ -453,7 +503,7 @@ class ImagePicker:
 			p = self.proc_files[k] = self.proc_dir / f'fgbg.{img_hash}.png'
 			if not p.exists():
 				p_tmp = self.proc_files['tmp'] = p.parent / (p.name + '.tmp')
-				try: image_magick(p_src, p_tmp, dpy, self.opts.proc.magick)
+				try: image_magick(p_src, p_tmp, self.opts.proc.magick, dpy)
 				except ImageMagickSkip:
 					self.p_skip.add(p_src)
 					return self.get_random_image(dpy)
@@ -463,16 +513,12 @@ class ImagePicker:
 				self._cache_dir_cleanup()
 		return p
 
-	def get_iter(self, dpy_list, dx, dy):
-		'''Returns iterator of scaled image paths
-			for specified displays and x/y count of virtual desktops.'''
-		cache = dict()
-		for dpy, x, y in it.product(dpy_list, dx, dy):
-			if self.opts.desktop_same:
-				p = cache.get(('ds', dpy.n))
-				if not p: p = cache['ds', dpy.n] = self.get_random_image(dpy)
-			else: p = self.get_random_image(dpy)
-			yield p, dpy, x, y
+	@_proc_error_wrapper
+	def proc_desktop_label(self, p, label_fmt, dpy, x, y):
+		label = label_fmt.format(x=x+1, y=y+1) # to 1-indexed human value
+		p_src, p = p, self.proc_dir_tmp / f'fgbg.desktop.m{dpy.n}-x{x}-y{y}.png'
+		image_magick(p_src, p, self.opts.proc.desktop_label, dpy, desktop_label=label)
+		return p
 
 
 class SDDaemon:
@@ -575,7 +621,8 @@ class SDDaemon:
 
 
 def main(args=None):
-	def_proc_label = 'Liberation Sans-16', '#baebf9', 'black'
+	def_proc_label = 'Liberation Sans-16', '#baebf9', 'black', 0, 0
+	def_desktop_label = 'Permanent Marker-60', '#a8563a', 'black', 20, 1
 
 	import argparse, textwrap
 	dd = lambda text: (textwrap.dedent(text).strip('\n') + '\n').replace('\t', '  ')
@@ -635,16 +682,27 @@ def main(args=None):
 		description='Enabling this requires ImageMagick and wand-py bindings for it.')
 	group.add_argument('-p', '--process', action='store_true', help=dd('''
 		Enable processing for image to desktop background using ImageMagick/wand-py.
-		This includes smart scaling, adding text label to the corner and such stuff.'''))
+		This includes smart scaling, adding text label(s) to the corner and such stuff.'''))
 	group.add_argument('--no-cache', action='store_true',
 		help='Disable using ~/.cache/fgbg for caching processed images.')
 	group.add_argument('--label-style',
-		metavar='font-spec(:color)(:outline)', default=':'.join(def_proc_label), help=dd('''
+		metavar='font-spec(:color)(:outline)(:ox)(:oy)',
+		default=':'.join(map(str, def_proc_label)), help=dd('''
 			Font specification for fontconfig.
 			Use command like "fc-match -b \'sans-15\'" to check what it\'d resolve to.
 			Special value "none" disables it. Default: %(default)s'''))
 	group.add_argument('--random-name', action='store_true',
 		help='Generate randomized filename instead of predictable one.')
+	group.add_argument('--desktop-label-disable', action='store_true',
+		help=dd('''
+			Disable putting virtual desktop number overlay in the corner of the image.
+			It takes an extra image-processing pass to add these
+				and resulting one-off images are stored in tmpfs instead of shared cache.'''))
+	group.add_argument('--desktop-label-style',
+		metavar='font-spec(:color)(:outline)(:ox)(:oy)',
+		default=':'.join(map(str, def_desktop_label)), help=dd('''
+			Font specification for per-virtual-desktop label for fontconfig.
+			Same format as --label-style. Default: %(default)s'''))
 
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
@@ -671,16 +729,23 @@ def main(args=None):
 
 	image_proc_opts = opts.process
 	if image_proc_opts:
-		font, color_font, color_label = ( (v or v_def)
-			for v, v_def in it.zip_longest(opts.label_style.split(':'), def_proc_label) )
-		if font != 'none':
-			proc = sp.run(['fc-match', '-f', '%{size}\n%{file}\n', font], stdout=sp.PIPE)
-			font_size, font_path = proc.stdout.decode().splitlines()
-		else: font_path, font_size = None, 0
+		def _parse_label_style(style, defaults):
+			font, color_font, color_label, ox, oy = ( (v or v_def)
+				for v, v_def in it.zip_longest(style.split(':'), defaults) )
+			if font != 'none':
+				proc = sp.run(['fc-match', '-f', '%{size}\n%{file}\n', font], stdout=sp.PIPE)
+				font_size, font_path = proc.stdout.decode().splitlines()
+			else: font_path, font_size = None, 0
+			return ImageMagickOpts(
+				font_path, int(font_size), color_font, color_label, int(ox), int(oy) )
+		magick = _parse_label_style(opts.label_style, def_proc_label)
+		desktop_label_opts = None
+		if not opts.desktop_label_disable:
+			desktop_label_opts = _parse_label_style(opts.desktop_label_style, def_desktop_label)
 		proc_hash_person = 'fgbg.1'.encode() if not opts.random_name else os.urandom(8)
 		image_proc_opts = ImageProcessingOpts(
 			cache=not opts.no_cache, hash_person=proc_hash_person,
-			magick=ImageMagickOpts(font_path, int(font_size), color_font, color_label) )
+			desktop_label=desktop_label_opts, magick=magick )
 
 	picker_opts = ImagePickerOpts(
 		proc=image_proc_opts, desktop_same=opts.desktop_same,
