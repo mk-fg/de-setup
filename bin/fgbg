@@ -2,7 +2,7 @@
 
 import itertools as it, functools as ft, ctypes as ct, pathlib as pl
 import subprocess as sp, dataclasses as dc, hashlib as hl
-import os, sys, re, random, math, time, signal, base64
+import os, sys, re, random, math, time, signal, base64, errno
 
 p_err = ft.partial(print, file=sys.stderr, flush=True)
 gather_wrap = lambda t: (lambda func: (lambda *a,**k: t(func(*a,**k))))
@@ -20,6 +20,12 @@ def hash_file(p, c=None, person=b'fgbg', chunk=1*2**20):
 	with p.open('rb') as src:
 		for chunk in iter(ft.partial(src.read, chunk), b''): p_hash.update(chunk)
 	return hash_str(p_hash.digest(), c, person)
+
+def p_mtime(p):
+	try: return p.stat().st_mtime
+	except OSError as err:
+		if err.errno != errno.ENOENT: raise
+		return 0
 
 parse_time_delta = lambda spec: sum(a*b for a,b in zip(
 	[1, 60, 3600], reversed(list(map(float, spec.split(':', 2)))) ))
@@ -515,10 +521,14 @@ class ImagePicker:
 
 	@_proc_error_wrapper
 	def proc_desktop_label(self, p, label_fmt, dpy, x, y):
+		# Keep two sets of paths and switch between them,
+		#  as E detects same path and doesn't actually change background.
+		p_dst = list(( self.proc_dir_tmp /
+			f'fgbg.desktop.{v}.m{dpy.n}-x{x}-y{y}.png' ) for v in 'ab')
+		p_dst = sorted(p_dst, key=p_mtime)[0]
 		label = label_fmt.format(x=x+1, y=y+1) # to 1-indexed human value
-		p_src, p = p, self.proc_dir_tmp / f'fgbg.desktop.m{dpy.n}-x{x}-y{y}.png'
-		image_magick(p_src, p, self.opts.proc.desktop_label, dpy, desktop_label=label)
-		return p
+		image_magick(p, p_dst, self.opts.proc.desktop_label, dpy, desktop_label=label)
+		return p_dst
 
 
 class SDDaemon:
