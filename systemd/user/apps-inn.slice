@@ -1,0 +1,2 @@
+[Slice]
+# Dummy slice to be checked in nftables (via cgroupv2) for extra net access
