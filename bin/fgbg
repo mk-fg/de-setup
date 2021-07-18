@@ -376,6 +376,7 @@ class ImagePicker:
 
 	def __init__(self, paths, opts):
 		self.p_skip, self.opts = set(), opts
+		self.boot_tag = hash_str(pl.Path('/proc/sys/kernel/random/boot_id').read_text(), 6)
 		self._p_list_init(paths)
 
 	def __enter__(self):
@@ -524,7 +525,7 @@ class ImagePicker:
 		# Keep two sets of paths and switch between them,
 		#  as E detects same path and doesn't actually change background.
 		p_dst = list(( self.proc_dir_tmp /
-			f'fgbg.desktop.{v}.m{dpy.n}-x{x}-y{y}.png' ) for v in 'ab')
+			f'fgbg.desktop.{self.boot_tag}.{v}.m{dpy.n}-x{x}-y{y}.png' ) for v in 'ab')
 		p_dst = sorted(p_dst, key=p_mtime)[0]
 		label = label_fmt.format(x=x+1, y=y+1) # to 1-indexed human value
 		image_magick(p, p_dst, self.opts.proc.desktop_label, dpy, desktop_label=label)
