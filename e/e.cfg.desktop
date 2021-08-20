@@ -981,25 +981,6 @@ group "E_Config" struct {
       value "zone" uint 0;
     }
     group "E_Config_Gadcon" struct {
-      group "clients" list {
-        group "E_Config_Gadcon_Client" struct {
-          value "autoscroll" uchar 0;
-          value "geom.pos" int <cut>;
-          value "geom.pos_x" double <cut>;
-          value "geom.pos_y" double <cut>;
-          value "geom.res" int <cut>;
-          value "geom.size" int <cut>;
-          value "geom.size_h" double <cut>;
-          value "geom.size_w" double <cut>;
-          value "id" string "ibox.1";
-          value "name" string "ibox";
-          value "orient" int 9;
-          value "resizable" uchar 0;
-          value "state_info.flags" int 3;
-          value "state_info.seq" int 4;
-          value "style" string "inset";
-        }
-      }
       value "id" int 114;
       value "name" string "gadman";
       value "zone" uint 0;
@@ -2085,7 +2066,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "f";
       value "modifiers" int 8;
-      value "params" string "Chromium ~/bin/wrappers/chromium";
+      value "params" string "Navigator ~/bin/wrappers/waterfox";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "window_jump_to_or_start";
@@ -9423,80 +9404,6 @@ group "Elm_Config" struct {
   }
   group "color_palette" list {
     group "Elm_Custom_Palette" struct {
-      group "color_list" list {
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 0;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 255;
-          value "r" uint 0;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 255;
-          value "g" uint 0;
-          value "r" uint 0;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 255;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 255;
-          value "g" uint 255;
-          value "r" uint 0;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 255;
-          value "g" uint 0;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 90;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 180;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 151;
-          value "g" uint 142;
-          value "r" uint 92;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 59;
-          value "g" uint 68;
-          value "r" uint 41;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 68;
-          value "g" uint 46;
-          value "r" uint 41;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 55;
-          value "g" uint 40;
-          value "r" uint 68;
-        }
-      }
       value "palette_name" string "default";
     }
     group "Elm_Custom_Palette" struct {
@@ -9783,9 +9690,9 @@ group "Config" struct {
     }
     group "Config_Color" struct {
       value "a" uchar 255;
-      value "b" uchar 54;
-      value "g" uchar 54;
-      value "r" uchar 61;
+      value "b" uchar 117;
+      value "g" uchar 117;
+      value "r" uchar 133;
     }
     group "Config_Color" struct {
       value "a" uchar 255;
@@ -10495,6 +10402,7 @@ group "Config" struct {
     }
   }
   value "active_links" uchar 0;
+  value "active_links_color" uchar 0;
   value "active_links_email" uchar 0;
   value "active_links_escape" uchar 0;
   value "active_links_file" uchar 0;
@@ -10503,6 +10411,7 @@ group "Config" struct {
   value "cg_height" int 0;
   value "cg_width" int 0;
   value "changedir_to_current" uchar 1;
+  value "color_scheme_name" string "Dark Fir";
   value "colors_use" uchar 1;
   value "cursor_shape" int 0;
   value "custom_geometry" uchar 0;
@@ -10518,6 +10427,7 @@ group "Config" struct {
   value "font.name" string "6x13.pcf";
   value "font.size" int 11;
   value "gravatar" uchar 0;
+  value "group_all" uchar 0;
   value "helper.email" string "";
   value "helper.inline_please" uchar 0;
   value "helper.local.general" string "";
@@ -10544,7 +10454,7 @@ group "Config" struct {
   value "translucent" uchar 0;
   value "ty_escapes" uchar 1;
   value "urg_bell" uchar 1;
-  value "version" int 23;
+  value "version" int 26;
   value "vidmod" int 0;
   value "visualize" uchar 0;
   value "xterm_256color" uchar 0;
