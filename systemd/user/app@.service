@@ -1,7 +1,0 @@
-[Unit]
-After=xorg.target
-PartOf=startx.target
-
-[Service]
-SyslogIdentifier=%i
-ExecStart=env %i
