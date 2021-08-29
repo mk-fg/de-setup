@@ -1,8 +1,4 @@
 [Slice]
-
-CPUWeight=30
-IOWeight=30
-
 MemoryHigh=9500M
 MemoryMax=11G
 MemorySwapMax=1G
