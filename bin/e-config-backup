@@ -56,7 +56,8 @@ def ast_dump(ast, level=0, stream=None):
 		if name in {
 			'E_Config_Desklock_Background', 'E_Config_Desktop_Background',
 			'E_Remember', 'Comp_Match', 'E_Exehist_Item', 'History_Types',
-			'E_Config_Randr', 'E_Config_Randr2', 'E_Exe_List', 'Fileman_Path' }: continue
+			'E_Config_Randr', 'E_Config_Randr2', 'E_Exe_List', 'Fileman_Path',
+			'Plugin_Config' }: continue
 		p(f'{pre}group "{name}" {b.t} {{')
 		ast_dump(b.sub, level=level+1, stream=stream)
 		p(f'{pre}}}')
