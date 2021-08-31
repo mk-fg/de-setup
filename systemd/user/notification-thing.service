@@ -1,6 +1,6 @@
 [Unit]
 Requires=dbus.service
-After=xorg.target dbus.service
+After=xorg.target dbus.service pulseaudio.socket pulseaudio.service
 PartOf=startx.target
 
 [Service]
