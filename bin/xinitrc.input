@@ -28,6 +28,8 @@ err=0
 		setxkbmap -rules evdev\
 			-layout 'us,ru' -option 'grp:switch,grp:caps_toggle,grp_led:caps' || err=1
 		xmodmap ~/.xmodmaprc || err=1
+		# Remap "menu" key to Super, to have one on the right with mech keyboard
+		xmodmap -e 'keycode 135 = Super_R'
 	fi
 }
 xset r rate 250 40 || err=1
