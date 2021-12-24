@@ -396,15 +396,15 @@ local function draw_bin_clock(cr, secs, mins, hours)
 	local row, v, max, bits, bx, by
 
 	for row_n, row in pairs(rows) do
-		bits = bit_decode(unpack(row))
+		bits = bit_decode(table.unpack(row))
 		for bit, set in pairs(bits) do
 			bx, by = pad + x + (row_n - 1) * (w + offset), pad + y + (h + offset) * bit
 			cairo_rectangle(cr, bx, by, w, h)
 			if set then
-				cairo_set_source_rgba(cr, unpack(rgba_fill))
+				cairo_set_source_rgba(cr, table.unpack(rgba_fill))
 				cairo_fill_preserve(cr)
 			end
-			cairo_set_source_rgba(cr, unpack(rgba_border))
+			cairo_set_source_rgba(cr, table.unpack(rgba_border))
 			cairo_stroke(cr)
 		end
 	end
@@ -455,11 +455,8 @@ local function sunturn_time(date, rising, latitude, longitude, zenith, local_off
 	local cosH = (strg.cos(zenith) - (sinDec * strg.sin(latitude))) / (cosDec * strg.cos(latitude))
 
 	-- Never rises / never sets at specified date (near poles)
-	if rising and cosH > 1
-		then return 'N/R'
-	elseif cosH < -1
-		then return 'N/S'
-	end
+	if rising and cosH > 1 then return 'N/R'
+	elseif cosH < -1 then return 'N/S' end
 
 	local H = ( rising and 360 - strg.acos(cosH) or strg.acos(cosH) ) / 15
 	local T = H + RA - (0.06571 * t) - 6.622
@@ -468,7 +465,7 @@ local function sunturn_time(date, rising, latitude, longitude, zenith, local_off
 
 	return os.time({
 		day = date.day, month = date.month, year = date.year,
-		hour = math.floor(LT), min = strg.frac(LT) * 60 })
+		hour = math.floor(LT), min = math.floor(strg.frac(LT) * 60) })
 end
 
 
@@ -527,7 +524,7 @@ end
 function conky_file_cap_read(...)
 	local model_re, ts = '', os.time()
 
-	for i, v in ipairs(arg) do
+	for _, v in ipairs{...} do
 		if string.len(model_re) > 0 then model_re = model_re .. ' ' end
 		model_re = model_re .. v
 	end
@@ -629,12 +626,12 @@ function conky_portmon(dir, count)
 end
 
 
-function conky_sun_event_time(t, fmt, ...)
+function conky_sun_event_time(t, ...)
 	assert(t == 'rise' or t == 'set', t)
-
-	fmt = fmt or '%H:%M'
-	for i, v in ipairs(arg) do fmt = fmt .. ' ' .. fmt end
-
+	local fmt = ''
+	for _, v in ipairs{...} do fmt = fmt .. ' ' .. fmt end
+	fmt = fmt:gsub('^%s*(.-)%s*$', '%1')
+	if fmt == '' then fmt = '%H:%M' end
 	local ts = sunturn_time( os.date('*t'), t == 'rise',
 		sunrise.lat, sunrise.lon, sunrise.zenith, sunrise.offset )
 	return os.date(fmt, ts)
