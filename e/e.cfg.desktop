@@ -3389,6 +3389,14 @@ group "Tasks_Config" struct {
       value "show_all" int 0;
       value "text_only" uchar 0;
     }
+    group "Tasks_Config_Item" struct {
+      value "icon_only" uchar 0;
+      value "id" string "tasks.1";
+      value "minh" int 32;
+      value "minw" int 100;
+      value "show_all" int 0;
+      value "text_only" uchar 0;
+    }
   }
 }
 ----- file: ~/.e/e/config/standard/module.temperature.cfg
@@ -9117,6 +9125,80 @@ group "Elm_Config" struct {
   }
   group "color_palette" list {
     group "Elm_Custom_Palette" struct {
+      group "color_list" list {
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 0;
+          value "g" uint 0;
+          value "r" uint 255;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 0;
+          value "g" uint 255;
+          value "r" uint 0;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 255;
+          value "g" uint 0;
+          value "r" uint 0;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 0;
+          value "g" uint 255;
+          value "r" uint 255;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 255;
+          value "g" uint 255;
+          value "r" uint 0;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 255;
+          value "g" uint 0;
+          value "r" uint 255;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 0;
+          value "g" uint 90;
+          value "r" uint 255;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 0;
+          value "g" uint 180;
+          value "r" uint 255;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 151;
+          value "g" uint 142;
+          value "r" uint 92;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 59;
+          value "g" uint 68;
+          value "r" uint 41;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 68;
+          value "g" uint 46;
+          value "r" uint 41;
+        }
+        group "Elm_Color_RGBA" struct {
+          value "a" uint 255;
+          value "b" uint 55;
+          value "g" uint 40;
+          value "r" uint 68;
+        }
+      }
       value "palette_name" string "default";
     }
     group "Elm_Custom_Palette" struct {
