@@ -10,17 +10,17 @@ group "Elm_Palette" struct {
     }
     group "Elm_Palette_Color" struct {
       value "a" uchar 182;
-      value "b" uchar 16;
-      value "g" uchar 16;
+      value "b" uchar 38;
+      value "g" uchar 38;
       value "name" string ":bg-semi";
-      value "r" uchar 16;
+      value "r" uchar 23;
     }
     group "Elm_Palette_Color" struct {
       value "a" uchar 192;
-      value "b" uchar 16;
-      value "g" uchar 16;
+      value "b" uchar 38;
+      value "g" uchar 38;
       value "name" string ":bg-trans";
-      value "r" uchar 16;
+      value "r" uchar 23;
     }
     group "Elm_Palette_Color" struct {
       value "a" uchar 255;
@@ -59,10 +59,10 @@ group "Elm_Palette" struct {
     }
     group "Elm_Palette_Color" struct {
       value "a" uchar 255;
-      value "b" uchar 33;
-      value "g" uchar 33;
+      value "b" uchar 93;
+      value "g" uchar 71;
       value "name" string ":bg-dim";
-      value "r" uchar 33;
+      value "r" uchar 8;
     }
     group "Elm_Palette_Color" struct {
       value "a" uchar 255;
@@ -101,24 +101,24 @@ group "Elm_Palette" struct {
     }
     group "Elm_Palette_Color" struct {
       value "a" uchar 255;
-      value "b" uchar 50;
-      value "g" uchar 50;
+      value "b" uchar 128;
+      value "g" uchar 101;
       value "name" string ":bg-high";
-      value "r" uchar 50;
+      value "r" uchar 51;
     }
     group "Elm_Palette_Color" struct {
       value "a" uchar 255;
-      value "b" uchar 69;
-      value "g" uchar 69;
+      value "b" uchar 153;
+      value "g" uchar 111;
       value "name" string ":bg-higher";
-      value "r" uchar 69;
+      value "r" uchar 31;
     }
     group "Elm_Palette_Color" struct {
       value "a" uchar 255;
-      value "b" uchar 99;
-      value "g" uchar 99;
+      value "b" uchar 204;
+      value "g" uchar 147;
       value "name" string ":bg-highest";
-      value "r" uchar 99;
+      value "r" uchar 41;
     }
     group "Elm_Palette_Color" struct {
       value "a" uchar 255;
