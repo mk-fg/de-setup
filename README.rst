@@ -63,14 +63,8 @@ and used to detect any new options between version upgrades, or (rare) `migratio
 Enlightenment Edje Themes (e/themes)
 ------------------------------------
 
-Mostly based on ones from E repositories, and might include assets (icons,
-sounds, etc) from these, so not original by any means, just tweaked slightly.
-
-Included Makefiles can be used to build ``*.edc`` themes (using edje_cc),
-i.e. just run "make" to produce ``*.edj`` files from these.
-
-edj files go to paths like ``~/.e/e/themes/`` or ``~/.config/terminology/themes/``,
-depending on the app.
+Mostly based on ones from E repositories, and might include assets
+(icons, sounds, etc) from these, so not original by any means, just tweaked slightly.
 
 Terminology color theme ini files can be installing using ``./data/colorschemes/add_color_scheme.sh``
 script from terminology repo, as described in COLORSCHEMES.md, for example::
