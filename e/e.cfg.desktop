@@ -1,3 +1,562 @@
+----- file: ~/.e/e.palette.cfg
+group "Elm_Palette" struct {
+  group "colors" list {
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 38;
+      value "g" uchar 38;
+      value "name" string ":bg";
+      value "r" uchar 23;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 182;
+      value "b" uchar 16;
+      value "g" uchar 16;
+      value "name" string ":bg-semi";
+      value "r" uchar 16;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 192;
+      value "b" uchar 16;
+      value "g" uchar 16;
+      value "name" string ":bg-trans";
+      value "r" uchar 16;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 8;
+      value "g" uchar 8;
+      value "name" string ":bg-dimmest";
+      value "r" uchar 8;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 14;
+      value "g" uchar 14;
+      value "name" string ":bg-dimmer";
+      value "r" uchar 14;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 20;
+      value "g" uchar 20;
+      value "name" string ":bg-alt-dark";
+      value "r" uchar 20;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 42;
+      value "g" uchar 42;
+      value "name" string ":bg-alt-light";
+      value "r" uchar 42;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 26;
+      value "g" uchar 26;
+      value "name" string ":bg-alt";
+      value "r" uchar 15;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 33;
+      value "g" uchar 33;
+      value "name" string ":bg-dim";
+      value "r" uchar 33;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":bg-dark";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 0;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":bg-dark-invisible";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":bg-darkest";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 8;
+      value "g" uchar 8;
+      value "name" string ":bg-dark-alt";
+      value "r" uchar 8;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 50;
+      value "g" uchar 50;
+      value "name" string ":bg-medium";
+      value "r" uchar 50;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 50;
+      value "g" uchar 50;
+      value "name" string ":bg-high";
+      value "r" uchar 50;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 69;
+      value "g" uchar 69;
+      value "name" string ":bg-higher";
+      value "r" uchar 69;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 99;
+      value "g" uchar 99;
+      value "name" string ":bg-highest";
+      value "r" uchar 99;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 123;
+      value "g" uchar 123;
+      value "name" string ":bg-light";
+      value "r" uchar 123;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 125;
+      value "g" uchar 125;
+      value "name" string ":bg-light-alt";
+      value "r" uchar 125;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 221;
+      value "g" uchar 221;
+      value "name" string ":fg-dim";
+      value "r" uchar 221;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 255;
+      value "g" uchar 255;
+      value "name" string ":fg";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 209;
+      value "g" uchar 209;
+      value "name" string ":fg-prehigh";
+      value "r" uchar 209;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 192;
+      value "g" uchar 192;
+      value "name" string ":fg-high";
+      value "r" uchar 192;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 190;
+      value "g" uchar 190;
+      value "name" string ":fg-higher";
+      value "r" uchar 190;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 255;
+      value "g" uchar 255;
+      value "name" string ":fg-light";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 73;
+      value "g" uchar 128;
+      value "name" string ":selected";
+      value "r" uchar 52;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 25;
+      value "b" uchar 73;
+      value "g" uchar 128;
+      value "name" string ":selected-light";
+      value "r" uchar 52;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 128;
+      value "b" uchar 73;
+      value "g" uchar 128;
+      value "name" string ":selected-medium";
+      value "r" uchar 52;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 192;
+      value "b" uchar 73;
+      value "g" uchar 128;
+      value "name" string ":selected-heavy";
+      value "r" uchar 52;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 31;
+      value "g" uchar 77;
+      value "name" string ":selected-alt";
+      value "r" uchar 38;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 64;
+      value "b" uchar 0;
+      value "g" uchar 51;
+      value "name" string ":selected-alt-trans";
+      value "r" uchar 43;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 0;
+      value "g" uchar 51;
+      value "name" string ":selected-alt-dim";
+      value "r" uchar 43;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 51;
+      value "g" uchar 51;
+      value "name" string ":selected-dim";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 51;
+      value "g" uchar 255;
+      value "name" string ":selected2";
+      value "r" uchar 153;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 25;
+      value "g" uchar 128;
+      value "name" string ":selected2-dim";
+      value "r" uchar 76;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 153;
+      value "g" uchar 51;
+      value "name" string ":selected3";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 51;
+      value "g" uchar 51;
+      value "name" string ":selected4";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 34;
+      value "g" uchar 34;
+      value "name" string ":selected4-dim";
+      value "r" uchar 153;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 255;
+      value "g" uchar 51;
+      value "name" string ":selected5";
+      value "r" uchar 153;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 127;
+      value "g" uchar 25;
+      value "name" string ":selected5-dim";
+      value "r" uchar 76;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 153;
+      value "g" uchar 255;
+      value "name" string ":selected6";
+      value "r" uchar 51;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 96;
+      value "g" uchar 160;
+      value "name" string ":selected6-dim";
+      value "r" uchar 56;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 255;
+      value "g" uchar 255;
+      value "name" string ":win-normal";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 255;
+      value "g" uchar 255;
+      value "name" string ":win-selected";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 0;
+      value "b" uchar 255;
+      value "g" uchar 255;
+      value "name" string ":light-off";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 128;
+      value "b" uchar 255;
+      value "g" uchar 255;
+      value "name" string ":light-medium";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 200;
+      value "b" uchar 255;
+      value "g" uchar 255;
+      value "name" string ":light-high";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 255;
+      value "g" uchar 255;
+      value "name" string ":light-on";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 160;
+      value "g" uchar 220;
+      value "name" string ":light-glow";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 0;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":dim-invisible";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 32;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":dim-lightest";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 64;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":dim-lighter";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 80;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":dim-light";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 160;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":dim";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 200;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":dim-dark";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 128;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":shadow";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":shadow-selected";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 64;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":shadow-disabled";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 0;
+      value "g" uchar 0;
+      value "name" string ":outline";
+      value "r" uchar 0;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 80;
+      value "b" uchar 16;
+      value "g" uchar 32;
+      value "name" string ":validate-fail";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 80;
+      value "b" uchar 16;
+      value "g" uchar 255;
+      value "name" string ":validate-pass";
+      value "r" uchar 32;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 51;
+      value "g" uchar 255;
+      value "name" string ":success";
+      value "r" uchar 51;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 51;
+      value "g" uchar 153;
+      value "name" string ":success-dim";
+      value "r" uchar 51;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 153;
+      value "g" uchar 153;
+      value "name" string ":keyword";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 80;
+      value "g" uchar 80;
+      value "name" string ":keyword-dim";
+      value "r" uchar 128;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 51;
+      value "g" uchar 187;
+      value "name" string ":match";
+      value "r" uchar 255;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 25;
+      value "g" uchar 96;
+      value "name" string ":match-dim";
+      value "r" uchar 128;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 153;
+      value "g" uchar 153;
+      value "name" string ":comment";
+      value "r" uchar 51;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 96;
+      value "g" uchar 96;
+      value "name" string ":comment-dim";
+      value "r" uchar 56;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 48;
+      value "g" uchar 220;
+      value "name" string ":number";
+      value "r" uchar 220;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 56;
+      value "g" uchar 128;
+      value "name" string ":number-dim";
+      value "r" uchar 128;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 221;
+      value "g" uchar 170;
+      value "name" string ":class";
+      value "r" uchar 119;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 110;
+      value "g" uchar 85;
+      value "name" string ":class-dim";
+      value "r" uchar 59;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 17;
+      value "g" uchar 80;
+      value "name" string ":note";
+      value "r" uchar 160;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 8;
+      value "g" uchar 40;
+      value "name" string ":note-dim";
+      value "r" uchar 80;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 160;
+      value "g" uchar 80;
+      value "name" string ":todo";
+      value "r" uchar 40;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 80;
+      value "g" uchar 40;
+      value "name" string ":todo-dim";
+      value "r" uchar 20;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 46;
+      value "g" uchar 77;
+      value "name" string "/bg/selected/titlebar";
+      value "r" uchar 31;
+    }
+    group "Elm_Palette_Color" struct {
+      value "a" uchar 255;
+      value "b" uchar 46;
+      value "g" uchar 77;
+      value "name" string "/bg/selected/menu/item";
+      value "r" uchar 31;
+    }
+  }
+  value "version" int 1000;
+}
 ----- file: ~/.e/e/config/default/e.cfg
 group "E_Config" struct {
   group "desklock_backgrounds" list {
@@ -1349,10 +1908,6 @@ group "E_Config" struct {
       value "name" string "lokker";
     }
     group "E_Config_Module" struct {
-      value "enabled" uchar 1;
-      value "name" string "luncher";
-    }
-    group "E_Config_Module" struct {
       value "enabled" uchar 0;
       value "name" string "mixer";
     }
@@ -1390,10 +1945,6 @@ group "E_Config" struct {
     }
     group "E_Config_Module" struct {
       value "enabled" uchar 1;
-      value "name" string "sysinfo";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 1;
       value "name" string "systray";
     }
     group "E_Config_Module" struct {
@@ -1407,10 +1958,6 @@ group "E_Config" struct {
     group "E_Config_Module" struct {
       value "enabled" uchar 0;
       value "name" string "temperature";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 1;
-      value "name" string "time";
     }
     group "E_Config_Module" struct {
       value "enabled" uchar 1;
@@ -1677,7 +2224,7 @@ group "E_Config" struct {
   value "clientlist_warp_to_iconified_desktop" int 0;
   value "cnfmdlg_disabled" int 0;
   value "config_type" uint 3;
-  value "config_version" int 1000030;
+  value "config_version" int 1000034;
   value "cursor_size" int 32;
   value "default_system_menu" string "/usr/etc/xdg/menus/enlightenment.menu";
   value "desk_auto_switch" int 0;
@@ -1692,8 +2239,6 @@ group "E_Config" struct {
   value "desklock_ask_presentation" uchar 0;
   value "desklock_ask_presentation_timeout" double 30.0000000000000000000000000;
   value "desklock_auth_method" int 0;
-  value "desklock_autolock_idle" int 0;
-  value "desklock_autolock_idle_timeout" double 5400.0000000000000000000000000;
   value "desklock_autolock_screensaver" int 0;
   value "desklock_login_box_zone" int -1;
   value "desklock_on_suspend" int 1;
@@ -1701,7 +2246,6 @@ group "E_Config" struct {
   value "desklock_pin" int 0;
   value "desklock_post_screensaver_time" double 300.0000000000000000000000000;
   value "desklock_start_locked" int 0;
-  value "desklock_use_custom_desklock" int 0;
   value "device_auto_mount" int 0;
   value "device_auto_open" int 0;
   value "device_desktop" int 1;
@@ -1720,6 +2264,7 @@ group "E_Config" struct {
   value "exec.expire_timeout" double 30.0000000000000000000000000;
   value "exec.show_exit_dialog" uchar 0;
   value "exec.show_run_dialog" uchar 1;
+  value "explicit_date_time" uchar 0;
   value "filemanager_copy" uchar 0;
   value "filemanager_secure_rm" uchar 0;
   value "filemanager_single_click" uchar 0;
@@ -1756,12 +2301,11 @@ group "E_Config" struct {
   value "menus_click_drag_timeout" double 0.2500000000000000000000000;
   value "menus_fast_mouse_move_threshhold" double 300.0000000000000000000000000;
   value "menus_scroll_speed" double 1000.0000000000000000000000000;
-  value "mode.offline" uchar 0;
-  value "mode.presentation" uchar 0;
-  value "mouse_accel_denominator" int 1;
-  value "mouse_accel_numerator" int 10;
+  value "mouse_accel" double 0.0000000000000000000000000;
   value "mouse_accel_threshold" int 10;
+  value "mouse_emulate_middle_button" uchar 1;
   value "mouse_hand" int 1;
+  value "mouse_natural_scroll" uchar 0;
   value "move_info_follows" int 1;
   value "move_info_visible" int 1;
   value "multiscreen_flip" int 0;
@@ -1790,8 +2334,10 @@ group "E_Config" struct {
   value "scale.factor" double 1.1000000000000000888178420;
   value "scale.max" double 3.0000000000000000000000000;
   value "scale.min" double 0.8000000000000000444089210;
+  value "scale.set_xapp_dpi" uchar 1;
   value "scale.use_custom" uchar 0;
   value "scale.use_dpi" uchar 0;
+  value "scale.xapp_base_dpi" int 75;
   value "screen_limits" int 0;
   value "screensaver_ask_presentation" uchar 0;
   value "screensaver_ask_presentation_timeout" double 30.0000000000000000000000000;
@@ -1810,7 +2356,6 @@ group "E_Config" struct {
   value "screensaver_wake_on_urgent" int 0;
   value "show_cursor" uchar 1;
   value "show_desktop_icons" int 1;
-  value "show_splash" int 0;
   value "suspend_connected_standby" uchar 0;
   value "syscon.do_input" uchar 1;
   value "syscon.extra.icon_size" int 48;
@@ -1823,6 +2368,15 @@ group "E_Config" struct {
   value "thumbscroll_friction" double 1.0000000000000000000000000;
   value "thumbscroll_momentum_threshhold" double 100.0000000000000000000000000;
   value "thumbscroll_threshhold" int 8;
+  value "touch_accel" double 0.0000000000000000000000000;
+  value "touch_clickpad" uchar 1;
+  value "touch_emulate_middle_button" uchar 1;
+  value "touch_natural_scroll" uchar 0;
+  value "touch_palm_detect" uchar 1;
+  value "touch_scrolling_2finger" uchar 1;
+  value "touch_scrolling_circular" uchar 0;
+  value "touch_scrolling_edge" uchar 0;
+  value "touch_scrolling_horiz" uchar 1;
   value "touch_tap_to_click" uchar 0;
   value "transient.desktop" int 1;
   value "transient.iconify" int 1;
@@ -1848,25 +2402,21 @@ group "E_Config" struct {
   value "window_maximize_transition" int 3;
   value "window_placement_policy" int 0;
   value "window_resist" int 12;
+  value "winlist_large_size" double 0.6665999999999999703348408;
   value "winlist_list_focus_while_selecting" int 1;
   value "winlist_list_jump_desk_while_selecting" int 1;
   value "winlist_list_move_after_select" int 0;
+  value "winlist_list_no_miniatures" uchar 0;
   value "winlist_list_raise_while_selecting" int 1;
   value "winlist_list_show_iconified" int 1;
   value "winlist_list_show_other_desk_iconified" int 1;
   value "winlist_list_show_other_desk_windows" int 0;
   value "winlist_list_show_other_screen_iconified" int 1;
   value "winlist_list_show_other_screen_windows" int 0;
+  value "winlist_list_size" double 0.3332999999999999851674204;
   value "winlist_list_uncover_while_selecting" int 0;
+  value "winlist_mode" int 0;
   value "winlist_no_warp_on_direction" int 0;
-  value "winlist_pos_align_x" double 0.5000000000000000000000000;
-  value "winlist_pos_align_y" double 0.5000000000000000000000000;
-  value "winlist_pos_max_h" int 320;
-  value "winlist_pos_max_w" int 320;
-  value "winlist_pos_min_h" int 0;
-  value "winlist_pos_min_w" int 0;
-  value "winlist_pos_size_h" double 0.5000000000000000000000000;
-  value "winlist_pos_size_w" double 0.5000000000000000000000000;
   value "winlist_scroll_animate" int 1;
   value "winlist_scroll_speed" double 0.1000000000000000055511151;
   value "winlist_warp_at_end" int 1;
@@ -3239,6 +3789,7 @@ group "IBox_Config" struct {
       value "id" string "0";
       value "show_desk" int 0;
       value "show_label" int 0;
+      value "show_preview" int 0;
       value "show_zone" int 1;
     }
     group "IBox_Config_Item" struct {
@@ -3247,6 +3798,7 @@ group "IBox_Config" struct {
       value "id" string "ibox.1";
       value "show_desk" int 0;
       value "show_label" int 0;
+      value "show_preview" int 0;
       value "show_zone" int 1;
     }
   }
@@ -3378,7 +3930,10 @@ group "Tasks_Config" struct {
       value "id" string "0";
       value "minh" int 32;
       value "minw" int 100;
-      value "show_all" int 0;
+      value "preview" uchar 0;
+      value "preview_size" int 0;
+      value "show_all_desktops" int 0;
+      value "show_all_screens" int 0;
       value "text_only" uchar 0;
     }
     group "Tasks_Config_Item" struct {
@@ -3386,7 +3941,10 @@ group "Tasks_Config" struct {
       value "id" string "tasks.0";
       value "minh" int 32;
       value "minw" int 100;
-      value "show_all" int 0;
+      value "preview" uchar 0;
+      value "preview_size" int 0;
+      value "show_all_desktops" int 0;
+      value "show_all_screens" int 0;
       value "text_only" uchar 0;
     }
     group "Tasks_Config_Item" struct {
@@ -3394,7 +3952,10 @@ group "Tasks_Config" struct {
       value "id" string "tasks.1";
       value "minh" int 32;
       value "minw" int 100;
-      value "show_all" int 0;
+      value "preview" uchar 0;
+      value "preview_size" int 0;
+      value "show_all_desktops" int 0;
+      value "show_all_screens" int 0;
       value "text_only" uchar 0;
     }
   }
@@ -9350,6 +9911,7 @@ group "Elm_Config" struct {
   value "naviframe_prev_btn_auto_pushed" uchar 1;
   value "offline" uchar 0;
   value "page_scroll_friction" double 0.5000000000000000000000000;
+  value "palette" string "dark-fir";
   value "password_show_last" uchar 0;
   value "password_show_last_timeout" double 2.0000000000000000000000000;
   value "popup_horizontal_align" double 0.5000000000000000000000000;
@@ -10210,7 +10772,7 @@ group "Config" struct {
   value "colors_use" uchar 1;
   value "cursor_shape" int 0;
   value "custom_geometry" uchar 0;
-  value "disable_cursor_blink" uchar 0;
+  value "disable_cursor_blink" uchar 1;
   value "disable_focus_visuals" uchar 0;
   value "disable_visual_bell" uchar 0;
   value "drag_links" uchar 0;
@@ -10252,5 +10814,5 @@ group "Config" struct {
   value "version" int 26;
   value "vidmod" int 0;
   value "visualize" uchar 0;
-  value "xterm_256color" uchar 0;
+  value "xterm_256color" uchar 1;
 }

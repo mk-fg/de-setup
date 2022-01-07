@@ -68,18 +68,19 @@ def ast_dump(ast, level=0, stream=None):
 		p(f'{pre}value "{name}" {t} {v};')
 	if stream_return: return stream.getvalue()
 
-def clean_file(p):
+def clean_file(p, eet_key):
 	if p.name == 'profile.cfg': # special case - just a profile name string
-		src = sp.run(['eet', '-x', p, 'config'], check=True, stdout=sp.PIPE)
+		src = sp.run(['eet', '-x', p, eet_key], check=True, stdout=sp.PIPE)
 		return f'{src.stdout.decode()}\n'
-	src = sp.run(['eet', '-d', p, 'config'], check=True, stdout=sp.PIPE)
+	src = sp.run(['eet', '-d', p, eet_key], check=True, stdout=sp.PIPE)
 	conf = eet_cfg.model_from_str(src.stdout.decode())
 	ast = ast_parse(conf.blocks)
 	return ast_dump(ast)
 
 
 def find_cfg_files(*paths):
-	files = list()
+	# Returns paths with the original prefix if possible, for shorter/consistent filenames
+	files, re_cfg = dict(), re.compile(r'(?<!\.[0-9])\.cfg$')
 	for p in paths:
 		try: p_real = p.expanduser().resolve(strict=True)
 		except FileNotFoundError: continue
@@ -88,8 +89,10 @@ def find_cfg_files(*paths):
 			if not root.startswith(p_str): raise RuntimeError(p, p_str, root)
 			fn_root = f'{p_prefix}{root[p_len:]}/'
 			for fn in fns:
-				if not re.search(r'(?<!\.[0-9])\.cfg$', fn): continue
-				files.append(f'{fn_root}{fn}')
+				if not re_cfg.search(fn): continue
+				if ( (pl.Path(root) / fn).is_symlink() and
+					(m := re.search(r'^e\.(\w+)\.cfg$', fn)) ): files[f'{fn_root}{fn}'] = m.group(1)
+				else: files[f'{fn_root}{fn}'] = 'config'
 	return files
 
 def main(args=None):
@@ -106,7 +109,11 @@ def main(args=None):
 				and strips ones that are too volatile (e.g. window positions) for cleaner git diffs.'''))
 	parser.add_argument('file', nargs='*', help=dd('''
 		Path to a file(s) to decode.
-		Default is to look for all non-backup .cfg files under ~/.e dir.'''))
+		Default is to look for all non-backup .cfg files under ~/.e dir.
+		Symlinked "e.somekey.cfg" files are treated
+			specially to lookup "somekey" in these instead of default "config".
+		For example, "ln -s elementary/colors/mycolors.pal mycolors.palette.cfg"
+			will process/dump "palette" key from E palette-configuration file.'''))
 	parser.add_argument('-o', '--output', metavar='file', help=dd('''
 		Path to an output file. Default is to use stdout.'''))
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
@@ -114,7 +121,7 @@ def main(args=None):
 	files = opts.file
 	if not files: files = find_cfg_files(pl.Path('~/.e'))
 	if not files: parser.error('No files to decode')
-	files.sort()
+	files = dict(sorted(files.items(), key=op.itemgetter(0)))
 	file_headers = len(files) > 1
 
 	try:
@@ -126,9 +133,9 @@ def main(args=None):
 			p_out_tmp = pl.Path(out.name)
 
 		print_func = lambda *line: print(*line, end='', file=out)
-		for p_str in files:
+		for p_str, eet_key in files.items():
 			p_real = pl.Path(p_str).expanduser()
-			try: conf_str = clean_file(p_real)
+			try: conf_str = clean_file(p_real, eet_key)
 			except Exception as err:
 				print(f'Failed to process file: {p_str}', file=sys.stderr)
 				raise
