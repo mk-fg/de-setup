@@ -168,7 +168,7 @@ class ImageMagickOpts:
 	label_font_path: str; label_font_size: int
 	label_color_font: str; label_color_outline: str
 	label_offset_x: int; label_offset_y: int
-	max_aspect_diff: float = 0.7; max_aspect_diff_scale: float = 0.3
+	max_aspect_diff: float = 0.9; max_aspect_diff_scale: float = 0.3
 	h_flip: bool = False; tall_scale: any = ImageMagickTallScale() # None - disabled
 	def opts_hash(self): return str(dc.astuple(self))
 
@@ -335,7 +335,7 @@ def image_magick(p_src, p_dst, opts, dpy, desktop_label=None, dst_fmt='png24'):
 			asp_img, asp_dpy = img.width / img.height, dpy.w / dpy.h
 			if abs(asp_img - asp_dpy) > opts.max_aspect_diff:
 				# Special scaling to one screen side or skip
-				if opts.tall_scale and asp_img - asp_dpy < 0:
+				if opts.tall_scale and asp_img < asp_dpy:
 					_tall_scale(img, opts.tall_scale, dpy.w, dpy.h, img_flip)
 				else: raise ImageMagickSkip
 
@@ -404,7 +404,7 @@ class ImagePicker:
 
 	def _p_list_refresh(self, p, p_list_nx_cleanup=False):
 		dir_updates = dict()
-		if not p.is_dir(): return self.p_map.setdefault(None, set()).add(p)
+		if not p.is_dir(): return self.p_map.setdefault(None, {p})
 		for root, dirs, files in os.walk(p, followlinks=True):
 			root = pl.Path(root).resolve()
 			if (ts := root.stat().st_mtime) == self.p_map_mtimes.get(root): continue
