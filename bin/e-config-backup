@@ -25,6 +25,23 @@ num: n=/[+\-]?[\d.]+/;
 str: '"' s=/(?:(?<!\\)(?:\\{2})*\\"|[^"])*(?<!\\)(?:\\{2})*/ '"';
 ''')
 
+
+cut_groups = { # bunch of groups with transient or unimportant data to cut
+	'E_Config_Desklock_Background', 'E_Config_Desktop_Background',
+	'E_Remember', 'E_Exehist_Item', 'E_Config_Randr', 'E_Config_Randr2', 'E_Exe_List',
+	'Comp_Match', 'History_Types', 'Fileman_Path', 'Plugin_Config' }
+
+cut_vals = [ # (group, value, type), where each can be ..., str, set or re
+	('Systray_Config', 'dbus', 'string'),
+	('E_Exehist', 'startup_id', 'int'),
+	(..., re.compile(r'^geom\.((pos|size|res)_?)?[whxy]?$'), {'int', 'double'}) ]
+
+# Sorting blocks is useful for things like "modules" with no otherwise-stable order from E
+sort_blocks = [
+	# Sort "module" blocks by "name" value inside each "E_Config_Module" sub-block
+	('modules', 'E_Config_Module', 'name') ]
+
+
 @dc.dataclass
 class AST:
 	group: list; value: list; elm: list
@@ -46,26 +63,37 @@ def ast_parse(blocks):
 	if len(ast.elm) > 1: raise ValueError(ast)
 	return ast
 
-def ast_dump(ast, level=0, stream=None):
+def ast_dump(ast, name=None, level=0, stream=None):
 	stream_return = False
 	if stream is None: stream = stream_return = io.StringIO()
 	pre, p = '  '*level, ft.partial(print, file=stream)
 	for t, s in ast.elm: p(f'{pre}{t} {s};')
+	for mg, mb, mk in sort_blocks:
+		if ( name == mg and ast.group
+				and all(b.name.s == mb for b in ast.group) ):
+			ast.group.sort(key=lambda b: next(
+				c.value.s for c in b.sub.value if c.name.s == mk ))
 	for b in ast.group:
-		name = b.name.s
-		if name in {
-			'E_Config_Desklock_Background', 'E_Config_Desktop_Background',
-			'E_Remember', 'Comp_Match', 'E_Exehist_Item', 'History_Types',
-			'E_Config_Randr', 'E_Config_Randr2', 'E_Exe_List', 'Fileman_Path',
-			'Plugin_Config' }: continue
-		p(f'{pre}group "{name}" {b.t} {{')
-		ast_dump(b.sub, level=level+1, stream=stream)
+		b_name = b.name.s
+		if b_name in cut_groups: continue
+		p(f'{pre}group "{b_name}" {b.t} {{')
+		ast_dump(b.sub, b_name, level=level+1, stream=stream)
 		p(f'{pre}}}')
 	for b in ast.value:
-		name, t = b.name.s, b.type.vt
-		v = ( '<cut>' if re.search( r'geom\.((pos|size|res)_?)?'
-			r'[whxy]?|startup_id', name ) and t in {'int', 'double'} else ast.value_str(b.value) )
-		p(f'{pre}value "{name}" {t} {v};')
+		k, t = b.name.s, b.type.vt
+		for mn, mk, mt in cut_vals:
+			for m, v in (mn, name), (mk, k), (mt, t):
+				if m is ...: continue # "any" match
+				elif isinstance(m, str):
+					if m == v: continue
+				elif isinstance(m, set):
+					if v in m: continue
+				elif m.search(v): continue
+				break # no match
+			else: break # full match found
+		else: m = None
+		v = ast.value_str(b.value) if m is None else '<cut>'
+		p(f'{pre}value "{k}" {t} {v};')
 	if stream_return: return stream.getvalue()
 
 def clean_file(p, eet_key):
