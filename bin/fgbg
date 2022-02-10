@@ -418,7 +418,7 @@ class ImagePicker:
 			self.p_list.extend((root, p) for p in (self.p_map[root] - p_set))
 			if p_list_nx_cleanup: # only used when bumping into removed files
 				nx_paths = p_set - self.p_map[root]
-				self.p_list = list(filter((root, p) for root, p in self.p_list if p not in nx_paths))
+				self.p_list = list((root, p) for root, p in self.p_list if p not in nx_paths)
 
 	def _p_list_get(self):
 		delta, p_list_updated = self.opts.dir_refresh_interval, False
