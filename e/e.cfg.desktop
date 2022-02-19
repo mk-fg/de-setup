@@ -2195,6 +2195,7 @@ group "E_Config" struct {
   value "always_click_to_raise" int 1;
   value "auto_raise_delay" double 0.5000000000000000000000000;
   value "backlight.battery_timer" double 0.0000000000000000000000000;
+  value "backlight.ddc" uchar 1;
   value "backlight.dim" double 0.2999999999999999888977698;
   value "backlight.idle_dim" uchar 0;
   value "backlight.normal" double 1.0000000000000000000000000;
@@ -2224,7 +2225,7 @@ group "E_Config" struct {
   value "clientlist_warp_to_iconified_desktop" int 0;
   value "cnfmdlg_disabled" int 0;
   value "config_type" uint 3;
-  value "config_version" int 1000034;
+  value "config_version" int 1000035;
   value "cursor_size" int 32;
   value "default_system_menu" string "/usr/etc/xdg/menus/enlightenment.menu";
   value "desk_auto_switch" int 0;
@@ -2279,6 +2280,7 @@ group "E_Config" struct {
   value "gadget_resist" int 32;
   value "geometry_auto_move" int 1;
   value "geometry_auto_resize_limit" int 1;
+  value "gesture_open_input_devices" uchar 0;
   value "icon_theme" string "Tango";
   value "icon_theme_overrides" uchar 0;
   value "idle_cursor" uchar 1;

@@ -1875,7 +1875,15 @@ group "E_Config" struct {
       value "name" string "battery";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "battery";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "clock";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "clock";
     }
     group "E_Config_Module" struct {
@@ -1883,7 +1891,15 @@ group "E_Config" struct {
       value "name" string "conf";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "conf_applications";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "conf_applications";
     }
     group "E_Config_Module" struct {
@@ -1891,7 +1907,15 @@ group "E_Config" struct {
       value "name" string "conf_bindings";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_bindings";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "conf_dialogs";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "conf_dialogs";
     }
     group "E_Config_Module" struct {
@@ -1899,7 +1923,15 @@ group "E_Config" struct {
       value "name" string "conf_display";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_display";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "conf_interaction";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "conf_interaction";
     }
     group "E_Config_Module" struct {
@@ -1907,7 +1939,15 @@ group "E_Config" struct {
       value "name" string "conf_intl";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_intl";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "conf_menus";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "conf_menus";
     }
     group "E_Config_Module" struct {
@@ -1915,7 +1955,15 @@ group "E_Config" struct {
       value "name" string "conf_paths";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_paths";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "conf_performance";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "conf_performance";
     }
     group "E_Config_Module" struct {
@@ -1923,7 +1971,15 @@ group "E_Config" struct {
       value "name" string "conf_randr";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_randr";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "conf_shelves";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "conf_shelves";
     }
     group "E_Config_Module" struct {
@@ -1931,11 +1987,23 @@ group "E_Config" struct {
       value "name" string "conf_theme";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_theme";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
       value "name" string "conf_window_manipulation";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "conf_window_manipulation";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "conf_window_remembers";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "conf_window_remembers";
     }
     group "E_Config_Module" struct {
@@ -1952,6 +2020,10 @@ group "E_Config" struct {
     }
     group "E_Config_Module" struct {
       value "enabled" uchar 0;
+      value "name" string "everything";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "fileman";
     }
     group "E_Config_Module" struct {
@@ -1963,11 +2035,23 @@ group "E_Config" struct {
       value "name" string "gadman";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "gadman";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
       value "name" string "ibar";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "ibar";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "ibox";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "ibox";
     }
     group "E_Config_Module" struct {
@@ -1976,10 +2060,22 @@ group "E_Config" struct {
     }
     group "E_Config_Module" struct {
       value "enabled" uchar 0;
+      value "name" string "lokker";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "luncher";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "mixer";
     }
     group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "msgbus";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "msgbus";
     }
     group "E_Config_Module" struct {
@@ -1995,7 +2091,15 @@ group "E_Config" struct {
       value "name" string "polkit";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "polkit";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "shot";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "shot";
     }
     group "E_Config_Module" struct {
@@ -2007,11 +2111,27 @@ group "E_Config" struct {
       value "name" string "syscon";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "syscon";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "sysinfo";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
       value "name" string "systray";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "systray";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "tasks";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "tasks";
     }
     group "E_Config_Module" struct {
@@ -2023,140 +2143,20 @@ group "E_Config" struct {
       value "name" string "temperature";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 0;
+      value "name" string "time";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 1;
+      value "name" string "winlist";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "winlist";
     }
     group "E_Config_Module" struct {
       value "enabled" uchar 1;
       value "name" string "xkbswitch";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "battery";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "clock";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_applications";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_bindings";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_dialogs";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_display";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_interaction";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_intl";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_menus";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_paths";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_performance";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_randr";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_shelves";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_theme";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_window_manipulation";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "conf_window_remembers";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "everything";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "gadman";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "ibar";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "ibox";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "lokker";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "luncher";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "msgbus";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "polkit";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "shot";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "syscon";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "sysinfo";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "systray";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "tasks";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "time";
-    }
-    group "E_Config_Module" struct {
-      value "enabled" uchar 0;
-      value "name" string "winlist";
     }
     group "E_Config_Module" struct {
       value "enabled" uchar 0;
@@ -2258,6 +2258,7 @@ group "E_Config" struct {
   value "always_click_to_raise" int 1;
   value "auto_raise_delay" double 0.5000000000000000000000000;
   value "backlight.battery_timer" double 0.0000000000000000000000000;
+  value "backlight.ddc" uchar 1;
   value "backlight.dim" double 0.2999999999999999888977698;
   value "backlight.idle_dim" uchar 0;
   value "backlight.normal" double 1.0000000000000000000000000;
@@ -2287,7 +2288,7 @@ group "E_Config" struct {
   value "clientlist_warp_to_iconified_desktop" int 0;
   value "cnfmdlg_disabled" int 0;
   value "config_type" uint 3;
-  value "config_version" int 1000034;
+  value "config_version" int 1000035;
   value "cursor_size" int 32;
   value "default_system_menu" string "/usr/etc/xdg/menus/enlightenment.menu";
   value "desk_auto_switch" int 0;
@@ -2342,6 +2343,7 @@ group "E_Config" struct {
   value "gadget_resist" int 32;
   value "geometry_auto_move" int 1;
   value "geometry_auto_resize_limit" int 1;
+  value "gesture_open_input_devices" uchar 0;
   value "icon_theme" string "Tango";
   value "icon_theme_overrides" uchar 0;
   value "idle_cursor" uchar 1;
@@ -4001,7 +4003,7 @@ group "Config" struct {
 }
 ----- file: ~/.e/e/config/standard/systray.cfg
 group "Systray_Config" struct {
-  value "dbus" string ":1.1";
+  value "dbus" string <cut>;
 }
 ----- file: ~/.e/elementary/config/default/base.cfg
 group "Elm_Config" struct {
