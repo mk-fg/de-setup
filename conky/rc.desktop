@@ -84,8 +84,7 @@ ${template4 80 60 swap Swap}
 ${color lightgrey}Processes:$color $processes  \
 ${color lightgrey}Running:$color $running_processes\
 ${alignr}\
-${template3 cpu k10temp-0-c3__temp1_input 68}\
-${color lightgrey}, ${template3 mb atk0110-0-0__temp2_input 60}\
+${template3 cpu coretemp-0-0__temp1_input 68}\
 ${color lightgrey}, ${template3 gpu re:amdgpu[-]0[-]%d+__temp1_input 80}\
 ${if_empty ${lua file_cap_read Apple Wireless}}${else}${color lightgrey}, kb_batt: ${color}${lua file_cap_read Apple Wireless}${endif}
 ${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00}
@@ -114,17 +113,17 @@ ${alignr}${color light slate gray}${top_io pid 1} ${top_io name 1}
 ${color light slate gray}${diskiograph /dev/sda 30,400 3333aa aa3333 0 -t -l}
 \
 $color$stippled_hr
-${color lightgrey}Net_leech: ${template7 wlan0 0} / ${template7 enp1s0 1} ${lua_parse rings_marker net_down}${color lightgrey} / ${template7 ppp0 2}\
-${alignr}${color lightgrey}Net_seed: ${template8 wlan0 0} / ${template8 enp1s0 1} ${lua_parse rings_marker net_up}${color lightgrey} / ${template8 ppp0 2}
+${color lightgrey}Net_leech: ${template7 wlan0 0} / ${template7 enp3s0 1} ${lua_parse rings_marker net_down}${color lightgrey} / ${template7 ppp0 2}\
+${alignr}${color lightgrey}Net_seed: ${template8 wlan0 0} / ${template8 enp3s0 1} ${lua_parse rings_marker net_up}${color lightgrey} / ${template8 ppp0 2}
 \
 ${if_up wlan0}${template6 wlan0 0}
-${endif}${if_up enp1s0}${template6 enp1s0 1}
+${endif}${if_up enp3s0}${template6 enp3s0 1}
 ${endif}${if_up ppp0}${template6 ppp0 2}
 ${endif}\
 \
-${color lightgrey}IPs: ${template5 wlan0 0} / ${template5 enp1s0 1} / ${template5 ppp0 2}\
-${if_up wlan0}${alignr}${color lightgrey}Signal:$color ${wireless_link_qual_perc wlan0}%\
- (${wireless_essid wlan0}, ${wireless_bitrate wlan0})${endif}
+${color lightgrey}IPs: ${template5 core 0} / ${template5 wlan_usb 1} / ${template5 vde 2}\
+${if_up wlan_usb}${alignr}${color lightgrey}Signal:$color ${wireless_link_qual_perc wlan_usb}%\
+ (${wireless_essid wlan_usb}, ${wireless_bitrate wlan_usb})${endif}
 # \
 # $color$stippled_hr
 # ${color #ddaa00}Ports${alignr}Conns
