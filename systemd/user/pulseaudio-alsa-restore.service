@@ -1,0 +1,14 @@
+[Unit]
+Before=sound.target
+Wants=pulseaudio.service
+After=pulseaudio.service
+
+[Service]
+Type=oneshot
+SyslogIdentifier=%p
+ExecStart=sleep 2
+ExecStart=sh -c 'set -x; for c in Master Headphone Front ; do amixer -qc PCH set $$c unmute ; done'
+ExecStart=sh -c 'set -x; for c in Master=92% Headphone+LO=100% PCM=100% ; do amixer -qc PCH sset $${c%=*} $${c#*=} ; done'
+
+[Install]
+WantedBy=startx.target
