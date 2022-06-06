@@ -2,7 +2,7 @@
 
 import itertools as it, functools as ft, ctypes as ct, pathlib as pl
 import subprocess as sp, dataclasses as dc, hashlib as hl
-import os, sys, re, random, math, time, signal, base64, errno
+import os, sys, re, random, math, time, signal, base64, errno, warnings
 
 p_err = ft.partial(print, file=sys.stderr, flush=True)
 gather_wrap = lambda t: (lambda func: (lambda *a,**k: t(func(*a,**k))))
@@ -354,6 +354,7 @@ def image_magick(p_src, p_dst, opts, dpy, desktop_label=None, dst_fmt='png24'):
 					outline_color=opts.label_color_outline, outline_hard=1, outline_blur=5,
 					font_size=opts.label_font_size, font_path=opts.label_font_path )
 
+		img.strip() # mostly to remove icc color profiles that cause libpng warnings in WMs
 		img.save(filename=f'{dst_fmt}:{p_dst}')
 
 
@@ -369,6 +370,13 @@ class ImagePickerOpts:
 	desktop_same: bool; proc: any
 	dir_refresh_interval: float = 12*3600; proc_retries: int = 8
 	cleanup: bool = True; cleanup_chance: float = 0.05; cleanup_size: int = 1000 * 2**20
+
+class ImagePath(pl.PosixPath):
+	__slots__ = 'img_src',
+	@classmethod
+	def with_src_path(cls, p_src, p):
+		(p := cls(p)).img_src = p_src
+		return p
 
 class ImagePicker:
 
@@ -465,7 +473,7 @@ class ImagePicker:
 		for n in range(self.opts.proc_retries):
 			p_src = self._p_list_get()
 			p = self.proc_image_base(p_src, dpy)
-			if p: return p
+			if p: return ImagePath.with_src_path(p_src, p)
 			p_err(f'----- [retry count: {n+1} / {self.opts.proc_retries}]')
 		raise ImagePickerError(f'Failed to process bg image(s) after {n+1} attempts')
 
@@ -484,11 +492,23 @@ class ImagePicker:
 			yield p, dpy, x, y
 
 	def _proc_error_wrapper(func):
+		warn_skip_img, warn_skip = None, set()
 		@ft.wraps(func)
 		def _wrapper(self, p, *args, **kws):
-			try: return func(self, p, *args, **kws)
+			nonlocal warn_skip_img, warn_skip
+			p_src = getattr(p, 'img_src', p)
+			if warn_skip and warn_skip_img != p_src: warn_skip.clear()
+			try:
+				with warnings.catch_warnings(record=True) as wrns:
+					# Change always -> error here to raise exceptions for full tracebacks
+					warnings.filterwarnings('always', message='.', module=r'^wand\.')
+					warn_skip_img, res = p_src, func(self, p, *args, **kws)
+					for w in wrns: # can usually be fixed by running "mogrify" on source
+						if (wm := str(w.message)) in warn_skip or warn_skip.add(wm): continue
+						p_err(f'----- WARNING: Non-fatal issue in image processing [ {p_src} ] - {wm}')
+					return res
 			except Exception as err:
-				p_err(f'----- ERROR: Failed to process image [ {p} ] - {err}')
+				p_err(f'----- ERROR: Failed to process image [ {p_src} ] - {err}')
 				import traceback
 				traceback.print_exc(file=sys.stderr)
 				sys.stderr.flush()
