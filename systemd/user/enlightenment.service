@@ -6,9 +6,15 @@ After=xorg.target
 Before=background.target xsettings.service
 
 [Service]
-SyslogIdentifier=%p
-KillMode=none
-StandardOutput=null
-StandardError=null
+Type=notify
 Environment=E_START=enlightenment
-ExecStart=/bin/bash -c "exec busybox svlogd -r _ -ttt %h/.e/logs < <(exec enlightenment -locked)"
+ExecStart=/usr/bin/enlightenment -locked
+Restart=always
+RestartPreventExitStatus=0
+RestartSec=2
+StartLimitInterval=50
+StartLimitBurst=6
+KillMode=process
+WatchdogSec=30
+TimeoutSec=15
+NotifyAccess=all
