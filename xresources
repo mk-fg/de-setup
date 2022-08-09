@@ -1,3 +1,6 @@
+! Apply changes: xrdb -merge ~/.Xresources
+! Apps dont usually pick those up until restart, e.g. xterm
+
 XTerm*color0: #000000
 XTerm*color1: #b21818
 XTerm*color2: #54FF54
@@ -15,7 +18,7 @@ XTerm*color13: #FF54FF
 XTerm*color14: #54FFFF
 XTerm*color15: #FFFFFF
 XTerm*background: #001800
-XTerm*foreground: #6ad468
+XTerm*foreground: #79fe6c
 
 XTerm*allowSendEvents: false
 XTerm*allowTcapOps: true
@@ -40,6 +43,17 @@ XTerm*showMissingGlyphs: true
 XTerm*metaSendsEscape: true
 XTerm*formatOtherKeys: 0
 XTerm*modifyOtherKeys: 1
+
+!! selectToClipboard also enables paste from it, but "select" part is bad
+XTerm*selectToClipboard: false
+XTerm*keepClipboard: true
+XTerm*VT100.Translations: #override \
+	Shift <KeyPress> Insert: insert-selection(CLIPBOARD) \n\
+	Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
+	Ctrl Shift <Key>C: copy-selection(CLIPBOARD) \n\
+	Ctrl <Btn1Up>: exec-formatted("xdg-open '%t'", PRIMARY)
+!! all printable ascii are "word chars" for copy-paste purposes
+XTerm*charClass: 33-126:48
 
 yeahconsole*restart: 0
 yeahconsole*consoleHeight: 30
