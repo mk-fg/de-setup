@@ -1,5 +1,5 @@
 #!/bin/sh
 echo 700 >/proc/$$/oom_score_adj
-exec terminology "$@"
-# exec xterm -u8 "$@"
+exec xterm -u8 "$@"
+# exec terminology "$@"
 # exec urxvt -bg '#001800' -fg '#6ad468' -fn fixed +ptab +sb $@
