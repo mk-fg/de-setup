@@ -87,7 +87,7 @@ local function lavfi_vis_init(force)
 	-- Filter Docs: https://ffmpeg.org/ffmpeg-filters.html
 	-- Fancy Examples: https://trac.ffmpeg.org/wiki/FancyFilteringExamples
 
-	local size_bg, size_fg = '960x768', '960x200'
+	local size_bg = '960x768'
 	local filter_bg = lavfi_filter_string{
 		'showcqt', {
 			fps = 30,
@@ -105,12 +105,14 @@ local function lavfi_vis_init(force)
 			tlength = "'st(0,0.17); 384*tc / (384 / ld(0)"..
 				" + tc*f /(1-ld(0))) + 384*tc / (tc*f / ld(0) + 384 /(1-ld(0)))'" } }
 		-- 'format=yuv420p' }
-	local filter_fg = lavfi_filter_string{ 'avectorscope',
-		{mode='lissajous_xy', size=size_fg, rate=30, scale='cbrt', draw='dot', zoom=1.5} }
+
+	local filter_fg = lavfi_filter_string{'showvolume', {
+		w=960, h=20, dm=3,
+		c='PEAK*255 + floor((1-PEAK)*255)*256 + 0xd06e0000' }}
 
 	local overlay = lavfi_filter_string{'overlay', {format='yuv420'}}
-	lavfi_vis = ' asplit=3 [ao][a1][a2]; [a1] '..
-		filter_bg..' [v1]; [a2] '..filter_fg..' [v2]; [v1][v2] '..overlay..' [vo]'
+	lavfi_vis = ' asplit=3 [ao][a1][a2];'..
+		' [a1] '..filter_bg..' [v1]; [a2] '..filter_fg..' [v2]; [v1][v2] '..overlay..' [vo]'
 
 	-- These opts help window to not blink size briefly when switching tracks
 	mp.set_property('options/keepaspect', 'no')
