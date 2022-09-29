@@ -3519,7 +3519,7 @@ group "Comp_Config" struct {
   value "indirect" uchar 0;
   value "max_unmapped_time" int 36000;
   value "min_unmapped_time" int 300;
-  value "no_dither" uchar 0;
+  value "no_dither" uchar 1;
   value "nocomp_fs" uchar 1;
   value "nofade" uchar 0;
   value "send_dump" uchar 1;
@@ -9679,80 +9679,6 @@ group "Elm_Config" struct {
   }
   group "color_palette" list {
     group "Elm_Custom_Palette" struct {
-      group "color_list" list {
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 0;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 255;
-          value "r" uint 0;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 255;
-          value "g" uint 0;
-          value "r" uint 0;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 255;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 255;
-          value "g" uint 255;
-          value "r" uint 0;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 255;
-          value "g" uint 0;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 90;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 0;
-          value "g" uint 180;
-          value "r" uint 255;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 151;
-          value "g" uint 142;
-          value "r" uint 92;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 59;
-          value "g" uint 68;
-          value "r" uint 41;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 68;
-          value "g" uint 46;
-          value "r" uint 41;
-        }
-        group "Elm_Color_RGBA" struct {
-          value "a" uint 255;
-          value "b" uint 55;
-          value "g" uint 40;
-          value "r" uint 68;
-        }
-      }
       value "palette_name" string "default";
     }
     group "Elm_Custom_Palette" struct {
@@ -10800,7 +10726,7 @@ group "Config" struct {
   value "shine" int 255;
   value "show_tabs" uchar 0;
   value "tab_zoom" double 0.5000000000000000000000000;
-  value "theme" string "dark-fir.edj";
+  value "theme" string "default.edj";
   value "translucent" uchar 0;
   value "ty_escapes" uchar 1;
   value "urg_bell" uchar 1;
