@@ -1,0 +1,15 @@
+[Unit]
+Wants=arc-term.slice
+After=startx.target
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=true
+
+# Cleanup sshfs and similar other-subsystem-blocking pids started from terminals
+ExecStop=sh -c 'systemctl --user kill -s TERM arc-term.slice \
+	&& { cgrc -qi.1 -t2 arc-term || systemctl --user kill -s KILL arc-term.slice; }'
+
+[Install]
+WantedBy=startx.target
