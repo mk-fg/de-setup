@@ -6,10 +6,16 @@ My configuration and customization bits for WM/DEs.
 
 Currently includes stuff for `Enlightenment <http://enlightenment.org>`_ (E17+).
 
-Feel free to reuse any of this stuff as you see fit.
+Feel free to reuse any of this as you see fit.
 
 .. contents::
   :backlinks: none
+
+Repository URLs:
+
+- https://github.com/mk-fg/de-setup
+- https://codeberg.org/mk-fg/de-setup
+- https://fraggod.net/code/git/de-setup
 
 
 
