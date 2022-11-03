@@ -55,7 +55,7 @@ conky.config = {
 	template6 = '${color\\2}${downspeedgraph \\1 30,190 aa3333 3333aa 0 -t -l}${alignr}${color\\2}${upspeedgraph \\1 30,190 3333aa aa3333 0 -t -l}',
 	template7 = '${color\\2}${downspeed \\1}${color lightgrey}',
 	template8 = '${color\\2}${upspeed \\1}${color lightgrey}',
-	template9 = '${color light slate gray}${if_match ${cpu cpu\\1} >= 85}${color red}${endif}${tab 10}${cpubar cpu\\1 5,90}',
+	template9 = '${color light slate gray}${if_match ${cpu cpu\\1} >= 85}${color red}${endif}${tab 7}${cpubar cpu\\1 5,60}',
 
 	lua_load = '~/.conkyrc.rings.lua',
 	lua_draw_hook_pre = 'rings_draw',
@@ -77,14 +77,14 @@ ${color lightgrey}sunset: ${color #fad6a5}${lua sun_event_time set}${color}
 \
 $stippled_hr
 ${color lightgrey}CPU ${lua_parse rings_marker cpu}${tab 20}$color$cpu% (${freq_g})${tab 60}${color light slate gray}${cpubar}
-${template9 1}${template9 2}${template9 3}${template9 4}
+${template9 1}${template9 2}${template9 3}${template9 4}${template9 5}${template9 6}
 \
 ${template4 90 70 mem RAM}
 ${template4 80 60 swap Swap}
 ${color lightgrey}Processes:$color $processes  \
 ${color lightgrey}Running:$color $running_processes\
 ${alignr}\
-${template3 cpu coretemp-0-0__temp1_input 68}\
+${template3 cpu k10temp-0-c3__temp1_input 68}\
 ${color lightgrey}, ${template3 gpu re:amdgpu[-]0[-]%d+__temp1_input 80}\
 ${if_empty ${lua file_cap_read Apple Wireless}}${else}${color lightgrey}, kb_batt: ${color}${lua file_cap_read Apple Wireless}${endif}
 ${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00}
