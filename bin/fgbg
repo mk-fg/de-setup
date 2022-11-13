@@ -10,9 +10,10 @@ gather_wrap = lambda t: (lambda func: (lambda *a,**k: t(func(*a,**k))))
 def hash_str(s, c=None, person=b'fgbg'):
 	if not isinstance(s, bytes):
 		s = hl.blake2s(s.encode(), person=person).digest()
-	s = base64.urlsafe_b64encode(s).decode().replace('-', '').replace('_', '').replace('=', '')
+	s = ( base64.urlsafe_b64encode(s)
+		.decode().translate(dict.fromkeys(b'-_=')) )
 	if c is None: return s
-	if len(s) < c: s = str_hash(s, c, person)
+	if len(s) < c: s = hash_str(s, c, person)
 	return s[:c]
 
 def hash_file(p, c=None, person=b'fgbg', chunk=1*2**20):
