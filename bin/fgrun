@@ -1,112 +1,66 @@
-#!/usr/bin/env python2
-# -*- coding: utf-8 -*-
-from __future__ import print_function
+#!/usr/bin/env python
 
-import itertools as it, operator as op, functools as ft
-from os.path import join, exists, expanduser, dirname, basename
-from contextlib import contextmanager, closing
-from tempfile import NamedTemporaryFile
-import os, sys, io, json, stat, subprocess
-
-dmenu_history = expanduser('~/.fgrun.history')
-dmenu_history_hwm = 10 * 2**10
-dmenu_cache = expanduser('~/.fgrun.cache')
-dmenu_args = ['-p', 'Run:', '-i', '-fn', 'Luxi Sans-8:normal']
-
-@contextmanager
-def replacement(path):
-	kws = dict( delete=False,
-		dir=dirname(path), prefix=basename(path)+'.' )
-	with NamedTemporaryFile(**kws) as tmp:
-		try:
-			yield tmp
-			tmp.flush()
-			os.rename(tmp.name, path)
-		finally:
-			try: os.unlink(tmp.name)
-			except (OSError, IOError): pass
-
-def mask_check(val, mask): return val & mask == mask
-
-_uid_gid = None
-def exec_check(st):
-	global _uid_gid
-	mode = st.st_mode
-	if mask_check(mode, stat.S_IXOTH): return True
-	if _uid_gid is None: _uid_gid = os.geteuid(), os.getegid()
-	uid, gid = _uid_gid
-	if st.st_gid == gid and mask_check(mode, stat.S_IXGRP): return True
-	if st.st_uid == uid and mask_check(mode, stat.S_IXUSR): return True
-	return False
-
-def clean_strings(values, index=None):
-	index, values = index and list(index), list(values)
-	if index is None: index = values
-	index = dict.fromkeys(index, True)
-	return filter(None, (v.strip() for v in values if index.pop(v, False)))
-
-def list_lines(values):
-	values = list(values)
-	values.append('')
-	return '\n'.join(values)
+import os, sys, pathlib as pl, subprocess as sp
 
 def main(args=None):
+	dmenu_history_hwm = 10 * 2**10
+	dmenu_history = pl.Path('~/.fgrun.history').expanduser()
+	dmenu_cache = pl.Path('~/.fgrun.cache').expanduser()
+	dmenu_cache_end = '-=puǝ=-'
+	dmenu_args = ['-p', 'Run:', '-i', '-fn', 'Luxi Sans-8:normal']
+
 	# Read caches
 	try:
-		with open(dmenu_cache) as src:
-			dcache = json.load(src)
-			dmenu_cache_ts = os.stat(dmenu_cache).st_mtime
-	except (OSError, IOError):
-		dcache, dmenu_cache_ts = dict(), 0
-	try:
-		with open(dmenu_history) as src:
-			history = filter(None, src.read().splitlines())
-	except (OSError, IOError): history = list()
+		dmenu_cache_ts = dmenu_cache.stat().st_mtime
+		dcache = dmenu_cache.read_text().split('\0')
+		if dcache[-1] != dmenu_cache_end: raise OSError
+		dcache = dict((s[0], s[1:]) for s in (s.split(' ') for s in dcache[:-1]))
+	except OSError: dcache, dmenu_cache_ts = dict(), 0
+	try: history = list(s for s in dmenu_history.read_text().splitlines() if s)
+	except OSError: history = list()
 	if os.environ.get('FGRUN_RECACHE'): dmenu_cache_ts = 0
 
 	# Update caches
-	dcache_change, bins, ps = False, set(), set()
-	for p in os.environ.get('PATH', '').split(':'):
-		if not p.strip(): continue
-		try: p_mtime = os.stat(p).st_mtime
-		except (OSError, IOError): continue
-		if p not in dcache or p_mtime > dmenu_cache_ts:
-			dcache_p = list()
-			dcache_change, dcache[p] = True, dcache_p
-			try: bs = os.listdir(p)
-			except (OSError, IOError): continue
-			for b in bs:
-				try:
-					if not exec_check(os.stat(join(p, b))): raise AssertionError
-				except (OSError, IOError, AssertionError): pass
-				else: dcache_p.append(b)
-		ps.add(p)
-	for p in set(dcache).difference(ps):
-		dcache_change = True
-		del dcache[p]
+	dcache_update, paths = False, set()
+	for s in os.environ.get('PATH', '').split(':'):
+		if not s.strip(): continue
+		try: p_mtime = (p := pl.Path(s).resolve(True)).stat().st_mtime
+		except OSError: continue
+		if (ps := str(p)) in paths: continue
+		if ps not in dcache or p_mtime > dmenu_cache_ts:
+			try: dcache[ps] = list(b for b in os.listdir(ps) if ' ' not in b)
+			except OSError: continue
+			dcache_update = True
+		paths.add(ps)
+	for ps in set(dcache).difference(paths):
+		del dcache[ps]; dcache_update = True
 
 	# Run dmenu
-	dmenu_list = clean_strings(list(it.chain(
-		reversed(history), it.chain.from_iterable(dcache.viewvalues()) )))
-	dmenu = subprocess.Popen(
-		['dmenu'] + dmenu_args,
-		stdin=subprocess.PIPE, stdout=subprocess.PIPE )
-	dmenu.stdin.write(list_lines(dmenu_list))
+	dmenu_list = dict.fromkeys(reversed(history))
+	for ext in dcache.values(): dmenu_list.update(dict.fromkeys(ext))
+	dmenu_list[''] = None
+	dmenu = sp.Popen(
+		['dmenu'] + dmenu_args, stdin=sp.PIPE, stdout=sp.PIPE )
+	dmenu.stdin.write('\n'.join(dmenu_list).encode())
 	dmenu.stdin.close()
-	del dmenu_list
-	b = dmenu.stdout.read().strip()
-	if dmenu.wait() != 0: b = None
+	run = dmenu.stdout.read().strip().decode()
+	if dmenu.wait() != 0: run = None
 
 	# Write caches, run app
-	if dcache_change:
-		with replacement(dmenu_cache) as tmp: json.dump(dcache, tmp)
-	if b:
-		if exists(dmenu_history) and os.stat(dmenu_history).st_size >= dmenu_history_hwm:
-			history.append(b)
-			history = list(reversed(clean_strings(reversed(history))))
-			with replacement(dmenu_history) as tmp: tmp.write(list_lines(history))
-		else:
-			with open(dmenu_history, 'a') as dst: dst.write(b + '\n')
-		os.execvp(b, [b] + sys.argv[1:])
+	if dcache_update:
+		(tmp := dmenu_cache.with_name(dmenu_cache.name + '.new')).write_text(
+			'\0'.join([*(' '.join([k,*v]) for k,v in dcache.items()), dmenu_cache_end]) )
+		tmp.rename(dmenu_cache)
+	if not run: return
+	try: hist_sz = dmenu_history.stat().st_size
+	except OSError: pass
+	history.append(run)
+	if hist_sz >= dmenu_history_hwm: # deduplicate
+		history = list(reversed(list(dict.fromkeys(reversed(history)))))
+	history.append('')
+	(tmp := dmenu_history.with_name(
+		dmenu_history.name + '.new' )).write_text('\n'.join(history))
+	tmp.rename(dmenu_history)
+	os.execvp(run, [run] + sys.argv[1:])
 
 if __name__ == '__main__': sys.exit(main())
