@@ -11,8 +11,9 @@ ExecReload=kill -HUP $MAINPID
 
 # Delay to give E time to adjust display resolutions
 ExecStartPre=sleep 3
-ExecStart=env fgbg -di 4:23:47 \
-	--desktop-same --process \
+ExecStart=env fgbg \
+	-di 4:23:47 --desktop-same --process \
+	-o 'm0; label_font_size=20; tall_scale=None' \
 	/mnt/volatiles/images ${HOME}/media/bgz
 
 WatchdogSec=300

@@ -518,10 +518,11 @@ class ImagePicker:
 	@_proc_error_wrapper
 	def proc_image_base(self, p, dpy):
 		if self.opts.proc:
-			self.opts.proc.magick.h_flip = random.random() < self.opts.proc.flip_chance
+			if isinstance(magick := self.opts.proc.magick, dict):
+				magick = magick.get(dpy.n, magick.get(None))
+			magick.h_flip = random.random() < self.opts.proc.flip_chance
 			img_hash = hash_file(p, person=self.opts.proc.hash_person)
-			img_hash = '\0'.join([ img_hash,
-				self.opts.proc.magick.opts_hash(), *map(str, [dpy.w, dpy.h]) ])
+			img_hash = '\0'.join([img_hash, magick.opts_hash(), *map(str, [dpy.w, dpy.h])])
 			img_hash = hash_str(img_hash, 16, self.opts.proc.hash_person)
 			k, k_prev, p_src = f'current.{dpy.n}', f'last.{dpy.n}', p
 			if k in self.proc_files:
@@ -531,7 +532,7 @@ class ImagePicker:
 			p = self.proc_files[k] = self.proc_dir / f'fgbg.{img_hash}.png'
 			if not p.exists():
 				p_tmp = self.proc_files['tmp'] = p.parent / (p.name + '.tmp')
-				try: image_magick(p_src, p_tmp, self.opts.proc.magick, dpy)
+				try: image_magick(p_src, p_tmp, magick, dpy)
 				except ImageMagickSkip:
 					self.p_skip.add(p_src)
 					return self.get_random_image(dpy)
@@ -673,9 +674,9 @@ def main(args=None):
 
 	group = parser.add_argument_group('Monitor and virtual desktop')
 	group.add_argument('-m', '--monitor',
-		action='append', type=int, metavar='n',
-		help='Physical monitor offset number to set'
-			' bg on (default: all). Can be specified multiple times.')
+		action='append', type=int, metavar='n', help=dd('''
+			Physical monitor offset number (starts from 0)
+				to set bg on (default: all). Can be specified multiple times.'''))
 	group.add_argument('-x', '--desktop-x',
 		action='append', type=int, metavar='n', help=dd('''
 			Desktop X offset to set bg on. Can be specified multiple times.
@@ -724,17 +725,26 @@ def main(args=None):
 			Use command like "fc-match -b \'sans-15\'" to check what it\'d resolve to.
 			Special value "none" disables it. Default: %(default)s'''))
 	group.add_argument('--random-name', action='store_true',
-		help='Generate randomized filename instead of predictable one.')
+		help='Generate randomized filenames'
+			' for resulting tmp-images, instead of predictable one(s).')
 	group.add_argument('--desktop-label-disable', action='store_true',
 		help=dd('''
 			Disable putting virtual desktop number overlay in the corner of the image.
-			It takes an extra image-processing pass to add these
+			It takes an extra image-processing pass to add these,
 				and resulting one-off images are stored in tmpfs instead of shared cache.'''))
 	group.add_argument('--desktop-label-style',
 		metavar='font-spec(:color)(:outline)(:ox)(:oy)',
 		default=':'.join(map(str, def_desktop_label)), help=dd('''
 			Font specification for per-virtual-desktop label for fontconfig.
 			Same format as --label-style. Default: %(default)s'''))
+	group.add_argument('-o', '--magick-opts', action='append',
+		metavar='[mN;]key1=value1;key2.key3=value2;...', help=dd('''
+			Any free-form processing options to assign as-is to ImageMagickOpts object.
+			Format example: m0; key1=value1; key2.key3=value2; ...
+			Keys are strings, which can be dot-separated to assign value to a child object.
+			Values should be in a "python literal" format, with no extra type conversion.
+			Optional m0, m1, ... prefix can be added to set monitor to apply these to.
+			Can be used multiple times, to apply all specified parameters.'''))
 
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
@@ -771,6 +781,28 @@ def main(args=None):
 			return ImageMagickOpts(
 				font_path, int(font_size), color_font, color_label, int(ox), int(oy) )
 		magick = _parse_label_style(opts.label_style, def_proc_label)
+
+		if opts.magick_opts:
+			import ast
+			updates = dict()
+			for opt_raw in map(str.strip, opts.magick_opts):
+				try:
+					dpy, opt = ( (int(m.group(1)), opt_raw[m.end():])
+						if (m := re.search('^[Mm](\d+)\s*;', opt_raw)) else (None, opt_raw) )
+					for opt in map(str.strip, opt.split(';')):
+						if not (opt := opt.strip()): continue
+						k, v = map(str.strip, opt.split('=', 1))
+						k, v = tuple(s.strip() for s in k.split('.', 1)), ast.literal_eval(v)
+						updates.setdefault(dpy, dict())[k] = v
+				except: parser.error(f'Failed to parse -o/--magick-opt string: {opt_raw}')
+			if set(updates).difference([None]): magick = {None: magick}
+			for dpy, upd in updates.items():
+				if dpy not in magick: magick[dpy] = magick[None]
+				for k, v in sorted(upd.items(), key=lambda v: (v is not None, v)):
+					if len(k) == 1: magick[dpy] = dc.replace(magick[dpy], **{k[0]: v})
+					else: setattr( magick[dpy], k[0],
+						dc.replace(getattr(magick[dpy], k[0]), **{k[1]: v}) )
+
 		desktop_label_opts = None
 		if not opts.desktop_label_disable:
 			desktop_label_opts = _parse_label_style(opts.desktop_label_style, def_desktop_label)
