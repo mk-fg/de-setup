@@ -7,7 +7,7 @@ def main(args=None):
 	dmenu_history = pl.Path('~/.fgrun.history').expanduser()
 	dmenu_cache = pl.Path('~/.fgrun.cache').expanduser()
 	dmenu_cache_end = '-=puǝ=-'
-	dmenu_args = ['-p', 'Run:', '-i', '-fn', 'Luxi Sans-8:normal']
+	dmenu_args = ['-p', 'Run:', '-i', '-m', '2', '-fn', 'Luxi Sans-8:normal']
 
 	# Read caches
 	try:
