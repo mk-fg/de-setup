@@ -698,6 +698,11 @@ def main(args=None):
 		help='Find running daemon pid(s) in /proc by script name, send SIGHUP and exit.')
 	group.add_argument('--fork', action='store_true',
 		help='Fork or indicate systemd startup only after setting initial background.')
+	group.add_argument('--no-image-proc-fork', action='store_true', help=dd('''
+			Do not fork for image processing - run as a single process.
+			Normally subprocess allows to not allocate memory required by imagemagick
+				in the main process, which will otherwise never be freed to the OS, causing
+				long-running process to grow to the requirements of the largest handled image.'''))
 	group.add_argument('--initial-delay', action='store_true',
 		help='Only set initial background after first interval of time passes.')
 	group.add_argument('--xprintidle-interval',
@@ -850,7 +855,13 @@ def main(args=None):
 				if not ts_idle:
 					dpy_list = dpy_info()
 					if mon_indexes: dpy_list = list(dpy_list[n] for n in mon_indexes)
-					set_bg_image(images, dpy_list, dx, dy)
+
+					if opts.no_image_proc_fork: set_bg_image(images, dpy_list, dx, dy)
+					elif pid := os.fork():
+						if os.waitpid(pid, 0)[1]: p_err('Failed to process/set bg image in a subprocess')
+					else:
+						set_bg_image(images, dpy_list, dx, dy)
+						exit(0)
 
 			if not daemon:
 				picker_opts.cleanup = False # keep processed files after exit, if any
