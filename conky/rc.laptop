@@ -115,9 +115,3 @@ ${endif}\
 ${color lightgrey}IPz: ${template5 wlp2s0 0} / ${template5 eth0 1} / ${template5 ppp0 2}\
 ${if_up wlp2s0}${alignr}${color lightgrey}Signal:$color ${wireless_link_qual_perc wlp2s0}%\
  (${wireless_essid wlp2s0}, ${wireless_bitrate wlp2s0})${endif}
-\
-$color$stippled_hr
-${color #ddaa00}Portz${alignr}Konnektionz
-$color ${color grey} Inbound: ${color #2266cc}${tcp_portmon 1 32767 count} ${color grey} Outbound: ${color #cc6622}${tcp_portmon 32768 65535 count}${alignr}${color grey}ALL: ${color #22cc22}${tcp_portmon 1 65535 count} $color
-# ${color #2266cc}${lua_parse conky_portmon in 2}
-# ${color #cc6622}${lua_parse conky_portmon out 20}

@@ -78,6 +78,7 @@ ${color lightgrey}sunset: ${color #fad6a5}${lua sun_event_time set}${color}
 $stippled_hr
 ${color lightgrey}CPU ${lua_parse rings_marker cpu}${tab 20}$color$cpu% (${freq_g})${tab 60}${color light slate gray}${cpubar}
 ${template9 1}${template9 2}${template9 3}${template9 4}${template9 5}${template9 6}
+${template9 7}${template9 8}${template9 9}${template9 10}${template9 11}${template9 12}
 \
 ${template4 90 70 mem RAM}
 ${template4 80 60 swap Swap}
