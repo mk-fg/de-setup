@@ -46,7 +46,7 @@ conky.config = {
 	color1 = 'darkgreen',
 	color2 = '4444cc',
 
-	template0 = '${color \\1}${top name \\2}${offset -30}${tab 40}${top pid \\2}${tab 20}${top cpu \\2}${tab 20}${top mem \\2}${tab 100}${top_mem name \\2}${offset -30}${tab 145}${top_mem pid \\2}${tab 165}${top_mem cpu \\2}${tab 185}${top_mem mem \\2}$color',
+	template0 = '${color \\1}${top cpu \\2}${goto 40}${top mem \\2}${goto 80}${top pid \\2}${goto 130}${top name \\2}${goto 200}${top_mem cpu \\2}${goto 235}${top_mem mem \\2}${goto 275}${top_mem pid \\2}${alignr}${top_mem name \\2}$color',
 	template1 = '${if_mounted \\2}${color lightgrey}\\1 ${lua_parse rings_marker fs_\\1}${tab 60 1}$color${if_match ${fs_free_perc \\2} <= \\3}${color red}${endif}${fs_free \\2} (${fs_free_perc \\2}%)${if_match ${fs_free_perc \\2} <= \\3}${blink !!!!!}${endif}${tab 90}${fs_bar \\2}$color${endif}',
 	template2 = '$color ${tcp_portmon \\1 \\2 rhost \\3} ${alignr} ${tcp_portmon \\1 \\2 \\4 \\3} $color',
 	template3 = '${color lightgrey}${if_empty ${lua sens_read \\2}}${else}${if_match ${lua sens_read \\2} > \\3}${color red}\\1: ${lua sens_read \\2}C${blink !!!}${else}\\1: ${color}${lua sens_read \\2}C${endif}${endif}',
