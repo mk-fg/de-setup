@@ -104,9 +104,9 @@ ${template0 gray 10}
 \
 $stippled_hr
 ${template1 root / 20}
-${template1 home /home 20}
-${template1 dump /mnt/volatiles 10}
-${template1 cans /var/lib/machines 20}
+${template1 vms /srv/vms 20}
+${template1 games /home/player 10}
+${template1 media /mnt/win-500 5}
 ${template1 tmp /tmp 30}
 ${color lightgrey}FS_read: ${color #99aaff}${diskio_read}\
   ${color lightgrey}FS_write: ${color #ffaa99}${diskio_write}\
