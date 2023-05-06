@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import itertools as it, functools as ft, ctypes as ct, pathlib as pl
-import subprocess as sp, dataclasses as dc, hashlib as hl
+import subprocess as sp, dataclasses as dcs, hashlib as hl
 import os, sys, re, random, math, time, signal, base64, errno, warnings
 
 p_err = ft.partial(print, file=sys.stderr, flush=True)
@@ -32,7 +32,7 @@ parse_time_delta = lambda spec: sum(a*b for a,b in zip(
 	[1, 60, 3600], reversed(list(map(float, spec.split(':', 2)))) ))
 
 
-@dc.dataclass
+@dcs.dataclass
 class DisplayInfo:
 	n:int; index:int; x:int; y:int; w:int; h:int; w_mm:int; h_mm:int; name:str
 
@@ -156,7 +156,7 @@ def set_bg_image(images, dpy_list, dx=None, dy=None):
 
 class ImageMagickSkip(Exception): pass
 
-@dc.dataclass
+@dcs.dataclass
 class ImageMagickTallScale:
 	gravity: float = 1/4 # 0-1.0, <0 to disable
 	bg_color: str = '#000' # empty - disabled
@@ -164,14 +164,14 @@ class ImageMagickTallScale:
 	edge_stretch_opacity: float = 0.7 # 0-1.0, 0 - disable
 	edge_stretch_blur: float = 3.0 # 0 - disable
 
-@dc.dataclass
+@dcs.dataclass
 class ImageMagickOpts:
 	label_font_path: str; label_font_size: int
 	label_color_font: str; label_color_outline: str
 	label_offset_x: int; label_offset_y: int
-	max_aspect_diff: float = 0.9; max_aspect_diff_scale: float = 0.3
-	h_flip: bool = False; tall_scale: any = ImageMagickTallScale() # None - disabled
-	def opts_hash(self): return str(dc.astuple(self))
+	max_aspect_diff: float = 0.9; max_aspect_diff_scale: float = 0.3; h_flip: bool = False
+	tall_scale: any = dcs.field(default_factory=ImageMagickTallScale) # None - disabled
+	def opts_hash(self): return str(dcs.astuple(self))
 
 def image_magick(p_src, p_dst, opts, dpy, desktop_label=None, dst_fmt='png24'):
 	'''Process image from source path
@@ -181,11 +181,11 @@ def image_magick(p_src, p_dst, opts, dpy, desktop_label=None, dst_fmt='png24'):
 	from wand.image import Image
 	from wand.drawing import Drawing
 
-	@dc.dataclass
+	@dcs.dataclass
 	class Box:
 		x1:int; y1:int; x2:int; y2:int
 		def __post_init__(self):
-			for k, v in dc.asdict(self).items(): setattr(self, k, round(v))
+			for k, v in dcs.asdict(self).items(): setattr(self, k, round(v))
 
 	ts_last = None
 	def _print_ts_delta(label): # to benchmark various ops
@@ -296,7 +296,7 @@ def image_magick(p_src, p_dst, opts, dpy, desktop_label=None, dst_fmt='png24'):
 				max(0, x - text_margin), max(0, y - text_margin),
 				min(img.width, x + (text_box.x2 - text_box.x1) + text_margin),
 				min(img.height, y + (text_box.y2 - text_box.y1) + text_margin) )
-			img_text.crop(*dc.astuple(img_text_box))
+			img_text.crop(*dcs.astuple(img_text_box))
 
 			# Hard inner outline edge
 			_pset( ctx, fill_color=outline_color,
@@ -361,12 +361,12 @@ def image_magick(p_src, p_dst, opts, dpy, desktop_label=None, dst_fmt='png24'):
 
 class ImagePickerError(Exception): pass
 
-@dc.dataclass
+@dcs.dataclass
 class ImageProcessingOpts:
 	cache: bool; hash_person: str; desktop_label: bool
 	flip_chance: float = 0.5; magick: any = None
 
-@dc.dataclass
+@dcs.dataclass
 class ImagePickerOpts:
 	desktop_same: bool; proc: any
 	dir_refresh_interval: float = 12*3600; proc_retries: int = 8
@@ -804,9 +804,9 @@ def main(args=None):
 			for dpy, upd in updates.items():
 				if dpy not in magick: magick[dpy] = magick[None]
 				for k, v in sorted(upd.items(), key=lambda v: (v is not None, v)):
-					if len(k) == 1: magick[dpy] = dc.replace(magick[dpy], **{k[0]: v})
+					if len(k) == 1: magick[dpy] = dcs.replace(magick[dpy], **{k[0]: v})
 					else: setattr( magick[dpy], k[0],
-						dc.replace(getattr(magick[dpy], k[0]), **{k[1]: v}) )
+						dcs.replace(getattr(magick[dpy], k[0]), **{k[1]: v}) )
 
 		desktop_label_opts = None
 		if not opts.desktop_label_disable:
