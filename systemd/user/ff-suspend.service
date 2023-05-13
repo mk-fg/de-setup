@@ -1,0 +1,13 @@
+[Service]
+Type=exec
+SyslogIdentifier=%p
+ExecStart=dash -c '\
+	sd() { systemctl -q --user $1 waterfox.scope; }; \
+	while :; do \
+		xdpms wait || exit 1; sleep 5; xdpms check || { \
+			sd is-active && sd freeze && thaw=t || thaw=; \
+			xiwait || exit 1; [[ -z "$thaw" ]] || sd thaw; }; \
+	done'
+
+[Install]
+WantedBy=startx.target
