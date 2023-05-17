@@ -7,8 +7,8 @@ After=pulseaudio.service
 Type=oneshot
 SyslogIdentifier=%p
 ExecStart=sleep 2
-ExecStart=sh -c 'set -x; for c in Master Front ; do amixer -qc Generic set $$c unmute ; done'
-ExecStart=sh -c 'set -x; for c in Master=92% PCM=100% ; do amixer -qc Generic sset $${c%=*} $${c#*=} ; done'
+ExecStart=sh -c 'for c in Master Front ; do amixer -qc Generic set $$c unmute ; done'
+ExecStart=sh -c 'for c in Master=92% PCM=100% ; do amixer -qc Generic sset $${c%=*} $${c#*=} ; done'
 
 [Install]
 WantedBy=startx.target
