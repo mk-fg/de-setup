@@ -12,9 +12,9 @@ local function _file_path()
 	if not p:match('^/')
 		then p = mp.get_property('working-directory'):gsub('/+$', '')..'/'..p end
 	if file_path_orig then -- resets stored values on mpv switching src files
-		if file_path_orig == p and file_path_new then p = file_path_new
-		else file_path_orig, file_path_new = nil end
-	end
+		if file_path_orig == p and file_path_new
+			then p = file_path_new else file_path_orig, file_path_new = nil
+	end end
 	return p
 end
 
@@ -47,8 +47,7 @@ local function file_ts_save()
 		return mp.msg.error(('time-pos-err: %s'):format(err or 'no-err-msg')) end
 	if ts < 60 then
 		return mp.msg.error('time-pos-err: time-pos is start of the file') end
-	hh = math.floor(ts / 3600)
-	mm = math.floor(ts % 3600 / 60)
+	hh, mm = math.floor(ts / 3600), math.floor(ts % 3600 / 60)
 	local ts = {}
 	if hh > 0 then table.insert(ts, ('%dh'):format(hh)) end
 	if mm > 0 then table.insert(ts, ('%dm'):format(mm)) end
