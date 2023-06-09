@@ -4,7 +4,7 @@
 
 My configuration and customization bits for WM/DEs.
 
-Currently includes stuff for `Enlightenment <http://enlightenment.org>`_ (E17+).
+Currently includes stuff for `Enlightenment <https://enlightenment.org>`_ (E17+).
 
 Feel free to reuse any of this as you see fit.
 
@@ -32,7 +32,7 @@ virtual desktop), use dmenu_ to launch more rare stuff or just run it from one
 of the terminals - yeahconsole_ on top or generic terminal window that's always
 open on desktop-1.
 
-.. _dmenu: http://tools.suckless.org/dmenu/
+.. _dmenu: https://tools.suckless.org/dmenu/
 .. _yeahconsole: http://phrat.de/yeahtools.html
 
 
@@ -60,10 +60,13 @@ user\@1000 daemon's "startx.target" - see stuff under "systemd" for more info.
 Enlightenment configs (e/e.cfg.*)
 ---------------------------------
 
-Created/processed by `e-config-backup <bin/e-config-backup>`_ tool (eet/TextX-based parser),
-and used to detect any new options between version upgrades, or (rare) `migrations between config schemas`_.
+Created/processed by e-config-backup_ tool (eet/TextX-based parser),
+and used to detect any new options between version upgrades, or (rare)
+`migrations between config schemas`_.
 
-.. _migrations between config schemas: http://blog.fraggod.net/2013/01/16/migrating-configuration-settings-to-e17-enlightenment-0170-from-older-e-versions.html
+.. _e-config-backup: bin/e-config-backup
+.. _migrations between config schemas:
+  https://blog.fraggod.net/2013/01/16/migrating-configuration-settings-to-e17-enlightenment-0170-from-older-e-versions.html
 
 
 Enlightenment Edje Themes (e/themes)
@@ -95,11 +98,13 @@ Use "make" to build it.
 
 .. raw:: html
 
-  <img src="http://blog.fraggod.net/images/conky_sensors.jpg" height="600px">
+  <img src="https://blog.fraggod.net/images/conky_sensors.jpg" height="600px">
 
-`Displaying any lm_sensors data in conky`_ blog post has more details on how it all works.
+`Displaying any lm_sensors data in conky`_ blog post has more details on how it
+all works.
 
-.. _Displaying any lm_sensors data in conky: http://blog.fraggod.net/2014/05/19/displaying-any-lm_sensors-data-temperature-fan-speeds-voltage-etc-in-conky.html
+.. _Displaying any lm_sensors data in conky:
+  https://blog.fraggod.net/2014/05/19/displaying-any-lm_sensors-data-temperature-fan-speeds-voltage-etc-in-conky.html
 
 
 mpv
@@ -126,8 +131,9 @@ decoded seconds, used/max state in dynamic B/K/M/G units), and then A/V bitrates
 
 Bitrates are generally useful when streaming stuff over network.
 
-fg.lavfi-audio-vis.lua
-``````````````````````
+fg.lavfi-audio-vis.lua_
+```````````````````````
+.. _fg.lavfi-audio-vis.lua: mpv/fg.lavfi-audio-vis.lua
 
 Parameter-tweaker script that abuses --lavfi-complex to produce visualizations
 (overlaid showcqt + avectorscope filters atm) for audio-only files if window is
@@ -136,22 +142,27 @@ stream in it (album art don't count).
 
 .. raw:: html
 
-  <img src="http://blog.fraggod.net/images/mpv-ffmpeg-vis.jpg" height="400px">
+  <img src="https://blog.fraggod.net/images/mpv-ffmpeg-vis.jpg" height="400px">
 
 I.e. some fancy dynamic swarming/flowing colors instead of just blank black square.
 
 Also includes client events to toggle visualization and other --lavfi-complex
-filtering (if any) on/off explicitly, regardless of whether it was enabled on start.
+filtering (if any) on/off explicitly, regardless of whether it was enabled on
+start.
 
 Can be used for key bindings, e.g. via something like ``y script-message
 fg.lavfi-audio-vis.on`` in input.conf, and I'm using that in a player frontend
 (`emms <https://github.com/mk-fg/emacs-setup/blob/master/core/fg_emms.el>`_).
 
-fg.file-rm-key.lua
-``````````````````
+fg.file-keys.lua_
+`````````````````
+.. _fg.file-keys.lua: mpv/fg.file-keys.lua
 
-Simple script "rm" currently-playing file, useful to cleanup whatever transient
-media files as you go through them, e.g. one-off downloaded stuff.
+Simple script to remove or manage playback timestamp in currently-playing
+filename, useful to cleanup or mark/seek whatever transient media files,
+as you go through them, e.g. one-off downloaded stuff from yt-dlp_.
+
+.. _yt-dlp: https://github.com/yt-dlp/yt-dlp
 
 
 xbindkeys
@@ -162,7 +173,8 @@ apparently common issue with this particular brand.
 
 More info in `Debounce bogus repeated mouse clicks`_ blog post.
 
-.. _Debounce bogus repeated mouse clicks: http://blog.fraggod.net/2016/05/15/debounce-bogus-repeated-mouse-clicks-in-xorg-with-xbindkeys.html
+.. _Debounce bogus repeated mouse clicks:
+  https://blog.fraggod.net/2016/05/15/debounce-bogus-repeated-mouse-clicks-in-xorg-with-xbindkeys.html
 
 
 bin
@@ -200,7 +212,8 @@ Somewhat notable stuff:
 
   exclip_ is a more modern, fast and robust replacement for that hack.
 
-  .. _exclip: http://blog.fraggod.net/2018/04/10/linux-x-desktop-clipboard-keys-via-exclip-tool.html
+  .. _exclip:
+    https://blog.fraggod.net/2018/04/10/linux-x-desktop-clipboard-keys-via-exclip-tool.html
 
 - xinitrc.\* - tweaks for various X input/display parameters like keyboard rates
   and layouts, dpms, mouse/touchpad stuff, xmodmap, etc.
@@ -208,16 +221,16 @@ Somewhat notable stuff:
   Useful to keep these outside of xorg.conf to be able to change re-apply them
   at any time without having to restart anything or remember all the commands again.
 
-- `e-config-backup <bin/e_config_backup>`_
+- e-config-backup_
 
-  Python3 + eet (EFL lib/tool) + TextX_-based parser script for Enlightenment (E17+)
-  config file(s), to backup these under e/ dir here.
+  Python3 + eet (EFL lib/tool) + TextX_-based parser script for Enlightenment
+  (E17+) config file(s), to backup these under e/ dir here.
 
   Whole purpose of decoding/encoding dance is to sort the sections
   (which E orders arbitrarily) and detect/filter-out irrelevant changes
   like remembered window positions or current (transient) wallpaper path.
 
-  .. _TextX: http://textx.github.io/textX/
+  .. _TextX: https://textx.github.io/textX/
 
 
 
