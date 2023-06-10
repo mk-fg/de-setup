@@ -1,0 +1,6 @@
+[Service]
+Type=oneshot
+StandardInput=socket
+StandardOutput=journal
+Restart=no
+ExecStart=bash -c 'read -rt1 url && [[ "$url" = mpv-* ]] && exec xdg-open "$url"'

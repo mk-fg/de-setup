@@ -1,0 +1,3 @@
+[Socket]
+SocketMode=0600
+ListenFIFO=%h/.mpv/urls.sock
