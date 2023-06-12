@@ -20,7 +20,7 @@ end
 
 local function _file_path_ts()
 	local p = _file_path()
-	local suff, ts, ext, hh, mm = p:match('(%.([%dhm -]+)%.([^.]+))$')
+	local suff, ts, ext, hh, mm = p:match('(%.([%dhm]+)%.([^.]+))$')
 	if ts then
 		hh, mm = ts:match('^(%d+)h[ _]*(%d+)m$')
 		if not hh then hh, mm = ts:match('^(%d+)h$'), 0 end
