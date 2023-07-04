@@ -8,7 +8,7 @@ local file_path_orig, file_path_new
 local function _file_path()
 	local p = mp.get_property('path')
 	if p:match(':') or p == '-' then return mp.msg.warn(
-		'SKIP: not removing currently-playing file, as it looks like an URL - '..p ) end
+		'SKIP: not using currently-playing file, as it looks like an URL - '..p ) end
 	if not p:match('^/')
 		then p = mp.get_property('working-directory'):gsub('/+$', '')..'/'..p end
 	if file_path_orig then -- resets stored values on mpv switching src files
@@ -20,6 +20,7 @@ end
 
 local function _file_path_ts()
 	local p = _file_path()
+	if not p then return end
 	local suff, ts, ext, hh, mm = p:match('(%.([%dhm]+)%.([^.]+))$')
 	if ts then
 		hh, mm = ts:match('^(%d+)h[ _]*(%d+)m$')
@@ -34,6 +35,7 @@ end
 
 local function file_rm()
 	local p = _file_path()
+	if not p then return mp.msg.info('skipped file removal') end
 	local done, err_msg, err_code = os.remove(p)
 	if not done
 		then mp.msg.error(('[OSError %s] %s'):format(err_code, err_msg))
@@ -42,6 +44,7 @@ end
 
 local function file_ts_save()
 	local p, hh, mm, p_tpl = _file_path_ts()
+	if not p then return mp.msg.info('skipped file renaming') end
 	local ts, err = mp.get_property_number('time-pos')
 	if not ts then
 		return mp.msg.error(('time-pos-err: %s'):format(err or 'no-err-msg')) end
@@ -61,6 +64,7 @@ end
 
 local function file_ts_seek()
 	local p, hh, mm = _file_path_ts()
+	if not p then return mp.msg.info('skipped file seek') end
 	if not hh then return mp.msg.error('seek-err: no time-pos info') end
 	local done, err = mp.commandv('seek', hh * 3600 + mm * 60, 'absolute')
 	if not done then
