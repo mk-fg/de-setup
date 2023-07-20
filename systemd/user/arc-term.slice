@@ -1,2 +1,5 @@
 [Slice]
 # Container slice for terminal and all shells and tui/cli apps running from there
+MemoryHigh=6G
+MemoryMax=8G
+MemorySwapMax=1G
