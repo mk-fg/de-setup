@@ -1506,6 +1506,10 @@ group "E_Config" struct {
       value "name" string "polkit";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "shot";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 0;
       value "name" string "shot";
     }
@@ -2623,6 +2627,13 @@ group "E_Config_Bindings" struct {
       value "params" string "emacs ~/bin/wrappers/emacs";
     }
     group "E_Config_Binding_Key" struct {
+      value "action" string "shot";
+      value "any_mod" uchar 0;
+      value "context" int 9;
+      value "key" string "Sys_Req";
+      value "modifiers" int 12;
+    }
+    group "E_Config_Binding_Key" struct {
       value "action" string "exec";
       value "any_mod" uchar 0;
       value "context" int 9;
@@ -2645,6 +2656,14 @@ group "E_Config_Bindings" struct {
       value "key" string "braceright";
       value "modifiers" int 11;
       value "params" string "pa_tweak -m media.role:music vol-set=0.3080";
+    }
+    group "E_Config_Binding_Key" struct {
+      value "action" string "exec";
+      value "any_mod" uchar 0;
+      value "context" int 9;
+      value "key" string "V";
+      value "modifiers" int 13;
+      value "params" string "exclip --tabs-to-spaces 0";
     }
   }
   group "mouse_bindings" list {
