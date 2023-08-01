@@ -1,3 +1,6 @@
+[Unit]
+After=xorg.target
+
 [Service]
 Type=exec
 SyslogIdentifier=%p
@@ -6,6 +9,11 @@ ExecStart=dash -c '\
 	while :; do xdpms wait || exit 1; sleep 5; xdpms check || { \
 		sd is-active && sd freeze && thaw=t || thaw=; \
 		xiwait || exit 1; [ -z "$thaw" ] || sd thaw; }; done'
+
+Restart=on-failure
+RestartSec=30
+StartLimitInterval=10min
+StartLimitBurst=5
 
 [Install]
 WantedBy=startx.target
