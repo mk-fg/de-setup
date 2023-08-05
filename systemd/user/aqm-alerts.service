@@ -1,4 +1,4 @@
 [Service]
 Type=exec
-ExecStart=env notify.aqm -z 127.0.0.1:8158 \
+ExecStart=env notify.aqm -z 127.0.0.1:8158 -c 3/10m \
 	-U critical -t0 -i aqm --udp-snooze 2h --exit-inactivity-timeout 15m
