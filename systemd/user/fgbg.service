@@ -13,7 +13,7 @@ ExecReload=kill -HUP $MAINPID
 ExecStartPre=sleep 3
 ExecStart=env fgbg \
 	-di 4:23:47 --desktop-same --process \
-	-o 'm0; label_font_size=20; tall_scale=None' \
+	-o 'm1; label_font_size=23; tall_scale=None' \
 	/mnt/volatiles/images ${HOME}/media/bgz
 
 WatchdogSec=300
