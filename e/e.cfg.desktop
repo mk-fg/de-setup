@@ -9236,7 +9236,7 @@ group "Elm_Config" struct {
       value "palette_name" string "painting";
     }
   }
-  value "accel_override" uchar 0;
+  value "accel_override" uchar 1;
   value "access_mode" uchar 0;
   value "atspi_mode" uchar 0;
   value "audio_mute_alert" uchar 0;

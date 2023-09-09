@@ -29,8 +29,7 @@ export XDG_DATA_DIRS="${HOME}/.xdg:/usr/share/enlightenment:/usr/share"
 
 # Agents
 init_zenv_file 2>/dev/null
-systemd-run --user --unit=ssh-agent -p Type=forking -- bash -c "ssh-agent | grep -v '^echo ' >>'$env_file'"
-systemd-run --user --unit=gpg-agent -p Type=forking -- gpg-agent --daemon
+systemd-run --user --unit=fg-ssh-agent -p Type=forking -- bash -c "ssh-agent | grep -v '^echo ' >>'$env_file'"
 source "$env_file"
 
 # Systemd env import and X start
