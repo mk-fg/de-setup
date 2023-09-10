@@ -24,7 +24,7 @@ source /etc/profile
 export DISPLAY=:1
 export VO_MAIN=0
 export VO_AUX=1
-export ELM_THEME=elm-efenniht
+export NO_AT_BRIDGE=1
 export GTK_MODULES="libcanberra-gtk-module.so"
 export XDG_DATA_DIRS="${HOME}/.xdg:/usr/share/enlightenment:/usr/share"
 [[ -r "$env_ext" ]] && source "$env_ext"
