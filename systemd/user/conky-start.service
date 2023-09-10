@@ -1,0 +1,7 @@
+[Service]
+Type=oneshot
+ExecStart=systemctl --user start "conky@bottom_left.${VO_MAIN}.service"
+ExecStart=systemctl --user start "conky@bottom_right.${VO_AUX}.service"
+
+[Install]
+WantedBy=startx.target

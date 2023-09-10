@@ -9,12 +9,12 @@ SyslogIdentifier=%p
 Type=notify
 ExecReload=kill -HUP $MAINPID
 
-# Delay to give E time to adjust display resolutions
-ExecStartPre=sleep 3
+# Delay to give E time to adjust display resolutions and w/e
+ExecStartPre=sleep 5
 ExecStart=env fgbg \
 	-di 4:23:47 --desktop-same --process \
-	-o 'm1; label_font_size=23; tall_scale=None' \
-	/mnt/volatiles/images ${HOME}/media/bgz
+	-o "m${VO_AUX}; label_font_size=23; tall_scale=None" \
+	/mnt/volatiles/images "${HOME}/media/bgz"
 
 WatchdogSec=300
 Restart=on-failure
