@@ -1,0 +1,6 @@
+[Socket]
+SocketMode=0600
+ListenFIFO=%h/.config/feh/screen.sock
+
+[Install]
+WantedBy=sockets.target

@@ -1,0 +1,5 @@
+[Service]
+Type=oneshot
+StandardInput=socket
+StandardOutput=journal
+ExecStart=feh-screen -F=-g=1920x1080+1920
