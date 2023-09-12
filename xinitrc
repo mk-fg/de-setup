@@ -21,9 +21,9 @@ init_zenv_file() {
 source /etc/profile
 
 # Misc env
+export LANG=en_US.utf8
+export LC_ALL=$LANG
 export DISPLAY=:1
-export VO_MAIN=0
-export VO_AUX=1
 export NO_AT_BRIDGE=1
 export GTK_MODULES="libcanberra-gtk-module.so"
 export XDG_DATA_DIRS="${HOME}/.xdg:/usr/share/enlightenment:/usr/share"
