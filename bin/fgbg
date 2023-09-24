@@ -732,6 +732,9 @@ def main(args=None):
 	group.add_argument('--random-name', action='store_true',
 		help='Generate randomized filenames'
 			' for resulting tmp-images, instead of predictable one(s).')
+	group.add_argument('--hflip-chance',
+		type=float, metavar='0-1.0', default=ImageProcessingOpts.flip_chance,
+		help='Chance of mirroring image horizontally, for extra variety. Default: %(default)s')
 	group.add_argument('--desktop-label-disable', action='store_true',
 		help=dd('''
 			Disable putting virtual desktop number overlay in the corner of the image.
@@ -814,7 +817,7 @@ def main(args=None):
 		proc_hash_person = 'fgbg.1'.encode() if not opts.random_name else os.urandom(8)
 		image_proc_opts = ImageProcessingOpts(
 			cache=not opts.no_cache, hash_person=proc_hash_person,
-			desktop_label=desktop_label_opts, magick=magick )
+			desktop_label=desktop_label_opts, flip_chance=opts.hflip_chance, magick=magick )
 
 	picker_opts = ImagePickerOpts(
 		proc=image_proc_opts, desktop_same=opts.desktop_same,
