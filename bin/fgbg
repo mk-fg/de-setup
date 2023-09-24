@@ -748,7 +748,7 @@ def main(args=None):
 	group.add_argument('-o', '--magick-opts', action='append',
 		metavar='[mN;]key1=value1;key2.key3=value2;...', help=dd('''
 			Any free-form processing options to assign as-is to ImageMagickOpts object.
-			Format example: m0; key1=value1; key2.key3=value2; ...
+			Example: -o 'm0; tall_scale.gravity=0.7' -o 'm1; label_font_size=23; tall_scale=None'
 			Keys are strings, which can be dot-separated to assign value to a child object.
 			Values should be in a "python literal" format, with no extra type conversion.
 			Optional m0, m1, ... prefix can be added to set monitor to apply these to.
@@ -803,14 +803,14 @@ def main(args=None):
 						k, v = tuple(s.strip() for s in k.split('.', 1)), ast.literal_eval(v)
 						updates.setdefault(dpy, dict())[k] = v
 				except: parser.error(f'Failed to parse -o/--magick-opt string: {opt_raw}')
-			if set(updates).difference([None]): magick = {None: magick}
 			for dpy, upd in updates.items():
-				if dpy not in magick: magick[dpy] = magick[None]
+				m = magick
 				for k, v in sorted(upd.items(), key=lambda v: (v is not None, v)):
-					if len(k) == 1: magick[dpy] = dcs.replace(magick[dpy], **{k[0]: v})
-					else: setattr( magick[dpy], k[0],
-						dcs.replace(getattr(magick[dpy], k[0]), **{k[1]: v}) )
-
+					if len(k) != 1: v = dcs.replace(getattr(m, k[0]), **{k[1]: v})
+					m = dcs.replace(m, **{k[0]: v})
+				updates[dpy] = m
+			if not set(updates).difference([None]): magick = updates[None]
+			else: magick, updates[None] = updates, magick
 		desktop_label_opts = None
 		if not opts.desktop_label_disable:
 			desktop_label_opts = _parse_label_style(opts.desktop_label_style, def_desktop_label)
