@@ -1306,6 +1306,10 @@ group "E_Config" struct {
       value "name" string "battery";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "clock";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 0;
       value "name" string "clock";
     }
@@ -1494,6 +1498,10 @@ group "E_Config" struct {
       value "name" string "notification";
     }
     group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "pager";
+    }
+    group "E_Config_Module" struct {
       value "enabled" uchar 0;
       value "name" string "pager";
     }
@@ -1528,6 +1536,10 @@ group "E_Config" struct {
     group "E_Config_Module" struct {
       value "enabled" uchar 0;
       value "name" string "sysinfo";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "systray";
     }
     group "E_Config_Module" struct {
       value "enabled" uchar 0;
