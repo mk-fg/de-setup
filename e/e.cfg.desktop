@@ -1299,6 +1299,10 @@ group "E_Config" struct {
   group "modules" list {
     group "E_Config_Module" struct {
       value "enabled" uchar 0;
+      value "name" string "appmenu";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 0;
       value "name" string "backlight";
     }
     group "E_Config_Module" struct {
@@ -1544,6 +1548,10 @@ group "E_Config" struct {
     group "E_Config_Module" struct {
       value "enabled" uchar 0;
       value "name" string "systray";
+    }
+    group "E_Config_Module" struct {
+      value "enabled" uchar 1;
+      value "name" string "tasks";
     }
     group "E_Config_Module" struct {
       value "enabled" uchar 0;
@@ -3035,12 +3043,10 @@ group "E_Gadget_Sites" struct {
     }
   }
 }
------ file: ~/.e/e/config/standard/e_randr.cfg
 ----- file: ~/.e/e/config/standard/e_randr2.cfg
 ----- file: ~/.e/e/config/standard/e_remember_restart.cfg
 group "E_Remember_List" struct {
 }
------ file: ~/.e/e/config/standard/evry_exebuf_cache.cfg
 ----- file: ~/.e/e/config/standard/exehist.cfg
 group "E_Exehist" struct {
   group "history" list {
@@ -3073,48 +3079,10 @@ group "Config" struct {
     }
   }
 }
------ file: ~/.e/e/config/standard/module.comp.cfg
-group "Comp_Config" struct {
-  group "match.borders" list {
-  }
-  group "match.menus" list {
-  }
-  group "match.overrides" list {
-  }
-  group "match.popups" list {
-  }
-  value "efl_sync" uchar 0;
-  value "engine" int 2;
-  value "first_draw_delay" double 0.1499999999999999944488849;
-  value "fps_average_range" int 30;
-  value "fps_corner" uchar 0;
-  value "fps_show" uchar 0;
-  value "grab" uchar 0;
-  value "indirect" uchar 0;
-  value "lock_fps" uchar 0;
-  value "loose_sync" uchar 1;
-  value "max_unmapped_time" int 36000;
-  value "min_unmapped_time" int 300;
-  value "nocomp_fs" uchar 0;
-  value "send_dump" uchar 1;
-  value "send_flush" uchar 1;
-  value "shadow_style" string "default";
-  value "smooth_windows" uchar 1;
-  value "swap_mode" uchar 0;
-  value "texture_from_pixmap" uchar 1;
-  value "vsync" uchar 1;
-}
 ----- file: ~/.e/e/config/standard/module.conf.cfg
 group "Config" struct {
   value "menu_augmentation" int 1;
   value "version" int 1000000;
-}
------ file: ~/.e/e/config/standard/module.cpufreq.cfg
-group "Cpufreq_Config" struct {
-  value "auto_powersave" int 1;
-  value "config_version" int 1;
-  value "poll_interval" int 32;
-  value "restore_governor" int 0;
 }
 ----- file: ~/.e/e/config/standard/module.everything-apps.cfg
 group "Module_Config" struct {
@@ -3185,48 +3153,6 @@ group "Config" struct {
   value "view_zoom" int 0;
   value "width" int 464;
 }
------ file: ~/.e/e/config/standard/module.fileman.cfg
-group "Fileman_Config" struct {
-  group "paths" list {
-  }
-  value "config_version" int 1000000;
-  value "icon.extension.show" uchar 1;
-  value "icon.fixed.h" uchar 0;
-  value "icon.fixed.w" uchar 0;
-  value "icon.icon.h" int 48;
-  value "icon.icon.w" int 48;
-  value "icon.list.h" int 16;
-  value "icon.list.w" int 16;
-  value "icon.max_thumb_size" uint 0;
-  value "list.sort.dirs.first" uchar 1;
-  value "list.sort.dirs.last" uchar 0;
-  value "list.sort.extension" uchar 0;
-  value "list.sort.mtime" uchar 0;
-  value "list.sort.no_case" uchar 1;
-  value "list.sort.size" uchar 0;
-  value "selection.single" uchar 0;
-  value "selection.windows_modifiers" uchar 0;
-  value "theme.fixed" uchar 0;
-  value "tooltip.delay" double 1.0000000000000000000000000;
-  value "tooltip.enable" uchar 1;
-  value "tooltip.size" double 30.0000000000000000000000000;
-  value "view.always_order" uchar 0;
-  value "view.desktop_navigation" uchar 0;
-  value "view.fit_custom_pos" uchar 0;
-  value "view.link_drop" uchar 0;
-  value "view.mode" int 1;
-  value "view.no_subdir_drop" uchar 0;
-  value "view.no_subdir_jump" uchar 0;
-  value "view.open_dirs_in_place" uchar 1;
-  value "view.selector" uchar 0;
-  value "view.show_desktop_icons" uchar 1;
-  value "view.show_full_path" uchar 0;
-  value "view.show_sidebar" uchar 0;
-  value "view.show_toolbar" uchar 0;
-  value "view.single_click" uchar 0;
-  value "view.spring_delay" int 1;
-  value "view.toolbar_orient" uint 5;
-}
 ----- file: ~/.e/e/config/standard/module.gadman.cfg
 group "Gadman_Config" struct {
   value "anim_bg" int 1;
@@ -3285,49 +3211,6 @@ group "IBox_Config" struct {
     }
   }
 }
------ file: ~/.e/e/config/standard/module.luncher.cfg
-group "Luncher_Config" struct {
-  group "items" list {
-    group "Luncher_Config_Item" struct {
-      value "dir" string "default";
-      value "hide_tooltips" int 0;
-      value "id" int 0;
-      value "preview_size" int 64;
-      value "type" int 0;
-      value "version" int 2;
-    }
-  }
-}
------ file: ~/.e/e/config/standard/module.mixer.cfg
-group "Mixer_Module_Config" struct {
-  group "gadgets" hash {
-    key "mixer.0";
-    group "Mixer_Gadget_Config" struct {
-      value "keybindings_popup" int 0;
-      value "lock_sliders" int 0;
-      value "show_locked" int 0;
-      value "state.left" int 0;
-      value "state.mute" int 0;
-      value "state.right" int 0;
-      value "using_default" uchar 0;
-    }
-  }
-  value "default_gc_id" string "mixer.0";
-  value "desktop_notification" int 1;
-  value "version" int 1000000;
-}
------ file: ~/.e/e/config/standard/module.notification.cfg
-group "Notification_Config" struct {
-  value "corner" int 1;
-  value "dual_screen" int 0;
-  value "force_timeout" int 0;
-  value "ignore_replacement" int 0;
-  value "show_critical" int 1;
-  value "show_low" int 0;
-  value "show_normal" int 1;
-  value "timeout" float 5.0000000000000000000000000;
-  value "version" int 1000000;
-}
 ----- file: ~/.e/e/config/standard/module.pager.cfg
 group "Pager_Config" struct {
   value "btn_desk" uchar 2;
@@ -3346,63 +3229,9 @@ group "Pager_Config" struct {
   value "popup_urgent_stick" uint 0;
   value "show_desk_names" uint 0;
 }
------ file: ~/.e/e/config/standard/module.pager_plain.cfg
-group "Pager_Config" struct {
-  value "btn_desk" uchar 2;
-  value "btn_drag" uchar 1;
-  value "btn_noplace" uchar 2;
-  value "disable_live_preview" uchar 1;
-  value "drag_resist" uint 3;
-  value "flip_desk" uchar 0;
-  value "popup" uint 0;
-  value "popup_act_height" int 60;
-  value "popup_height" int 60;
-  value "popup_speed" double 1.0000000000000000000000000;
-  value "popup_urgent" uint 0;
-  value "popup_urgent_speed" double 1.5000000000000000000000000;
-  value "popup_urgent_stick" uint 0;
-  value "show_desk_names" uint 1;
-}
 ----- file: ~/.e/e/config/standard/module.syscon.cfg
 group "Syscon_Config" struct {
   value "menu" uchar 0;
-}
------ file: ~/.e/e/config/standard/module.sysinfo.cfg
-group "Sysinfo_Config" struct {
-  group "items" list {
-    group "Sysinfo_Config_Item" struct {
-      value "batman.alert" int 30;
-      value "batman.alert_p" int 10;
-      value "batman.alert_timeout" int 0;
-      value "batman.desktop_notifications" int 0;
-      value "batman.force_mode" int 0;
-      value "batman.fuzzy" int 0;
-      value "batman.poll_interval" int 512;
-      value "batman.suspend_below" int 0;
-      value "batman.suspend_method" int 0;
-      value "cpuclock.auto_powersave" int 1;
-      value "cpuclock.poll_interval" int 32;
-      value "cpuclock.pstate_max" int 101;
-      value "cpuclock.pstate_min" int 1;
-      value "cpuclock.restore_governor" int 0;
-      value "cpumonitor.poll_interval" int 32;
-      value "esm" int 0;
-      value "id" int 0;
-      value "memusage.poll_interval" int 32;
-      value "netstatus.automax" int 1;
-      value "netstatus.inmax" int 0;
-      value "netstatus.outmax" int 0;
-      value "netstatus.poll_interval" int 32;
-      value "netstatus.receive_units" int 0;
-      value "netstatus.send_units" int 0;
-      value "thermal.high" int 80;
-      value "thermal.low" int 30;
-      value "thermal.poll_interval" int 128;
-      value "thermal.sensor_type" int 0;
-      value "thermal.units" int 0;
-      value "version" int 2;
-    }
-  }
 }
 ----- file: ~/.e/e/config/standard/module.tasks.cfg
 group "Tasks_Config" struct {
@@ -3441,24 +3270,6 @@ group "Tasks_Config" struct {
       value "text_only" uchar 0;
     }
   }
-}
------ file: ~/.e/e/config/standard/module.temperature.cfg
-group "Temperature_Config" struct {
-  group "faces" hash {
-    key "temperature.1";
-    group "Temperature_Config_Face" struct {
-      value "backend" int 0;
-      value "high" int 80;
-      value "id" string "temperature.1";
-      value "low" int 30;
-      value "poll_interval" int 128;
-      value "sensor_type" int 0;
-      value "units" int 0;
-    }
-  }
-}
------ file: ~/.e/e/config/standard/module.time.cfg
-group "Config" struct {
 }
 ----- file: ~/.e/e/config/standard/systray.cfg
 group "Systray_Config" struct {
