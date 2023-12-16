@@ -4,7 +4,7 @@
 
 My configuration and customization bits for WM/DEs.
 
-Currently includes stuff for `Enlightenment <https://enlightenment.org>`_ (E17+).
+Currently includes stuff for `Enlightenment <https://enlightenment.org>`_ (E17+) on X11.
 
 Feel free to reuse any of this as you see fit.
 
@@ -23,8 +23,8 @@ General Info
 ============
 
 It's not some cool tiling setup, as I prefer (and use) fullscreen windows on
-separate "virtual desktops" anyway. And where I don't (e.g. floating skype,
-terminals), just bind a key to position things at some fixed location/size
+separate "virtual desktops" anyway. And where I don't (e.g. floating messenger,
+terminals, mpv), just bind a key to position things at some fixed location/size
 and/or set these to be persistent for specific app windows.
 
 Don't use DE menu(s?) - either have a key to start what I need (on a constant
@@ -202,18 +202,12 @@ Somewhat notable stuff:
   aura_ background-setter project atm), and has plenty of scale/opacity/offset/blur
   and such options in ImageMagickOpts and ImageMagickTallScale dataclasses.
 
-  .. _ImageMagick: https://www.imagemagick.org/
-  .. _wand-py: https://docs.wand-py.org/
-  .. _aura: https://github.com/mk-fg/aura
-
 - `xclipc <bin/xclipc>`_ - obsoleted but useful key-bound script, for adding
   some processing to some "copy to clipboard" operations, as well as making
   these more universal wrt diff X selection buffers.
 
   exclip_ is a more modern, fast and robust replacement for that hack.
 
-  .. _exclip:
-    https://blog.fraggod.net/2018/04/10/linux-x-desktop-clipboard-keys-via-exclip-tool.html
 
 - xinitrc.\* - tweaks for various X input/display parameters like keyboard rates
   and layouts, dpms, mouse/touchpad stuff, xmodmap, etc.
@@ -230,7 +224,29 @@ Somewhat notable stuff:
   (which E orders arbitrarily) and detect/filter-out irrelevant changes
   like remembered window positions or current (transient) wallpaper path.
 
-  .. _TextX: https://textx.github.io/textX/
+- `cron.check.dev-nodes <bin/cron.check.dev-nodes>`_
+
+  Trivial script to read ~/.dev-nodes.checks.list with
+  ``<dev> <check> <dev name...>`` lines like::
+
+    /dev/disk/by-id/wwn-0x... unplug some external hdd
+    usb_wifi net-cut wifi temp usb ap
+
+  ...and issue persistent deduplicated desktop notifications if device needs to be
+  unplugged, network interface removed, and such physical-manipulation reminders,
+  to fix common "always forget about this thing" errors that are easily detectable.
+
+  Implemented as systemd timer + oneshot service.
+  Avoids creating duplicate notifications while one is already on-screen via
+  -w/--wait option of notify-send (to monitor "notification closed" signals),
+  and transient systemd-run units to keep these notification-bubble monitors around.
+
+.. _ImageMagick: https://www.imagemagick.org/
+.. _wand-py: https://docs.wand-py.org/
+.. _aura: https://github.com/mk-fg/aura
+.. _exclip:
+  https://blog.fraggod.net/2018/04/10/linux-x-desktop-clipboard-keys-via-exclip-tool.html
+.. _TextX: https://textx.github.io/textX/
 
 
 
@@ -240,25 +256,15 @@ Themes
 Don't really need much from these, as browser, mpv, emacs and terminal have
 their own styles, and I spend almost all in just these few apps.
 
-Used in claws-mail_ and dialog windows (e.g. rare "Select File" in browser) and
-context menus.
+Used in claws-mail_ and dialog windows (e.g. rare "Select File" in browser)
+and context menus.
 
-- Theme - `gnome-look.org/Breeze-Inspiration-Dark`_ (`L4ki/Inspiration`_)
+- Theme - default GTK dark-mode one, ~/.gtkrc-3.0::
 
-  Has some diffs between gtk2/gtk3 versions, with gtk2 one (still used in
-  claws-mail) having proper distinct borders but bogus highlighted-text color.
-
-  Tweaks:
-
-  - gtk.css: #131521 -> #1e3c61
-  - gtkrc: "selected_fg_color:#bbe6f2"
-
-- Common icons - `L4ki/Breeze-Inspiration-Icons`_ (same gnome-look.org set)
+    [Settings]
+    gtk-application-prefer-dark-theme = true
 
 - claws-mail_ icons - `PapirusDevelopmentTeam/papirus-claws-mail-theme`_ (dark-bg version)
 
 .. _claws-mail: https://www.claws-mail.org/
-.. _gnome-look.org/Breeze-Inspiration-Dark: https://www.gnome-look.org/p/1342928/
-.. _L4ki/Inspiration: https://github.com/L4ki/Inspiration-GTK-3-Theme
-.. _L4ki/Breeze-Inspiration-Icons: https://github.com/L4ki/Breeze-Inspiration-Icons
 .. _PapirusDevelopmentTeam/papirus-claws-mail-theme: https://github.com/PapirusDevelopmentTeam/papirus-claws-mail-theme
