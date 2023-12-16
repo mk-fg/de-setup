@@ -1,6 +1,0 @@
-[Unit]
-PartOf=notification-thing.service
-
-[Service]
-Type=oneshot
-ExecStart=env cron.check.dev-nodes

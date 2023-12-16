@@ -208,7 +208,6 @@ Somewhat notable stuff:
 
   exclip_ is a more modern, fast and robust replacement for that hack.
 
-
 - xinitrc.\* - tweaks for various X input/display parameters like keyboard rates
   and layouts, dpms, mouse/touchpad stuff, xmodmap, etc.
 
@@ -223,23 +222,6 @@ Somewhat notable stuff:
   Whole purpose of decoding/encoding dance is to sort the sections
   (which E orders arbitrarily) and detect/filter-out irrelevant changes
   like remembered window positions or current (transient) wallpaper path.
-
-- `cron.check.dev-nodes <bin/cron.check.dev-nodes>`_
-
-  Trivial script to read ~/.dev-nodes.checks.list with
-  ``<dev> <check> <dev name...>`` lines like::
-
-    /dev/disk/by-id/wwn-0x... unplug some external hdd
-    usb_wifi net-cut wifi temp usb ap
-
-  ...and issue persistent deduplicated desktop notifications if device needs to be
-  unplugged, network interface removed, and such physical-manipulation reminders,
-  to fix common "always forget about this thing" errors that are easily detectable.
-
-  Implemented as systemd timer + oneshot service.
-  Avoids creating duplicate notifications while one is already on-screen via
-  -w/--wait option of notify-send (to monitor "notification closed" signals),
-  and transient systemd-run units to keep these notification-bubble monitors around.
 
 .. _ImageMagick: https://www.imagemagick.org/
 .. _wand-py: https://docs.wand-py.org/

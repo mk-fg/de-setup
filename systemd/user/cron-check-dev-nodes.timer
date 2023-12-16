@@ -1,8 +1,0 @@
-[Unit]
-After=xorg.target background.target notification-thing.service
-PartOf=startx.target
-
-[Timer]
-OnStartupSec=20m
-OnUnitActiveSec=1h17m
-RandomizedDelaySec=10m
