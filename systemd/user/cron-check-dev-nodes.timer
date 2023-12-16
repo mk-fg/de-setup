@@ -4,5 +4,5 @@ PartOf=startx.target
 
 [Timer]
 OnStartupSec=20m
-OnUnitActiveSec=47m
+OnUnitActiveSec=1h17m
 RandomizedDelaySec=10m
