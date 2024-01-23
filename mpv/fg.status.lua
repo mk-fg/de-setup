@@ -29,9 +29,12 @@ local function update_status_line()
 	elseif mp.get_property_bool('seeking') then atsl('(Seek) ')
 	end
 
+	-- When using lavfi-filters, aid/vid can be "no" with inputs/outputs there
 	local r = false
-	if mp.get_property('vid') ~= 'no' then r = atsl('V') end
-	if mp.get_property('aid') ~= 'no' then r = atsl('A') end
+	if mp.get_property('vid') ~= 'no'
+		or mp.get_property('video-format') then r = atsl('V') end
+	if mp.get_property('aid') ~= 'no'
+		or mp.get_property('audio-params/format') then r = atsl('A') end
 	if mp.get_property('sid') ~= 'no' then r = atsl('S') end
 	if not r then atsl('?') end
 
@@ -47,9 +50,8 @@ local function update_status_line()
 	r = mpn('speed', -1)
 	if r ~= 1 then atsl((' x%4.2f'):format(r)) end
 
-	-- Causes segfaults when used with lavfi-complex
-	-- r = mpn('decoder-frame-drop-count', -1)
-	-- if r > 0 then atsl(' Late: '..r) end
+	r = mpn('decoder-frame-drop-count', -1)
+	if r > 0 then atsl(' Late: '..r) end
 
 	r = mpn('playlist-count')
 	if r > 1 then atsl((' [pls:%02d/%02d]'):format(mpn('playlist-pos-1'), r)) end
@@ -66,5 +68,12 @@ local function update_status_line()
 	mp.set_property('options/term-status-msg', status_line)
 end
 
+local function print_last_status()
+	-- Used to indicate last playback position in the terminal,
+	--   as pointless "Exiting..." line clobbers it since mpv 0.37.0
+	mp.msg.info(mp.get_property('options/term-status-msg') or '-no-last-status-')
+end
+
 mp.add_periodic_timer(0.5, update_status_line)
+mp.register_event('shutdown', print_last_status)
 -- mp.register_event('tick', update_status_line)
