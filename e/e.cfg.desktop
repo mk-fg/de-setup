@@ -1788,12 +1788,15 @@ group "E_Config" struct {
   value "mouse_accel" double 0.0000000000000000000000000;
   value "mouse_accel_threshold" int 10;
   value "mouse_emulate_middle_button" uchar 1;
+  value "mouse_flat_accel" uchar 0;
   value "mouse_hand" int 1;
+  value "mouse_hires_scroll" uchar 0;
   value "mouse_natural_scroll" uchar 0;
   value "move_info_follows" int 1;
   value "move_info_visible" int 1;
   value "multiscreen_flip" int 0;
   value "no_dpms_on_fullscreen" uchar 0;
+  value "no_state_hidden_desktop" uchar 0;
   value "null_container_win" uchar 0;
   value "pass_click_on" int 1;
   value "ping_clients" int 1;
@@ -1855,6 +1858,7 @@ group "E_Config" struct {
   value "touch_accel" double 0.0000000000000000000000000;
   value "touch_clickpad" uchar 1;
   value "touch_emulate_middle_button" uchar 1;
+  value "touch_flat_accel" uchar 0;
   value "touch_natural_scroll" uchar 0;
   value "touch_palm_detect" uchar 1;
   value "touch_scrolling_2finger" uchar 1;
@@ -9120,6 +9124,7 @@ group "Elm_Config" struct {
   value "glayer_zoom_finger_factor" double 1.0000000000000000000000000;
   value "glayer_zoom_wheel_factor" double 0.0500000000000000027755576;
   value "icon_size" int 32;
+  value "icon_theme" string "Tango";
   value "image_cache" int 65536;
   value "inwin_dialogs_enable" uchar 0;
   value "item_select_on_focus_disable" uchar 1;
