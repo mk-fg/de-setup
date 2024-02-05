@@ -7,14 +7,23 @@ Before=background.target xsettings.service
 
 [Service]
 Type=notify
+NotifyAccess=all
+KillMode=process
+WatchdogSec=30
+TimeoutSec=15
+
+# E WM uses literal printf's for logging, and is incredibly noisy, hence log wrapper here
 Environment=E_START=enlightenment
-ExecStart=/usr/bin/enlightenment -locked
+Environment=LOGPROXY_LOG_DIRECTORY=%t/e
+Environment=LOGPROXY_ROTATED_FILES=3
+Environment=LOGPROXY_ROTATION_TIME=86400
+Environment=LOGPROXY_ROTATION_SIZE=512000
+Environment=LOGPROXY_ROTATION_SUFFIX=.%%Y%%m%%d_%%H%%M%%S
+# systemd always strips trailing whitespace from its arguments, hence sh wrapper #31214
+ExecStart=sh -c "exec log_proxy_wrapper -T '%%F %%T :: ' -O e.log -- enlightenment -locked"
+
 Restart=always
 RestartPreventExitStatus=0
 RestartSec=2
 StartLimitInterval=50
 StartLimitBurst=6
-KillMode=process
-WatchdogSec=30
-TimeoutSec=15
-NotifyAccess=all
