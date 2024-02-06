@@ -1989,12 +1989,52 @@ group "E_Config_Bindings" struct {
       value "params" string "dbus-send --session --print-reply --dest=org.freedesktop.Notifications /org/freedesktop/Notifications org.freedesktop.DBus.Properties.Set string:org.freedesktop.Notifications string:plug variant:string:toggle";
     }
     group "E_Config_Binding_Key" struct {
+      value "action" string "exec";
+      value "any_mod" uchar 0;
+      value "context" int 9;
+      value "key" string "XF86AudioNext";
+      value "modifiers" int 0;
+      value "params" string "ec -- -e \"(emms-next)\"";
+    }
+    group "E_Config_Binding_Key" struct {
+      value "action" string "exec";
+      value "any_mod" uchar 0;
+      value "context" int 9;
+      value "key" string "XF86AudioPlay";
+      value "modifiers" int 0;
+      value "params" string "de.music.pause";
+    }
+    group "E_Config_Binding_Key" struct {
+      value "action" string "exec";
+      value "any_mod" uchar 0;
+      value "context" int 9;
+      value "key" string "XF86AudioPrev";
+      value "modifiers" int 0;
+      value "params" string "ec -- -e \"(emms-previous)\"";
+    }
+    group "E_Config_Binding_Key" struct {
       value "action" string "backlight_adjust";
       value "any_mod" uchar 0;
       value "context" int 9;
       value "key" string "XF86MonBrightnessUp";
       value "modifiers" int 0;
       value "params" string "0.1";
+    }
+    group "E_Config_Binding_Key" struct {
+      value "action" string "exec";
+      value "any_mod" uchar 0;
+      value "context" int 9;
+      value "key" string "XF86AudioLowerVolume";
+      value "modifiers" int 0;
+      value "params" string "pa_tweak -m media.role:music vol-change=-0.006";
+    }
+    group "E_Config_Binding_Key" struct {
+      value "action" string "exec";
+      value "any_mod" uchar 0;
+      value "context" int 9;
+      value "key" string "XF86AudioRaiseVolume";
+      value "modifiers" int 0;
+      value "params" string "pa_tweak -m media.role:music vol-change=+0.006";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "backlight_adjust";

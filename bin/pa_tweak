@@ -49,6 +49,7 @@ def main(args=None):
 		help='Only print matched objects and all tweaks without applying anything.')
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
+	if not opts.match: parser.error('At least one -m/--match spec is required')
 	if any(m.strip() == '?' for m in opts.match):
 		help(pulse_obj_lookup)
 		return
