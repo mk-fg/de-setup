@@ -51,7 +51,7 @@ def dpy_info():
 
 	XRRCrtcInfo = make_struct('XRRCrtcInfo', 'ts:ulong x:int y:int w:int h:int')
 	XRRScreenResources = make_struct( 'XRRScreenResources',
-		'ts:ulong ts_conf:ulong nctrc:int nctrcs:ulong_p nout:int out:ulong_p' )
+		'ts:ulong ts_conf:ulong nctrc:int ctrcs:ulong_p nout:int out:ulong_p' )
 	XRROutputInfo = make_struct( 'XRROutputInfo',
 		'ts:ulong crtc:ulong name:char_p name_len:int w_mm:ulong h_mm:ulong conn:ushort' )
 
@@ -64,26 +64,29 @@ def dpy_info():
 
 	dpy = xlib.XOpenDisplay(b'')
 	if not dpy: raise RuntimeError('XOpenDisplay failed')
+	out_crtcs, crtcs, root_win = list(), list(), xlib.XDefaultRootWindow(dpy)
 	try:
-		root_win = xlib.XDefaultRootWindow(dpy)
-		n, res = 0, xrandr.XRRGetScreenResourcesCurrent(dpy, root_win)
+		n, res = -1, xrandr.XRRGetScreenResourcesCurrent(dpy, root_win)
 		for out_idx in range(res.contents.nout):
-			out = ( out_raw := xrandr
-				.XRRGetOutputInfo(dpy, res, res.contents.out[out_idx]) ).contents
-			if out.conn != 0: continue # RR_Connected=0
-			if not out.crtc: continue
-			try:
-				crtc = (crtc_raw := xrandr
-					.XRRGetCrtcInfo(dpy, ct.byref(out_raw), out.crtc)).contents
-				try:
-					yield DisplayInfo( n=n, index=out_idx,
-						x=crtc.x, y=crtc.y, w=crtc.w, h=crtc.h,
-						w_mm=out.w_mm, h_mm=out.h_mm,
-						name=out.name.decode(sys.getfilesystemencoding()) )
-					n += 1
-				finally: xrandr.XRRFreeCrtcInfo(crtc_raw)
-			finally: xrandr.XRRFreeOutputInfo(out_raw)
-	finally: xlib.XCloseDisplay(dpy)
+			out_crtcs.append([ out_raw := xrandr
+				.XRRGetOutputInfo(dpy, res, res.contents.out[out_idx]), None ])
+			if (out := out_raw.contents).conn == 0:
+				crtc = ... # sometimes output is connected with crtc=0, idk why
+				if out.crtc: crtcs.append( crtc :=
+					xrandr.XRRGetCrtcInfo(dpy, ct.byref(out_raw), out.crtc) )
+				out_crtcs[-1][-1] = crtc
+		for out, crtc in out_crtcs:
+			if crtc is ...: crtc = len(crtcs) == 1 and crtcs[0] # for crtc=0 cases
+			if not crtc: continue
+			out, crtc, n = out.contents, crtc.contents, n + 1
+			yield DisplayInfo( n=n, index=out_idx,
+				x=crtc.x, y=crtc.y, w=crtc.w, h=crtc.h,
+				w_mm=out.w_mm, h_mm=out.h_mm,
+				name=out.name.decode(sys.getfilesystemencoding()) )
+	finally:
+		for crtc in crtcs: xrandr.XRRFreeCrtcInfo(crtc)
+		for out, crtc in out_crtcs: xrandr.XRRFreeOutputInfo(out)
+		xlib.XCloseDisplay(dpy)
 
 
 def set_bg_image(images, dpy_list, dx=None, dy=None):
