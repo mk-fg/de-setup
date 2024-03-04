@@ -1,6 +1,7 @@
 -- Fancy mpv status line formatter/setter
 
-local status_line = ''
+local status_line, log_ts, log_pos
+local log_td, log_td_pos = 5*60, 15*60
 
 local function atsl(s) status_line = status_line..s; return true end
 local function mpn(k, def) return mp.get_property_number(k, def or 0) end
@@ -17,6 +18,12 @@ end
 local function bts_str(bytes, fmt, ...)
 	local v, u = bts(bytes, ...)
 	return (fmt or '%.0f%s'):format(v, u)
+end
+
+local function print_last_status()
+	-- Used to persist playback position in the terminal on log_td intervals
+	--   and on quit (pointless "Exiting..." line clobbers status since mpv 0.37.0)
+	mp.msg.info(os.date('%F %T :: ') .. status_line or '-no-last-status-')
 end
 
 local function update_status_line()
@@ -66,12 +73,12 @@ local function update_status_line()
 		mpn('demuxer-cache-duration'), table.concat(brs, ' ') ))
 
 	mp.set_property('options/term-status-msg', status_line)
-end
 
-local function print_last_status()
-	-- Used to indicate last playback position in the terminal,
-	--   as pointless "Exiting..." line clobbers it since mpv 0.37.0
-	mp.msg.info(mp.get_property('options/term-status-msg') or '-no-last-status-')
+	local ts, pos = os.time(), mp.get_property_number('time-pos')
+	if not log_ts then log_ts = ts end
+	if not log_pos then log_pos = pos end
+	if ts - log_ts > log_td and pos - log_pos > log_td_pos
+		then print_last_status(); log_ts, log_pos = ts, pos end
 end
 
 mp.add_periodic_timer(0.5, update_status_line)
