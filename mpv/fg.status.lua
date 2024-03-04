@@ -77,7 +77,7 @@ local function update_status_line()
 	local ts, pos = os.time(), mp.get_property_number('time-pos')
 	if not log_ts then log_ts = ts end
 	if not log_pos then log_pos = pos end
-	if ts - log_ts > log_td and pos - log_pos > log_td_pos
+	if ts - log_ts > log_td and pos and pos - log_pos > log_td_pos
 		then print_last_status(); log_ts, log_pos = ts, pos end
 end
 
