@@ -23,7 +23,7 @@ end
 local function print_last_status()
 	-- Used to persist playback position in the terminal on log_td intervals
 	--   and on quit (pointless "Exiting..." line clobbers status since mpv 0.37.0)
-	mp.msg.info(os.date('%F %T :: ') .. status_line or '-no-last-status-')
+	mp.msg.info(os.date('%F %T :: ')..(status_line or '-no-status-'))
 end
 
 local function update_status_line()
