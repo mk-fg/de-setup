@@ -799,7 +799,7 @@ def main(args=None):
 			for opt_raw in map(str.strip, opts.magick_opts):
 				try:
 					dpy, opt = ( (int(m.group(1)), opt_raw[m.end():])
-						if (m := re.search('^[Mm](\d+)\s*;', opt_raw)) else (None, opt_raw) )
+						if (m := re.search(r'^[Mm](\d+)\s*;', opt_raw)) else (None, opt_raw) )
 					for opt in map(str.strip, opt.split(';')):
 						if not (opt := opt.strip()): continue
 						k, v = map(str.strip, opt.split('=', 1))
