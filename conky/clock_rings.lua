@@ -259,6 +259,7 @@ sunrise = {
 
 
 require 'cairo'
+require 'cairo_xlib'
 
 
 local function rgb_to_r_g_b(color,alpha)
