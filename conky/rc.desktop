@@ -106,6 +106,7 @@ ${template1 media /mnt/win-500 5}
 ${template1 tmp /tmp 30}
 ${color lightgrey}FS read: ${color #99aaff}${diskio_read}\
   ${color lightgrey}write: ${color #ffaa99}${diskio_write}\
+  ${color lightgrey}queue: ${color #e87bf7}${lua_parse fs_backlog}\
 ${alignr}${color light slate gray}${top_io pid 1} ${top_io name 1}
 ${color light slate gray}${diskiograph /dev/sda 30,400 3333aa aa3333 0 -t -l}
 \
@@ -116,6 +117,7 @@ ${color lightgrey}Net IN: ${lua_parse iface_num downspeed core wlp2s0 wlan_usb v
 ${alignr}${color lightgrey}Net OUT: ${lua_parse iface_num upspeed core wlp2s0 wlan_usb vde} ${lua_parse rings_marker net_up}
 ${lua_parse iface_graph wlan0 wlp2s0 enp3s0}
 \
+# $color[${pa_sink_active_port_description}] ${pa_sink_volume}% ${pa_sink_volumebar}
 # \
 # $color$stippled_hr
 # ${color #ddaa00}Ports${alignr}Conns

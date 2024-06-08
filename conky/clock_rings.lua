@@ -655,6 +655,18 @@ end
 function conky_env(var) return os.getenv(var) end
 
 
+--- === FS writeback info
+
+function conky_fs_backlog()
+	local d, src = {}, io.open('/proc/meminfo')
+	if not src then return '' end
+	for _, k, v in string.gmatch( src:read('*a'),
+		'((%S+):%s+(%S+ +%S+))\n' ) do d[k] = v end
+	if not (d.Dirty and d.Writeback) then return '' end
+	return d.Dirty..' + '..d.Writeback
+end
+
+
 --- === Pick network interfaces from arg list and template stuff with them
 -- To show/hide ifaces that don't exist on this machine or various temporary ones
 
