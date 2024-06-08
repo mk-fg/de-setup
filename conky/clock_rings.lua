@@ -1,7 +1,7 @@
 -- Clock Rings + Binary Clock + File Readers + sensors + misc
 
 -- Original Clock Rings by londonali1010 (2009) - edited by h0zza (2012)
--- [http://blog.hozzamedia.com/software/conky-resource-dialrings/]
+-- http://blog.hozzamedia.com/software/conky-resource-dialrings/
 
 -- Sunrise/Sunset script by 2012 Alexander Yakushev
 -- https://github.com/alexander-yakushev/lustrous/blob/master/sunriseset.lua
@@ -9,7 +9,7 @@
 -- Link: http://williams.best.vwh.net/sunrise_sunset_algorithm.htm
 
 
--- Settings
+--- === Settings and global cache
 
 rings_ox=130
 rings_oy=155
@@ -257,15 +257,20 @@ sunrise = {
 	zenith=90.83,
 }
 
+ifaces = {
+	cache={},
+	ts_read_i=600, ts_read={},
+}
+
+
+--- === Clock/data rings
 
 require 'cairo'
 require 'cairo_xlib'
 
-
 local function rgb_to_r_g_b(color,alpha)
 	return ((color / 0x10000) % 0x100) / 255., ((color / 0x100) % 0x100) / 255., (color % 0x100) / 255., alpha
 end
-
 
 local function draw_bg(cr, t)
 	local radius = t['corner_radius'] / t['aspect']
@@ -286,7 +291,6 @@ local function draw_bg(cr, t)
 	cairo_stroke(cr)
 end
 
-
 local function draw_ring(cr, t, pt)
 	local function ring_k(k)
 		local v = pt[k] or rings_defaults[k]
@@ -296,8 +300,10 @@ local function draw_ring(cr, t, pt)
 
 	local w, h=conky_window.width, conky_window.height
 
-	local xc, yc, ring_r, ring_w, sa, ea = ring_k('x'), ring_k('y'), ring_k('radius'), ring_k('thickness'), ring_k('start_angle'), ring_k('end_angle')
-	local bgc, bga, fgc, fga = ring_k('bg_color'), ring_k('bg_alpha'), ring_k('fg_color'), ring_k('fg_alpha')
+	local xc, yc, ring_r, ring_w, sa, ea = ring_k('x'), ring_k('y'),
+		ring_k('radius'), ring_k('thickness'), ring_k('start_angle'), ring_k('end_angle')
+	local bgc, bga, fgc, fga =
+		ring_k('bg_color'), ring_k('bg_alpha'), ring_k('fg_color'), ring_k('fg_alpha')
 
 	local angle_0 = sa*(2*math.pi/360)-math.pi/2
 	local angle_f = ea*(2*math.pi/360)-math.pi/2
@@ -316,7 +322,6 @@ local function draw_ring(cr, t, pt)
 	cairo_set_source_rgba(cr,rgb_to_r_g_b(fgc,fga))
 	cairo_stroke(cr)
 end
-
 
 local function draw_clock_hands(cr, secs, mins, hours)
 	local r, xc, yc = clock['r'], clock['x'], clock['y']
@@ -358,6 +363,8 @@ local function draw_clock_hands(cr, secs, mins, hours)
 	end
 end
 
+
+--- === Binary clock
 
 local function bit_check(x, pos)
 	pos = 2 ^ pos
@@ -411,6 +418,59 @@ local function draw_bin_clock(cr, secs, mins, hours)
 	end
 end
 
+function conky_rings_draw()
+	local function setup_rings(cr, pt)
+		local str, value
+
+		str = string.format('${%s %s}', pt['name'], pt['arg'])
+		str = conky_parse(str)
+
+		value = tonumber(str)
+		if not value then value = 0 end
+		pct = value / pt['max']
+
+		draw_ring(cr, pct, pt)
+	end
+
+	if not conky_window then return end
+	local cs = cairo_xlib_surface_create(
+		conky_window.display,
+		conky_window.drawable,
+		conky_window.visual,
+		conky_window.width, conky_window.height )
+
+	local cr = cairo_create(cs)
+	local updates = conky_parse('${updates}')
+	local secs, mins, hours = os.date("%S"), os.date("%M"), os.date("%I")
+
+	draw_bg(cr, bg)
+
+	update_num = tonumber(updates)
+
+	-- First update(s) can produce really weird numbers and segfault
+	if update_num > 5 then
+		for i in pairs(rings) do setup_rings(cr, rings[i]) end
+	end
+
+	draw_clock_hands(cr, secs, mins, hours)
+	draw_bin_clock(cr, secs, mins, hours)
+end
+
+function conky_rings_color(ring_name)
+	local c = rings_colors[ring_name]
+	assert(c, ring_name)
+	return string.format('${color %s}', string.format('%06x', c))
+end
+
+function conky_rings_marker(ring_name)
+	if not rings_colors[ring_name] then
+		return ''
+	end
+	return string.format('%s[*]', conky_rings_color(ring_name))
+end
+
+
+--- === Sunrise / sunset times
 
 strg = {
 	frac=function(n) return n - math.floor(n) end,
@@ -469,58 +529,19 @@ local function sunturn_time(date, rising, latitude, longitude, zenith, local_off
 		hour = math.floor(LT), min = math.floor(strg.frac(LT) * 60) })
 end
 
-
-function conky_rings_draw()
-	local function setup_rings(cr, pt)
-		local str, value
-
-		str = string.format('${%s %s}', pt['name'], pt['arg'])
-		str = conky_parse(str)
-
-		value = tonumber(str)
-		if not value then value = 0 end
-		pct = value / pt['max']
-
-		draw_ring(cr, pct, pt)
-	end
-
-	if not conky_window then return end
-	local cs = cairo_xlib_surface_create(
-		conky_window.display,
-		conky_window.drawable,
-		conky_window.visual,
-		conky_window.width, conky_window.height )
-
-	local cr = cairo_create(cs)
-	local updates = conky_parse('${updates}')
-	local secs, mins, hours = os.date("%S"), os.date("%M"), os.date("%I")
-
-	draw_bg(cr, bg)
-
-	update_num = tonumber(updates)
-
-	-- First update(s) can produce really weird numbers and segfault
-	if update_num > 5 then
-		for i in pairs(rings) do setup_rings(cr, rings[i]) end
-	end
-
-	draw_clock_hands(cr, secs, mins, hours)
-	draw_bin_clock(cr, secs, mins, hours)
+function conky_sun_event_time(t, ...)
+	assert(t == 'rise' or t == 'set', t)
+	local fmt = ''
+	for _, v in ipairs{...} do fmt = fmt .. ' ' .. fmt end
+	fmt = fmt:gsub('^%s*(.-)%s*$', '%1')
+	if fmt == '' then fmt = '%H:%M' end
+	local ts = sunturn_time( os.date('*t'), t == 'rise',
+		sunrise.lat, sunrise.lon, sunrise.zenith, sunrise.offset )
+	return os.date(fmt, ts)
 end
 
-function conky_rings_color(ring_name)
-	local c = rings_colors[ring_name]
-	assert(c, ring_name)
-	return string.format('${color %s}', string.format('%06x', c))
-end
 
-function conky_rings_marker(ring_name)
-	if not rings_colors[ring_name] then
-		return ''
-	end
-	return string.format('%s[*]', conky_rings_color(ring_name))
-end
-
+--- === Read/match value from a file
 
 function conky_file_cap_read(...)
 	local model_re, ts = '', os.time()
@@ -566,18 +587,19 @@ function conky_file_cap_read(...)
 end
 
 
+--- === lm-sensors data via helper "sens" binary
+
 function conky_sens_cache()
 	local ts = os.time()
-	if os.difftime(ts, sensors.ts_read) > sensors.ts_read_i then
-		local sh = io.popen(sensors.cmd, 'r')
-		sensors.values = {}
-		for p in string.gmatch(sh:read('*a'), '(%S+ %S+)\n') do
-			local n = string.find(p, ' ')
-			sensors.values[string.sub(p, 0, n-1)] = string.sub(p, n)
-		end
-		sh:close()
-		sensors.ts_read = ts
+	if os.difftime(ts, sensors.ts_read) <= sensors.ts_read_i then return end
+	local sh = io.popen(sensors.cmd, 'r')
+	sensors.values = {}
+	for p in string.gmatch(sh:read('*a'), '(%S+ %S+)\n') do
+		local n = string.find(p, ' ')
+		sensors.values[string.sub(p, 0, n-1)] = string.sub(p, n)
 	end
+	sh:close()
+	sensors.ts_read = ts
 end
 
 function conky_sens_read(name, precision)
@@ -599,6 +621,8 @@ function conky_sens_read(name, precision)
 	return ''
 end
 
+
+--- === Network port monitor helpers
 
 function conky_portmon(dir, count)
 	local p0, p1, ps
@@ -627,18 +651,74 @@ function conky_portmon(dir, count)
 end
 
 
-function conky_sun_event_time(t, ...)
-	assert(t == 'rise' or t == 'set', t)
-	local fmt = ''
-	for _, v in ipairs{...} do fmt = fmt .. ' ' .. fmt end
-	fmt = fmt:gsub('^%s*(.-)%s*$', '%1')
-	if fmt == '' then fmt = '%H:%M' end
-	local ts = sunturn_time( os.date('*t'), t == 'rise',
-		sunrise.lat, sunrise.lon, sunrise.zenith, sunrise.offset )
-	return os.date(fmt, ts)
+--- === Simple env-var reader
+function conky_env(var) return os.getenv(var) end
+
+
+--- === Pick network interfaces from arg list and template stuff with them
+-- To show/hide ifaces that don't exist on this machine or various temporary ones
+
+function conky_iface_cache(...)
+	local iface_args = table.pack(...)
+	local ifk, ts, iface_list, iface_chk = table.concat(iface_args, ' '), os.time()
+	if os.difftime(ts, ifaces.ts_read[ifk] or 0) <= ifaces.ts_read_i
+		then return ifaces.cache[ifk] end
+	ifaces.cache[ifk] = {}; iface_list = ifaces.cache[ifk]
+	for _, iface in ipairs(iface_args) do
+		iface_chk = io.open('/sys/class/net/'..iface..'/address')
+		if iface_chk then iface_chk:close(); iface_list[#iface_list+1] = iface end
+	end
+	ifaces.ts_read[ifk] = ts
+	return iface_list
+end
+
+function conky_iface_list(...)
+	local s, iface_list = '', conky_iface_cache(...)
+	for n, iface in ipairs(iface_list) do
+		if s:len() > 0 then s = s .. ' ' end
+		s = s .. '${color'..(n-1)..'}'..iface
+	end
+	return s
+end
+
+function conky_iface_ips(...)
+	local s, iface_list = '', conky_iface_cache(...)
+	for n, iface in ipairs(iface_list) do
+		if s:len() > 0 then s = s .. ' / ' end
+		s = s .. '${color darkred}${if_up '..iface..
+			'}${color'..(n-1)..'}${endif}${addr '..iface..'}${color lightgrey}'
+	end
+	return s
+end
+
+function conky_iface_num(num, ...)
+	local s, iface_list = '', conky_iface_cache(...)
+	for n, iface in ipairs(iface_list) do
+		if s:len() > 0 then s = s .. ' / ' end
+		s = s .. '${color'..(n-1)..'}${'..num..' '..iface..'}${color lightgrey}'
+	end
+	return s
+end
+
+function conky_iface_wlan_info(...)
+	local iface_list = conky_iface_cache(...)
+	for n, iface in ipairs(iface_list) do
+		return '${if_up '..iface..'}${alignr}${color lightgrey}Signal:$color' ..
+			' ${wireless_link_qual_perc '..iface..'}%' ..
+			' (${wireless_essid '..iface..'}, ${wireless_bitrate '..iface..'})${endif}'
+	end
+	return ''
+end
+
+function conky_iface_graph(...)
+	local iface_list = conky_iface_cache(...)
+	for n, iface in ipairs(iface_list) do
+		return '${if_up '..iface..'}'..
+			'${color'..n..'}${downspeedgraph '..iface..' 30,190 aa3333 3333aa 0 -t -l}${alignr}' ..
+			'${color'..n..'}${upspeedgraph '..iface..' 30,190 3333aa aa3333 0 -t -l}${endif}'
+	end
+	return ''
 end
 
 
-function conky_env(var)
-	return os.getenv(var)
-end
+---
