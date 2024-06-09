@@ -21,7 +21,7 @@ rings_colors = {
 	net_up=0x8f4444,
 	net_down=0x446f44,
 	fs_root=0xbdbb7b,
-	fs_home=0xaabdb6,
+	fs_media=0x0bb9ac,
 }
 
 rings_defaults = {
@@ -99,7 +99,7 @@ rings = {
 		radius=75,
 		thickness=4,
 		start_angle=93,
-		end_angle=208
+		end_angle=150
 	},
 	{
 		name='cpu',
@@ -110,7 +110,7 @@ rings = {
 		radius=79,
 		thickness=4,
 		start_angle=93,
-		end_angle=208
+		end_angle=150
 	},
 	{
 		name='cpu',
@@ -121,7 +121,7 @@ rings = {
 		radius=83,
 		thickness=4,
 		start_angle=93,
-		end_angle=208
+		end_angle=150
 	},
 	{
 		name='cpu',
@@ -132,6 +132,50 @@ rings = {
 		radius=87,
 		thickness=4,
 		start_angle=93,
+		end_angle=150
+	},
+	{
+		name='cpu',
+		arg='cpu5',
+		max=100,
+		fg_color=rings_colors.cpu,
+		fg_alpha=0.3,
+		radius=75,
+		thickness=4,
+		start_angle=151,
+		end_angle=208
+	},
+	{
+		name='cpu',
+		arg='cpu6',
+		max=100,
+		fg_color=rings_colors.cpu,
+		fg_alpha=0.3,
+		radius=79,
+		thickness=4,
+		start_angle=151,
+		end_angle=208
+	},
+	{
+		name='cpu',
+		arg='cpu7',
+		max=100,
+		fg_color=rings_colors.cpu,
+		fg_alpha=0.3,
+		radius=83,
+		thickness=4,
+		start_angle=151,
+		end_angle=208
+	},
+	{
+		name='cpu',
+		arg='cpu8',
+		max=100,
+		fg_color=rings_colors.cpu,
+		fg_alpha=0.3,
+		radius=87,
+		thickness=4,
+		start_angle=151,
 		end_angle=208
 	},
 	{
@@ -202,9 +246,9 @@ rings = {
 	},
 	{
 		name='fs_used_perc',
-		arg='/home',
+		arg='/mnt/win-500',
 		max=100,
-		fg_color=rings_colors.fs_home,
+		fg_color=rings_colors.fs_media,
 		fg_alpha=0.5,
 		radius=105,
 		thickness=3,

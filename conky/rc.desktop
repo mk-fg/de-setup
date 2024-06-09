@@ -114,7 +114,7 @@ ${color light slate gray}\
 ${diskiograph_read /dev/disk/by-id/wwn-0x55cd2e4155dd3a6e 17,133 456e73 7a88cc 0 -t -l}\
 ${diskiograph_read /dev/disk/by-id/wwn-0x5001b444a75849ed 17,133 456e73 7a88cc 0 -t -l}\
 ${diskiograph_read /dev/disk/by-id/wwn-0x50014ee65732acb6 17,133 456e73 7a88cc 0 -t -l}\
-$color${voffset 5}${goto 9}root${goto 140}vms/games${goto 273}dump${voffset -10}
+$color${voffset 5}${goto 9}root${goto 140}vms/games${goto 273}media${voffset -10}
 ${voffset -7}${color light slate gray}\
 ${diskiograph_write /dev/disk/by-id/wwn-0x55cd2e4155dd3a6e 17,133 80804c cc887a 0 -t -l}\
 ${diskiograph_write /dev/disk/by-id/wwn-0x5001b444a75849ed 17,133 80804c cc887a 0 -t -l}\
