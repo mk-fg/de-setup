@@ -111,10 +111,14 @@ ${color lightgrey}FS read: ${color #99aaff}${diskio_read}\
   ${color lightgrey}queue: ${color #e87bf7}${lua_parse fs_backlog}\
 ${alignr}${color light slate gray}${top_io pid 1} ${top_io name 1}
 ${color light slate gray}\
-${diskiograph /dev/disk/by-id/wwn-0x55cd2e4155dd3a6e 30,133 3333aa aa3333 0 -t -l}\
-${diskiograph /dev/disk/by-id/wwn-0x5001b444a75849ed 30,133 3333aa aa3333 0 -t -l}\
-${diskiograph /dev/disk/by-id/wwn-0x50014ee65732acb6 30,133 3333aa aa3333 0 -t -l}\
+${diskiograph_read /dev/disk/by-id/wwn-0x55cd2e4155dd3a6e 17,133 456e73 7a88cc 0 -t -l}\
+${diskiograph_read /dev/disk/by-id/wwn-0x5001b444a75849ed 17,133 456e73 7a88cc 0 -t -l}\
+${diskiograph_read /dev/disk/by-id/wwn-0x50014ee65732acb6 17,133 456e73 7a88cc 0 -t -l}\
 $color${voffset 5}${goto 9}root${goto 140}vms/games${goto 273}dump${voffset -10}
+${voffset -7}${color light slate gray}\
+${diskiograph_write /dev/disk/by-id/wwn-0x55cd2e4155dd3a6e 17,133 80804c cc887a 0 -t -l}\
+${diskiograph_write /dev/disk/by-id/wwn-0x5001b444a75849ed 17,133 80804c cc887a 0 -t -l}\
+${diskiograph_write /dev/disk/by-id/wwn-0x50014ee65732acb6 17,133 80804c cc887a 0 -t -l}
 \
 ${color lightgrey}IPs ${color #888}[ ${lua_parse iface_list core wlan_usb vde enp3s0 wlp2s0} ${color #888}]$color: \
 ${lua_parse iface_ips core wlp2s0 wlan_usb vde}${lua_parse iface_wlan_info wlp2s0 wlan_usb}
