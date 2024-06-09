@@ -232,7 +232,7 @@ clock = {
 }
 
 clock_bin = {
-	-- h=bg['h'], drawn to the right of the rings bg
+	-- h=bg.h, drawn to the right of the rings bg
 	w=135, clock_offset=10, pad=20,
 	block_offset=10,
 	fill_color=0xeeaaaa, fill_alpha=0.5,
@@ -265,19 +265,20 @@ ifaces = {
 }
 
 
---- === Clock/data rings
+--- === Clock/data rings + binary clock above main info
 
 require 'cairo'
 require 'cairo_xlib'
 
 local function rgb_to_r_g_b(color,alpha)
-	return ((color / 0x10000) % 0x100) / 255., ((color / 0x100) % 0x100) / 255., (color % 0x100) / 255., alpha
+	return ((color / 0x10000) % 0x100) / 255.,
+		((color / 0x100) % 0x100) / 255., (color % 0x100) / 255., alpha
 end
 
 local function draw_bg(cr, t)
-	local radius = t['corner_radius'] / t['aspect']
+	local radius = t.corner_radius / t.aspect
 	local degrees = math.pi / 180.0
-	local x, y, w, h = t['x'] - t['w'] / 2, t['y'] - t['h'] / 2, t['w'], t['h']
+	local x, y, w, h = t.x - t.w / 2, t.y - t.h / 2, t.w, t.h
 
 	cairo_new_sub_path(cr)
 	cairo_arc(cr, x + w - radius, y + radius, radius, -90 * degrees, 0 * degrees)
@@ -286,10 +287,10 @@ local function draw_bg(cr, t)
 	cairo_arc(cr, x + radius, y + radius, radius, 180 * degrees, 270 * degrees)
 	cairo_close_path(cr)
 
-	cairo_set_source_rgba(cr, rgb_to_r_g_b(t['fill_color'], t['fill_alpha']))
+	cairo_set_source_rgba(cr, rgb_to_r_g_b(t.fill_color, t.fill_alpha))
 	cairo_fill_preserve(cr)
-	cairo_set_source_rgba(cr, rgb_to_r_g_b(t['border_color'], t['border_alpha']))
-	cairo_set_line_width(cr, t['border_width'])
+	cairo_set_source_rgba(cr, rgb_to_r_g_b(t.border_color, t.border_alpha))
+	cairo_set_line_width(cr, t.border_width)
 	cairo_stroke(cr)
 end
 
@@ -326,7 +327,7 @@ local function draw_ring(cr, t, pt)
 end
 
 local function draw_clock_hands(cr, secs, mins, hours)
-	local r, xc, yc = clock['r'], clock['x'], clock['y']
+	local r, xc, yc = clock.r, clock.x, clock.y
 	local xh,yh,xm,ym,xs,ys
 
 	local secs_arc = (2*math.pi/60)*secs
@@ -341,7 +342,7 @@ local function draw_clock_hands(cr, secs, mins, hours)
 
 	cairo_set_line_cap(cr, CAIRO_LINE_CAP_ROUND)
 	cairo_set_line_width(cr,5)
-	cairo_set_source_rgba(cr, rgb_to_r_g_b(clock['color'], clock['alpha']))
+	cairo_set_source_rgba(cr, rgb_to_r_g_b(clock.color, clock.alpha))
 	cairo_stroke(cr)
 
 	-- minute hand
@@ -354,7 +355,7 @@ local function draw_clock_hands(cr, secs, mins, hours)
 	cairo_stroke(cr)
 
 	-- seconds hand
-	if clock['show_seconds'] then
+	if clock.show_seconds then
 		xs=xc+r*math.sin(secs_arc)
 		ys=yc-r*math.cos(secs_arc)
 		cairo_move_to(cr,xc,yc)
@@ -365,8 +366,7 @@ local function draw_clock_hands(cr, secs, mins, hours)
 	end
 end
 
-
---- === Binary clock
+--- Binary clock
 
 local function bit_check(x, pos)
 	pos = 2 ^ pos
@@ -390,17 +390,17 @@ end
 local function draw_bin_clock(cr, secs, mins, hours)
 	local bin_bg = {}
 	for k, v in pairs(bg) do bin_bg[k] = v end
-	bin_bg['x'], bin_bg['w'] = bg['x'] + bg['w'] / 2 + clock_bin['w'] / 2 + clock_bin['clock_offset'], clock_bin['w']
+	bin_bg.x, bin_bg.w = bg.x + bg.w / 2 + clock_bin.w / 2 + clock_bin.clock_offset, clock_bin.w
 	draw_bg(cr, bin_bg)
 
-	local d, x, y = 6, bin_bg['x'] - bin_bg['w'] / 2, bin_bg['y'] - bin_bg['h'] / 2
-	local offset, pad = clock_bin['block_offset'], clock_bin['pad']
-	local h = round((bin_bg['h'] - pad * 2 + offset) / d - offset, 0)
+	local d, x, y = 6, bin_bg.x - bin_bg.w / 2, bin_bg.y - bin_bg.h / 2
+	local offset, pad = clock_bin.block_offset, clock_bin.pad
+	local h = round((bin_bg.h - pad * 2 + offset) / d - offset, 0)
 	local w = h
 
-	local rgba_fill = {rgb_to_r_g_b(clock_bin['fill_color'], clock_bin['fill_alpha'])}
-	local rgba_border = {rgb_to_r_g_b(clock_bin['border_color'], clock_bin['border_alpha'])}
-	cairo_set_line_width(cr, clock_bin['border_width'])
+	local rgba_fill = {rgb_to_r_g_b(clock_bin.fill_color, clock_bin.fill_alpha)}
+	local rgba_border = {rgb_to_r_g_b(clock_bin.border_color, clock_bin.border_alpha)}
+	cairo_set_line_width(cr, clock_bin.border_width)
 
 	local rows = {{secs, 60}, {mins, 60}, {hours, 24}}
 	local row, v, max, bits, bx, by
@@ -420,40 +420,35 @@ local function draw_bin_clock(cr, secs, mins, hours)
 	end
 end
 
-function conky_rings_draw()
-	local function setup_rings(cr, pt)
-		local value = pt.arg
-		if type(value) == 'function' then value = value() end
-		value = tonumber(conky_parse(
-			string.format('${%s %s}', pt.name, value) ))
-		if not value then value = 0 end
-		pct = value / pt.max
-		draw_ring(cr, pct, pt)
-	end
+--- Main shared draw call
 
+function conky_draw_graphics()
 	if not conky_window then return end
 	local cs = cairo_xlib_surface_create(
 		conky_window.display,
 		conky_window.drawable,
 		conky_window.visual,
 		conky_window.width, conky_window.height )
-
 	local cr = cairo_create(cs)
-	local updates = conky_parse('${updates}')
-	local secs, mins, hours = os.date('%S'), os.date('%M'), os.date('%I')
-
 	draw_bg(cr, bg)
 
-	update_num = tonumber(updates)
-
 	-- First update(s) can produce really weird numbers and segfault
-	if update_num > 5 then
-		for i in pairs(rings) do setup_rings(cr, rings[i]) end
-	end
+	if tonumber(conky_parse('${updates}')) > 5 then
+		local value, pt
+		for n in pairs(rings) do
+			pt = rings[n]; value = pt.arg
+			if type(value) == 'function' then value = value() end
+			value = tonumber(conky_parse(
+				string.format('${%s %s}', pt.name, value) )) or 0
+			draw_ring(cr, value / pt.max, pt)
+	end end
 
+	local secs, mins, hours = os.date('%S %M %I'):match('(%S+) (%S+) (%S+)')
 	draw_clock_hands(cr, secs, mins, hours)
 	draw_bin_clock(cr, secs, mins, hours)
 end
+
+--- Helpers for conky legend infos
 
 function conky_rings_color(ring_name)
 	local c = rings_colors[ring_name]
@@ -464,7 +459,7 @@ end
 function conky_rings_marker(ring_name, ...)
 	if not rings_colors[ring_name] then return '' end
 	rings_values[ring_name] = table.pack(...)
-	return string.format('%s[*]', conky_rings_color(ring_name))
+	return string.format('%s■', conky_rings_color(ring_name))
 end
 
 
@@ -481,8 +476,7 @@ strg = {
 }
 
 local function fit_into_range(val, min, max)
-	local range = max - min
-	local count
+	local range, count = max - min
 	if val < min then
 		count = math.floor((min - val) / range) + 1
 		return val + count * range
@@ -576,9 +570,7 @@ function conky_file_cap_read(...)
 	end
 
 	for model, cap in pairs(file_cap.values) do
-		if string.match(model, model_re) then
-			return cap
-		end
+		if string.match(model, model_re) then return cap end
 	end
 
 	return ''
@@ -650,6 +642,7 @@ end
 
 
 --- === Simple env-var reader
+
 function conky_env(var) return os.getenv(var) end
 
 
