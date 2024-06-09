@@ -39,9 +39,10 @@ conky.config = {
 	no_buffers = true,
 	uppercase = false,
 	short_units = true,
-	cpu_avg_samples = 2,
-	net_avg_samples = 2,
+	units_spacer = ' ',
 	use_spacer = 'none',
+	-- cpu_avg_samples = 2,
+	-- net_avg_samples = 2,
 
 	color0 = 'cc4444',
 	color1 = 'darkgreen',
@@ -52,6 +53,7 @@ conky.config = {
 	template2 = '$color ${tcp_portmon \\1 \\2 rhost \\3} ${alignr} ${tcp_portmon \\1 \\2 \\4 \\3} $color',
 	template3 = '${color lightgrey}${if_empty ${lua sens_read \\2}}${else}${if_match ${lua sens_read \\2} > \\3}${color red}\\1: ${lua sens_read \\2}C${blink !!!}${else}\\1: ${color}${lua sens_read \\2}C${endif}${endif}',
 	template4 = '${color lightgrey}${if_match $\\3perc >= \\1}${color red}${endif}\\4 ${lua_parse rings_marker \\3}${tab 25}$color${if_match $\\3perc >= \\1}${color red}${endif}$\\3/$\\3max - $\\3perc%${tab 60}${color light slate gray}${if_match $\\3perc >= \\2}${color maroon}${endif}${if_match $\\3perc >= \\1}${color red}${endif}${\\3bar}',
+	template5 = '${if_up \\1}${downspeedgraph \\1 30,190 aa3333 3333aa \\2 -t -l}${alignr}${upspeedgraph \\1 30,190 3333aa aa3333 \\2 -t -l}${endif}',
 	template9 = '${color light slate gray}${if_match ${cpu cpu\\1} >= 85}${color red}${endif}${tab 7}${cpubar cpu\\1 5,60}',
 
 	lua_load = '~/.conkyrc.rings.lua',
@@ -84,7 +86,7 @@ ${color lightgrey}Running:$color $running_processes\
 ${alignr}\
 ${template3 cpu k10temp-0-c3__temp1_input 68}\
 ${if_empty ${lua file_cap_read Apple Wireless}}${else}${color lightgrey}, kb_batt: ${color}${lua file_cap_read Apple Wireless}${endif}
-${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00}
+${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00 -t -l}
 \
 ${color}---=={ CPU${alignr}RAM }==---
 ${template0 #ab1c00 1}
@@ -108,14 +110,21 @@ ${color lightgrey}FS read: ${color #99aaff}${diskio_read}\
   ${color lightgrey}write: ${color #ffaa99}${diskio_write}\
   ${color lightgrey}queue: ${color #e87bf7}${lua_parse fs_backlog}\
 ${alignr}${color light slate gray}${top_io pid 1} ${top_io name 1}
-${color light slate gray}${diskiograph /dev/sda 30,400 3333aa aa3333 0 -t -l}
+${color light slate gray}\
+${diskiograph /dev/disk/by-id/wwn-0x55cd2e4155dd3a6e 30,133 3333aa aa3333 0 -t -l}\
+${diskiograph /dev/disk/by-id/wwn-0x5001b444a75849ed 30,133 3333aa aa3333 0 -t -l}\
+${diskiograph /dev/disk/by-id/wwn-0x50014ee65732acb6 30,133 3333aa aa3333 0 -t -l}\
+$color${voffset 5}${goto 9}root${goto 140}vms/games${goto 273}dump${voffset -10}
 \
-${color lightgrey}IPs [ ${lua_parse iface_list core wlp2s0 wlan_usb vde}${color lightgrey} ]: \
+${color lightgrey}IPs [ ${lua_parse iface_list core wlan_usb vde enp3s0 wlp2s0}${color lightgrey} ]: \
 ${lua_parse iface_ips core wlp2s0 wlan_usb vde}${lua_parse iface_wlan_info wlp2s0 wlan_usb}
 \
-${color lightgrey}Net IN: ${lua_parse iface_num downspeed core wlp2s0 wlan_usb vde} ${lua_parse rings_marker net_down}\
-${alignr}${color lightgrey}Net OUT: ${lua_parse iface_num upspeed core wlp2s0 wlan_usb vde} ${lua_parse rings_marker net_up}
-${lua_parse iface_graph wlan0 wlp2s0 enp3s0}
+${color lightgrey}Net IN: ${lua_parse iface_num downspeed core wlan_usb vde enp3s0 wlp2s0}\
+ ${lua_parse rings_marker net_down wlan0 enp3s0 wlp2s0}\
+${alignr}${color lightgrey}Net OUT: ${lua_parse iface_num upspeed core wlan_usb vde enp3s0 wlp2s0}\
+ ${lua_parse rings_marker net_up wlan0 enp3s0 wlp2s0}
+${template5 wlan0 0}${template5 wlp2s0 0}${template5 enp3s0 0}
+$color${voffset -40}${goto 9}${lua_parse iface_first wlan0 enp3s0 wlp2s0}${voffset 20}
 \
 # $color[${pa_sink_active_port_description}] ${pa_sink_volume}% ${pa_sink_volumebar}
 # \
@@ -125,6 +134,6 @@ ${lua_parse iface_graph wlan0 wlp2s0 enp3s0}
 # ${color #2266cc}${lua_parse conky_portmon in 2}
 # ${color #cc6622}${lua_parse conky_portmon out 20}
 \
-$color$stippled_hr
+$color${voffset -5}$stippled_hr
 ${catp /run/user/1000/cal.conky}
 ]]

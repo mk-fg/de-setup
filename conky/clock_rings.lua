@@ -169,7 +169,7 @@ rings = {
 	},
 	{
 		name='upspeedf',
-		arg='enp1s0',
+		arg=function() return conky_iface_first(table.unpack(rings_values.net_up or {})) end,
 		max=5000,
 		fg_color=rings_colors.net_up,
 		fg_alpha=0.3,
@@ -180,7 +180,7 @@ rings = {
 	},
 	{
 		name='downspeedf',
-		arg='enp1s0',
+		arg=function() return conky_iface_first(table.unpack(rings_values.net_down or {})) end,
 		max=5000,
 		fg_color=rings_colors.net_down,
 		fg_alpha=0.3,
@@ -212,6 +212,8 @@ rings = {
 		end_angle=93
 	},
 }
+
+rings_values = {} -- stored from conky_rings_marker calls
 
 bg_rings_y_offset = -10 -- shift/scale the thing up/down
 bg_size = 250
@@ -246,7 +248,7 @@ file_cap = {
 
 sensors = {
 	values=nil,
-	cmd="sens",
+	cmd='sens',
 	ts_read_i=120, ts_read=0,
 }
 
@@ -420,15 +422,12 @@ end
 
 function conky_rings_draw()
 	local function setup_rings(cr, pt)
-		local str, value
-
-		str = string.format('${%s %s}', pt['name'], pt['arg'])
-		str = conky_parse(str)
-
-		value = tonumber(str)
+		local value = pt.arg
+		if type(value) == 'function' then value = value() end
+		value = tonumber(conky_parse(
+			string.format('${%s %s}', pt.name, value) ))
 		if not value then value = 0 end
-		pct = value / pt['max']
-
+		pct = value / pt.max
 		draw_ring(cr, pct, pt)
 	end
 
@@ -441,7 +440,7 @@ function conky_rings_draw()
 
 	local cr = cairo_create(cs)
 	local updates = conky_parse('${updates}')
-	local secs, mins, hours = os.date("%S"), os.date("%M"), os.date("%I")
+	local secs, mins, hours = os.date('%S'), os.date('%M'), os.date('%I')
 
 	draw_bg(cr, bg)
 
@@ -462,10 +461,9 @@ function conky_rings_color(ring_name)
 	return string.format('${color %s}', string.format('%06x', c))
 end
 
-function conky_rings_marker(ring_name)
-	if not rings_colors[ring_name] then
-		return ''
-	end
+function conky_rings_marker(ring_name, ...)
+	if not rings_colors[ring_name] then return '' end
+	rings_values[ring_name] = table.pack(...)
 	return string.format('%s[*]', conky_rings_color(ring_name))
 end
 
@@ -684,6 +682,8 @@ function conky_iface_cache(...)
 	return iface_list
 end
 
+function conky_iface_first(...) return conky_iface_cache(...)[1] end
+
 function conky_iface_list(...)
 	local s, iface_list = '', conky_iface_cache(...)
 	for n, iface in ipairs(iface_list) do
@@ -713,24 +713,14 @@ function conky_iface_num(num, ...)
 end
 
 function conky_iface_wlan_info(...)
-	local iface_list = conky_iface_cache(...)
-	for n, iface in ipairs(iface_list) do
-		return '${if_up '..iface..'}${alignr}${color lightgrey}Signal:$color' ..
-			' ${wireless_link_qual_perc '..iface..'}%' ..
-			' (${wireless_essid '..iface..'}, ${wireless_bitrate '..iface..'})${endif}'
-	end
-	return ''
+	local iface = conky_iface_first(...)
+	if not iface then return '' end
+	return '${if_up '..iface..'}${alignr}${color lightgrey}Signal:$color' ..
+		' ${wireless_link_qual_perc '..iface..'}%' ..
+		' (${wireless_essid '..iface..'}, ${wireless_bitrate '..iface..'})${endif}'
 end
 
-function conky_iface_graph(...)
-	local iface_list = conky_iface_cache(...)
-	for n, iface in ipairs(iface_list) do
-		return '${if_up '..iface..'}'..
-			'${color'..n..'}${downspeedgraph '..iface..' 30,190 aa3333 3333aa 0 -t -l}${alignr}' ..
-			'${color'..n..'}${upspeedgraph '..iface..' 30,190 3333aa aa3333 0 -t -l}${endif}'
-	end
-	return ''
-end
+function conky_iface_graph(...) return end -- does not work - graph resets on each tick if templated from lua
 
 
 ---
