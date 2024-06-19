@@ -3,9 +3,7 @@
 usage() {
 	bin=$(basename $0)
 	echo >&2 "Usage: $bin [--nomap]"
-	echo >&2
-	echo >&2 "Note: --nomap disables xmodmap and"
-	echo >&2 " setxkbmap, which are usually slow for some reason."
+	echo >&2 "--nomap disables xmodmap/setxkbmap, which can be slow."
 	exit ${1:-0}
 }
 [[ "$#" -gt 1 || "$1" = -h || "$1" = --help ]] && usage
@@ -41,14 +39,18 @@ xinput list "$dev" &>/dev/null && {
 	xinput set-prop "$dev" --type=float 256 50 || err=1
 } ||:
 
-# Razer E-BLUE mouse
-# Middle button gets remapped to "8", so that xbindkeys script can proxy it to "2" with debouncing
-# One side button is used exclusively for wakeups, so is disabled, other one is for xmodmap to bind
-dev=$( xinput list |
-	gawk 'match($0,/\<2.4G 2.4G Wireless Device Mouse\s+id=([0-9]+)\s+\[slave\s+pointer\>/,a) {print a[1]}' )
-[[ -n "$dev" ]] && xinput list "$dev" &>/dev/null && {
-	xinput set-button-map "$dev" 1 8 3 4 5 6 7 0 9 10 11 12 13 || err=1
-} ||:
+# Mouse - unmap any extra buttons
+evdev=
+for dev in $( xinput list |
+	gawk 'match($0,/\<COMPANY\s+USB\s+Device\s+id=([0-9]+)\s+\[slave\s+pointer\>/,a) {print a[1]}' )
+do
+	evdev=$(xinput list-props "$dev" | gawk 'match($0,/^\s+Device Node \S+:\s+"(\S+)"$/,a) {print a[1]}')
+	[[ -n "$evdev" ]] && udevadm info -q path -n "$evdev" | # match usb vid:pid from sysfs path
+		grep -Piq '/[\da-z]+:09DA:1EC0\.[\da-z]+/' || { evdev=; continue; }
+	xinput set-button-map "$dev" 1 2 3 4 5 0 0 0 0 0 0 0 || err=1
+	break
+done
+[[ -n "$evdev" ]] || err=1
 
 # Synaptics settings, in case something (e.g. WM) messes these up
 synclient -l &>/dev/null && {
