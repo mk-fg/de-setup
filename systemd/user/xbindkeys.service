@@ -1,9 +1,0 @@
-[Unit]
-After=xorg.target xsettings.service
-PartOf=startx.target
-
-[Service]
-SyslogIdentifier=%p
-Restart=on-failure
-RestartSec=5
-ExecStart=env xbindkeys -n
