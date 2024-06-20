@@ -697,6 +697,7 @@ function conky_fs_backlog()
 	if not src then return '' end
 	for _, k, v in string.gmatch( src:read('*a'),
 		'((%S+):%s+(%S+ +%S+))\n' ) do d[k] = v end
+	src:close()
 	if not (d.Dirty and d.Writeback) then return '' end
 	return d.Dirty..' + '..d.Writeback
 end
