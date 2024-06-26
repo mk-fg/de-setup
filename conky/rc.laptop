@@ -59,7 +59,7 @@ template7 ${color\2}${downspeed \1}${color lightgrey}
 template8 ${color\2}${upspeed \1}${color lightgrey}
 template9 ${color light slate gray}${if_match ${cpu cpu\1} >= 85}${color red}${endif}${tab 10}${cpubar cpu\1 5,90}
 
-lua_load ~/.conkyrc.rings.lua
+lua_load ~/.conkyrc.lua
 
 
 TEXT

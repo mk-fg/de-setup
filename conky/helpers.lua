@@ -312,7 +312,8 @@ ifaces = {
 --- === Clock/data rings + binary clock above main info
 
 require 'cairo'
-require 'cairo_xlib'
+local function load_cairo_xlib() require 'cairo_xlib' end
+pcall(load_cairo_xlib)
 
 local function rgb_to_r_g_b(color,alpha)
 	return ((color / 0x10000) % 0x100) / 255.,
