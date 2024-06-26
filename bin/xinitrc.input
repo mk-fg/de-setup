@@ -50,7 +50,6 @@ do
 	xinput set-button-map "$dev" 1 2 3 4 5 0 0 0 0 0 0 0 || err=1
 	break
 done
-[[ -n "$evdev" ]] || err=1
 
 # Synaptics settings, in case something (e.g. WM) messes these up
 synclient -l &>/dev/null && {
