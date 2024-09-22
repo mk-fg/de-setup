@@ -1,3 +1,5 @@
+! Check current mappings: xmodmap -pke && xmodmap -pm
+
 ! caps_lock is used to switch langs
 clear Lock
 
@@ -15,3 +17,7 @@ keycode 104 = Down
 
 ! Make right Alt same as the left one
 keycode 108 = Alt_L
+
+! Disable Scroll Lock, to use it as a regular key
+! Enable Scroll Lock
+add mod3 = Scroll_Lock
