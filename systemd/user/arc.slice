@@ -1,4 +1,4 @@
 [Slice]
-MemoryHigh=9500M
-MemoryMax=11G
+MemoryHigh=20G
+MemoryMax=25G
 MemorySwapMax=1G

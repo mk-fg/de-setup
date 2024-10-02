@@ -1,4 +1,4 @@
 [Slice]
 CPUWeight=30
 IOWeight=30
-MemoryHigh=3G
+MemoryHigh=12G

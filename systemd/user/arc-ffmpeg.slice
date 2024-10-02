@@ -1,3 +1,6 @@
 [Slice]
 CPUWeight=10
-CPUQuota=400%
+CPUQuota=900%
+
+MemoryMax=15G
+MemorySwapMax=0
