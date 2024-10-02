@@ -1,0 +1,8 @@
+[Slice]
+# Slice for tasks outside of "arc" desktop stuff, with its own limits here
+
+CPUWeight=10
+CPUQuota=500%
+
+MemoryMax=16G
+MemorySwapMax=0
