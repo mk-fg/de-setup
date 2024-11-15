@@ -4,6 +4,7 @@
 
 -- This tracks files after timestamp-renaming
 local file_path_orig, file_path_new
+local symlink_dir = '/tmp/mpv-links'
 
 local function _file_path()
 	local p = mp.get_property('path')
@@ -75,7 +76,26 @@ local function file_ts_seek()
 	mp.msg.info(('filename-ts seek: %s'):format(table.concat(ts, ' ')))
 end
 
+local function file_link()
+	local err_code = mp.command_native({name='subprocess', args={ 'sh', '-c',
+		'exec install -o"$(id -u)" -g"$(id -g)" -m700 -d "$1"', '--', symlink_dir }}).status
+	if err_code ~= 0 then return mp.msg.error(
+		('[symlink] mkdir error (code=%s): %s'):format(err_code, symlink_dir) ) end
+	local pid_dir = ('%s/pid.%s/'):format(symlink_dir, mp.get_property('pid'))
+	err_code = mp.command_native({
+		name='subprocess', args={'mkdir', '-pm700', pid_dir} }).status
+	if err_code ~= 0 then return mp.msg.error(
+		('[symlink] mkdir pid-subdir error (code=%s): %s'):format(err_code, pid_dir) ) end
+	local p = _file_path()
+	err_code = mp.command_native({
+		name='subprocess', args={'ln', '-s', p, pid_dir} }).status
+	if err_code ~= 0 then return mp.msg.error(
+		('[symlink] ln failed (code=%s): %s'):format(err_code, p) ) end
+	mp.msg.info(('[symlink] created: %s'):format(p))
+end
+
 ---- Hotkey spec example: ctrl+k script-message fg.file-rm
 mp.register_script_message('fg.file-rm', function() file_rm() end)
 mp.register_script_message('fg.file-ts-save', function() file_ts_save() end)
 mp.register_script_message('fg.file-ts-seek', function() file_ts_seek() end)
+mp.register_script_message('fg.file-link', function() file_link() end)
