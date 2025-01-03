@@ -2026,7 +2026,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "XF86AudioLowerVolume";
       value "modifiers" int 0;
-      value "params" string "pa_tweak -m media.role:music vol-change=-0.006";
+      value "params" string "pa_tweak -m media.role:music -m application.process.binary:mpv -1 vol-change=-0.006";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2034,7 +2034,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "XF86AudioRaiseVolume";
       value "modifiers" int 0;
-      value "params" string "pa_tweak -m media.role:music vol-change=+0.006";
+      value "params" string "pa_tweak -m media.role:music -m application.process.binary:mpv -1 vol-change=+0.006";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "backlight_adjust";

@@ -1,11 +1,8 @@
 #!/usr/bin/env python3
 
-import itertools as it, operator as op, functools as ft
-import os, sys, math, random, pathlib as pl
+import os, sys
 
-import pulsectl
-from pulsectl.lookup import pulse_obj_lookup
-
+import pulsectl, pulsectl.lookup as pal
 
 def parse_bool(val, _states={
 		'1': True, 'yes': True, 'true': True, 'on': True,
@@ -16,56 +13,46 @@ def parse_bool(val, _states={
 def parse_tweak(val):
 	return val.split('=', 1) if '=' in val else (val, None)
 
-
 def main(args=None):
-	import argparse, textwrap
-
-	dedent = lambda text: (textwrap.dedent(text).strip('\n') + '\n').replace('\t', '  ')
-	class SmartHelpFormatter(argparse.HelpFormatter):
-		def __init__(self, *args, **kws):
-			return super().__init__(*args, **kws, width=100)
-		def _fill_text(self, text, width, indent):
-			if '\n' not in text: return super()._fill_text(text, width, indent)
-			return ''.join(indent + line for line in text.splitlines(keepends=True))
-		def _split_lines(self, text, width):
-			return super()._split_lines(text, width)\
-				if '\n' not in text else dedent(text).splitlines()
+	import argparse, textwrap, re
+	dd = lambda text: re.sub( r' \t+', ' ',
+		textwrap.dedent(text).strip('\n') + '\n' ).replace('\t', '  ')
 
 	parser = argparse.ArgumentParser(
-		formatter_class=SmartHelpFormatter,
+		formatter_class=argparse.RawTextHelpFormatter,
 		description='Non-interactive command-line tool to tweak pulseaudio objects.')
-	parser.add_argument('actions', nargs='*',
-		help='''
-			List of key=value tweaks or actions to apply to any matched objects.
-			Supported tweaks/actions: vol, props, vol-set, vol-change, mute.
-			Examples: vol-set=0.13, vol, props, mute=1, mute, vol-change=-0.1''')
-	parser.add_argument('-m', '--match', action='append', metavar='match-expr',
-		help='''
-			Match pulse objects to affect using provided expression(s).
-			Can be specified multiple times, to affect any/all matched objects.
-			Use "?" with this option to get more info on expression syntax.
-			Examples: -m application.binary:mpv, -m vlc, -m sink:device.bus:pci''')
+	parser.add_argument('actions', nargs='*', help=dd('''
+		List of key=value tweaks or actions to apply to any matched objects.
+		Supported tweaks/actions: vol, props, vol-set, vol-change, mute.
+		Examples: vol-set=0.13, vol, props, mute=1, mute, vol-change=-0.1'''))
+	parser.add_argument('-m', '--match', action='append', metavar='match-expr', help=dd('''
+		Match pulse objects to affect using provided expression(s).
+		Can be specified multiple times, to affect any/all matched objects.
+		Use "?" with this option to get more info on expression syntax.
+		Examples: -m application.process.binary:mpv, -m vlc, -m sink:device.bus:pci'''))
+	parser.add_argument('-1', '--match-first', action='store_true', help=dd('''
+		When processing -m/--match opts in order, if any match returns
+			any pulse objects, use only those, ignoring any other matches.
+		This can be used to specify a list of "fallback" match-expressions.'''))
 	parser.add_argument('-n', '--dry-run', action='store_true',
 		help='Only print matched objects and all tweaks without applying anything.')
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
 	if not opts.match: parser.error('At least one -m/--match spec is required')
-	if any(m.strip() == '?' for m in opts.match):
-		help(pulse_obj_lookup)
-		return
+	if any(m.strip() == '?' for m in opts.match): help(pal.pulse_obj_lookup); return
 
 	with pulsectl.Pulse('pulsectl-cli-tool') as pulse:
-		obj_set = set(it.chain.from_iterable(
-			pulse_obj_lookup(pulse, m) for m in opts.match ))
+		obj_set = set()
+		for m in opts.match:
+			objs = pal.pulse_obj_lookup(pulse, m)
+			obj_set.update(objs)
+			if opts.match_first and objs: break
 		tweaks = dict(parse_tweak(t) for t in opts.actions)
 
 		for obj in obj_set:
 			if opts.dry_run: print(f'Object: {obj!r}')
 			for k, v in tweaks.items():
-				if opts.dry_run:
-					print(f'  tweak: {k} = {v}')
-					continue
-
+				if opts.dry_run: print(f'  tweak: {k} = {v}'); continue
 				if k == 'vol': print(f'{obj!r} volume = {pulse.volume_get_all_chans(obj):.4f}')
 				elif k == 'props':
 					print(f'{obj!r} proplist:')
