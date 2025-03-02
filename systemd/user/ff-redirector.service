@@ -1,8 +1,0 @@
-[Service]
-Type=exec
-ExecStart=env redirector -t 3600
-
-# Restart=on-failure
-# RestartSec=5
-# StartLimitInterval=60
-# StartLimitBurst=5
