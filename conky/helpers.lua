@@ -286,14 +286,14 @@ clock_bin = {
 file_cap = {
 	values=nil,
 	glob_cmd="dash -c 'echo /sys/class/power_supply/*/'", glob_dirs=nil,
-	ts_glob_i=600, ts_glob=0,
-	ts_read_i=120, ts_read=0,
+	td_glob=600, ts_glob=0,
+	td_read=120, ts_read=0,
 }
 
 sensors = {
 	values=nil,
-	cmd='sens',
-	ts_read_i=120, ts_read=0,
+	cmd='sensors -Aj',
+	td_read=120, ts_read=0,
 }
 
 sunrise = {
@@ -305,7 +305,7 @@ sunrise = {
 
 ifaces = {
 	cache={},
-	ts_read_i=600, ts_read={},
+	td_read=600, ts_read={},
 }
 
 
@@ -588,8 +588,8 @@ function conky_file_cap_read(...)
 		model_re = model_re .. v
 	end
 
-	if os.difftime(ts, file_cap.ts_read) > file_cap.ts_read_i then
-		if os.difftime(ts, file_cap.ts_glob) > file_cap.ts_glob_i then
+	if os.difftime(ts, file_cap.ts_read) > file_cap.td_read then
+		if os.difftime(ts, file_cap.ts_glob) > file_cap.td_glob then
 			local sh = io.popen(file_cap.glob_cmd, 'r')
 			file_cap.glob_dirs = {}
 			for p in string.gmatch(sh:read('*a'), '%S+') do
@@ -622,18 +622,138 @@ function conky_file_cap_read(...)
 end
 
 
---- === lm-sensors data via helper "sens" binary
+--- === lm-sensors json data from "sensors -j"
+
+-- Compact JSON parser from https://github.com/rxi/json.lua
+
+local function json_set(...)
+	local res = {}
+	for n = 1, select('#', ...) do res[select(n, ...)] = true end
+	return res
+end
+local function json_char(str, idx, set, negate)
+	for n = idx, #str do if set[str:sub(n, n)] ~= negate then return n end end
+	return #str + 1
+end
+local function json_err(str, idx, msg)
+	local line_count, col_count = 1, 1
+	for n = 1, idx - 1 do
+		col_count = col_count + 1
+		if str:sub(n, n) == '\n' then line_count, col_count = line_count + 1, 1 end
+	end
+	error(('%s at line %d col %d').format(msg, line_count, col_count))
+end
+
+local json_parse
+local json_c_space, json_c_delim, json_c_esc, json_c_lit =
+	json_set(' ', '\t', '\r', '\n'), json_set(' ', '\t', '\r', '\n', ']', '}', ','),
+	json_set('\\', '/', '"', 'b', 'f', 'n', 'r', 't', 'u'), json_set('true', 'false', 'null')
+local json_lits = {['true']=true, ['false']=false, ['null']=nil}
+local json_esc_map = { ['\\']='\\', ['\'']='\'',
+	['/']='/', ['b']='\b', ['f']='\f', ['n']='\n', ['r']='\r', ['t']='\t' }
+
+local function json_str(str, i)
+	local res, j, k, x, c, hex = '', i + 1, i + 1
+	while j <= #str do
+		x = str:byte(j)
+		if x < 32 then json_err(str, j, 'control character in string')
+		elseif x == 92 then -- `\`: Escape
+			res = res .. str:sub(k, j - 1); j = j + 1; c = str:sub(j, j)
+			if c == 'u' then
+				hex = str:match('^[dD][89aAbB]%x%x\\u%x%x%x%x', j + 1)
+					or str:match('^%x%x%x%x', j + 1)
+					or decode_error(str, j - 1, 'invalid unicode escape in string')
+				j = j + #hex; res = res .. 'U' -- json_parse_unicode(hex) - not used here
+			else
+				if not json_c_esc[c]
+					then decode_error(str, j - 1, 'invalid str escape "'..c..'"') end
+				res = res .. json_esc_map[c]
+			end
+			k = j + 1
+		elseif x == 34 then return res .. str:sub(k, j - 1), j + 1 end -- `"`: string end
+		j = j + 1
+	end
+	decode_error(str, i, 'expected closing quote for string')
+end
+
+local function json_num(str, i)
+	local x, s, n = json_char(str, i, json_c_delim)
+	s = str:sub(i, x - 1); n = tonumber(s)
+	if not n then json_err(str, i, 'invalid number "'..s..'"') end
+	return n, x
+end
+local function json_lit(str, i)
+	local x = json_char(str, i, json_c_delim)
+	local word = str:sub(i, x - 1)
+	if not json_c_lit[word] then decode_error(str, i, 'bad literal "'..word..'"') end
+	return json_lits[word], x
+end
+local function json_arr(str, i)
+	local res, n, x, chr = {}, 1
+	i = i + 1
+	while 1 do
+		i = json_char(str, i, json_c_space, true)
+		if str:sub(i, i) == ']' then i = i + 1; break end -- Empty / end of arr
+		x, i = json_parse(str, i) -- Read token
+		res[n] = x; n = n + 1
+		i = json_char(str, i, json_c_space, true) -- Next token
+		chr = str:sub(i, i); i = i + 1
+		if chr == ']' then break end
+		if chr ~= ',' then json_err(str, i, 'expected "]" or ","') end
+	end
+	return res, i
+end
+local function json_obj(str, i)
+	local res, key, val, chr = {}
+	i = i + 1
+	while 1 do
+		i = json_char(str, i, json_c_space, true)
+		if str:sub(i, i) == '}' then i = i + 1; break end -- Empty / end of obj
+		if str:sub(i, i) ~= '"' then json_err(str, i, 'expected string for key') end
+		key, i = json_parse(str, i)
+		i = json_char(str, i, json_c_space, true) -- Read ':' delimiter
+		if str:sub(i, i) ~= ':' then json_err(str, i, 'expected ":" after key') end
+		i = json_char(str, i + 1, json_c_space, true)
+		val, i = json_parse(str, i) -- Read value
+		res[key] = val -- Set
+		i = json_char(str, i, json_c_space, true) -- Next token
+		chr = str:sub(i, i); i = i + 1
+		if chr == '}' then break end
+		if chr ~= ',' then json_err(str, i, 'expected "}" or ","') end
+	end
+	return res, i
+end
+
+local json_char_map = {
+	['"']=json_str, ['0']=json_num, ['1']=json_num, ['2']=json_num,
+	['3']=json_num, ['4']=json_num, ['5']=json_num, ['6']=json_num,
+	['7']=json_num, ['8']=json_num, ['9']=json_num, ['-']=json_num,
+	['t']=json_lit, ['f']=json_lit, ['n']=json_lit, ['[']=json_arr, ['{']=json_obj }
+json_parse = function(str, idx)
+	local chr = str:sub(idx, idx)
+	local f = json_char_map[chr]
+	if f then return f(str, idx) end
+	json_err(str, idx, 'unexpected character "'..chr..'"')
+end
+function json_decode(str)
+	if type(str) ~= 'string' then error('invalid non-str type: '..type(str)) end
+	local res, idx = json_parse(str, json_char(str, 1, json_c_space, true))
+	idx = json_char(str, idx, json_c_space, true)
+	if idx <= #str then json_err(str, idx, 'trailing garbage') end
+	return res
+end
+
+-- Conky hooks
 
 function conky_sens_cache()
 	local ts = os.time()
-	if os.difftime(ts, sensors.ts_read) <= sensors.ts_read_i then return end
-	local sh = io.popen(sensors.cmd, 'r')
+	if os.difftime(ts, sensors.ts_read) <= sensors.td_read then return end
+	local sh, data = io.popen(sensors.cmd, 'r')
+	data = json_decode(sh:read('*a')); sh:close()
 	sensors.values = {}
-	for p in string.gmatch(sh:read('*a'), '(%S+ %S+)\n') do
-		local n = string.find(p, ' ')
-		sensors.values[string.sub(p, 0, n-1)] = string.sub(p, n)
-	end
-	sh:close()
+	for dev, d in pairs(data) do for sen, dd in pairs(d) do for k, v in pairs(dd) do
+		sensors.values[dev..'__'..sen..'__'..k] = v
+	end end end
 	sensors.ts_read = ts
 end
 
@@ -710,7 +830,7 @@ end
 function conky_iface_cache(...)
 	local iface_args = table.pack(...)
 	local ifk, ts, iface_list, iface_chk = table.concat(iface_args, ' '), os.time()
-	if os.difftime(ts, ifaces.ts_read[ifk] or 0) <= ifaces.ts_read_i
+	if os.difftime(ts, ifaces.ts_read[ifk] or 0) <= ifaces.td_read
 		then return ifaces.cache[ifk] end
 	ifaces.cache[ifk] = {}; iface_list = ifaces.cache[ifk]
 	for _, iface in ipairs(iface_args) do

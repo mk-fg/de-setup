@@ -111,17 +111,18 @@ and (mostly decorative) analog/binary clocks on top.
 
 `rc.laptop` is a cut-down version of `rc.desktop` for smaller screen.
 
-Requres conky lua extension enabled (at build-time, not the case on Arch for
-some reason) and uses tiny "sens" binary for lm_sensors readouts, started from
-lua with separate interval, with outputs cached between runs.
-
-Use "make" to build it.
+Requres conky lua extension enabled (at build-time, not the case on Arch
+for some reason) and uses JSON output of "sensors" binary from [lm_sensors],
+which is being run from lua with separate interval (configured there),
+its outputs cached between runs.
 
 ![conky-sensors](https://blog.fraggod.net/images/conky_sensors.jpg)
 
-[Displaying any lm_sensors data in conky] blog post has more details on how it
-all works.
+[Displaying any lm_sensors data in conky] blog post has a bit more details,
+but outdated by now - used to need separate "sens" binary, obsoleted by
+lm\_sensors' `-j` option.
 
+[lm_sensors]: https://archive.kernel.org/oldwiki/hwmon.wiki.kernel.org/lm_sensors.html
 [Displaying any lm_sensors data in conky]:
   https://blog.fraggod.net/2014/05/19/displaying-any-lm_sensors-data-temperature-fan-speeds-voltage-etc-in-conky.html
 
