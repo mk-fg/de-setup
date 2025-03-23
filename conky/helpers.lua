@@ -311,9 +311,8 @@ ifaces = {
 
 --- === Clock/data rings + binary clock above main info
 
-require 'cairo'
-local function load_cairo_xlib() require 'cairo_xlib' end
-pcall(load_cairo_xlib)
+pcall(function() require 'cairo' end) -- optional for running script from cli
+pcall(function() require 'cairo_xlib' end)
 
 local function rgb_to_r_g_b(color,alpha)
 	return ((color / 0x10000) % 0x100) / 255.,
@@ -624,7 +623,7 @@ end
 
 --- === lm-sensors json data from "sensors -j"
 
--- Compact JSON parser from https://github.com/rxi/json.lua
+-- Compact JSON parser based on https://github.com/rxi/json.lua
 
 local function json_set(...)
 	local res = {}
@@ -641,7 +640,7 @@ local function json_err(str, idx, msg)
 		col_count = col_count + 1
 		if str:sub(n, n) == '\n' then line_count, col_count = line_count + 1, 1 end
 	end
-	error(('%s at line %d col %d').format(msg, line_count, col_count))
+	error(('%s at line %d col %d'):format(msg, line_count, col_count))
 end
 
 local json_parse
@@ -657,20 +656,20 @@ local function json_str(str, i)
 	while j <= #str do
 		x = str:byte(j)
 		if x < 32 then json_err(str, j, 'control character in string')
-		elseif x == 92 then -- `\`: Escape
+		elseif x == 92 then -- `\` escape
 			res = res .. str:sub(k, j - 1); j = j + 1; c = str:sub(j, j)
 			if c == 'u' then
 				hex = str:match('^[dD][89aAbB]%x%x\\u%x%x%x%x', j + 1)
 					or str:match('^%x%x%x%x', j + 1)
 					or decode_error(str, j - 1, 'invalid unicode escape in string')
-				j = j + #hex; res = res .. 'U' -- json_parse_unicode(hex) - not used here
+				j = j + #hex; res = res .. '?' -- json_unicode(hex) - not used here
 			else
 				if not json_c_esc[c]
 					then decode_error(str, j - 1, 'invalid str escape "'..c..'"') end
 				res = res .. json_esc_map[c]
 			end
 			k = j + 1
-		elseif x == 34 then return res .. str:sub(k, j - 1), j + 1 end -- `"`: string end
+		elseif x == 34 then return res .. str:sub(k, j - 1), j + 1 end -- `"` string end
 		j = j + 1
 	end
 	decode_error(str, i, 'expected closing quote for string')
@@ -751,8 +750,8 @@ function conky_sens_cache()
 	local sh, data = io.popen(sensors.cmd, 'r')
 	data = json_decode(sh:read('*a')); sh:close()
 	sensors.values = {}
-	for dev, d in pairs(data) do for sen, dd in pairs(d) do for k, v in pairs(dd) do
-		sensors.values[dev..'__'..sen..'__'..k] = v
+	for sen, d in pairs(data) do for sf, dd in pairs(d) do for ss, v in pairs(dd) do
+		sensors.values[sen..'__'..sf..'__'..ss] = v
 	end end end
 	sensors.ts_read = ts
 end
@@ -774,6 +773,12 @@ function conky_sens_read(name, precision)
 		return string.format(fmt, sensors.values[name])
 	end
 	return ''
+end
+
+-- To check produced sensor names via CLI command: lua conky/helpers.lua
+if debug.getinfo(2) then
+	conky_sens_cache()
+	for k, v in pairs(sensors.values) do print(('%s = %s'):format(k, v)) end
 end
 
 
