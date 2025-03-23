@@ -1708,7 +1708,7 @@ group "E_Config" struct {
   value "cnfmdlg_disabled" int 0;
   value "config_type" uint 3;
   value "config_version" int 1000035;
-  value "cursor_size" int 32;
+  value "cursor_size" int 16;
   value "default_system_menu" string "/usr/etc/xdg/menus/enlightenment.menu";
   value "desk_auto_switch" int 0;
   value "desk_flip_animate_interpolation" int 0;
@@ -1844,6 +1844,7 @@ group "E_Config" struct {
   value "show_cursor" uchar 1;
   value "show_desktop_icons" int 1;
   value "suspend_connected_standby" uchar 0;
+  value "suspend_mode" uchar 0;
   value "syscon.do_input" uchar 1;
   value "syscon.extra.icon_size" int 48;
   value "syscon.main.icon_size" int 48;
