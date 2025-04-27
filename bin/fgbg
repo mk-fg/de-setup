@@ -2,7 +2,7 @@
 
 import itertools as it, functools as ft, ctypes as ct, pathlib as pl
 import subprocess as sp, dataclasses as dcs, hashlib as hl
-import os, sys, re, random, math, time, signal, base64, errno, warnings
+import os, sys, re, random, math, time, signal, base64, errno, warnings, threading
 
 p_err = ft.partial(print, file=sys.stderr, flush=True)
 gather_wrap = lambda t: (lambda func: (lambda *a,**k: t(func(*a,**k))))
@@ -580,7 +580,6 @@ class SDDaemon:
 
 	def __init__(self, wakeup_interval=None, fork=False, sd_status_tpl='Wakeup in {delta_str}'):
 		'fork=True would only do double-fork if not under systemd Type=notify control.'
-		import threading
 		self.sleep_event = threading.Event()
 		self.fork, self.wu_interval = fork, wakeup_interval
 		self.sd_ready, self.sd_status_tpl = None, sd_status_tpl
@@ -692,26 +691,31 @@ def main(args=None):
 		help='Pick and use same one image for all virtual desktops within monitor.')
 
 	group = parser.add_argument_group('Continuous operation mode')
-	group.add_argument('-d', '--daemon', action='store_true',
-		help=fill('Run in continous daemon mode,'
-			' setting new background on interval or when receiving HUP/QUIT signal.'))
+	group.add_argument('-d', '--daemon', action='store_true', help=dd('''
+		Run in continous daemon mode, setting new
+			background on interval or when receiving HUP/QUIT signal.
+		Extra USR1 signal (or -H/--hold option) can be used to postpone
+			normal rotation until getting USR2/HUP/QUIT or --xprintidle-interval.'''))
 	group.add_argument('-i', '--interval', metavar='((hh:)mm:)ss', default='4:23:47',
 		help='Interval between switching to a new background image(s). Default: %(default)s')
 	group.add_argument('-n', '--next', action='store_true',
 		help='Find running daemon pid(s) in /proc by script name, send SIGHUP and exit.')
+	group.add_argument('-H', '--hold', action='store_true',
+		help='Similar to -n/--next, but for sending USR1 to stop bg-changes for a while.')
 	group.add_argument('--fork', action='store_true',
 		help='Fork or indicate systemd startup only after setting initial background.')
 	group.add_argument('--no-image-proc-fork', action='store_true', help=dd('''
-			Do not fork for image processing - run as a single process.
-			Normally subprocess allows to not allocate memory required by imagemagick
-				in the main process, which will otherwise never be freed to the OS, causing
-				long-running process to grow to the requirements of the largest handled image.'''))
+		Do not fork for image processing - run as a single process.
+		Normally subprocess allows to not allocate memory required by imagemagick
+			in the main process, which will otherwise never be freed to the OS, causing
+			long-running process to grow to the requirements of the largest handled image.'''))
 	group.add_argument('--initial-delay', action='store_true',
 		help='Only set initial background after first interval of time passes.')
 	group.add_argument('--xprintidle-interval',
 		metavar='((hh:)mm:)ss', default='30:00', help=dd('''
 			Run "xprintidle" tool to check for activity, if it is available,
 				and only change backgrounds if something happened within specified interval.
+			This interval interacts with -H/--hold option and USR1/USR2 signals.
 			Specify 0 or "-" to explicitly disable these checks. Default: %(default)s'''))
 	group.add_argument('--dir-refresh-interval',
 		metavar='((hh:)mm:)ss', default='12:00:00', help=dd('''
@@ -759,7 +763,7 @@ def main(args=None):
 
 	opts = parser.parse_args(sys.argv[1:] if args is None else args)
 
-	if opts.next:
+	if opts.next or opts.hold:
 		def _find_pids(name, self_pid):
 			self_pid = str(self_pid)
 			for p in pl.Path('/proc').glob('*/cmdline'):
@@ -774,7 +778,8 @@ def main(args=None):
 		pid_set = set(_find_pids(name, os.getpid()))
 		if not pid_set: parser.error( 'Failed to find'
 			f' running daemon pid(s) by script name: {name!r}' )
-		for pid in pid_set: os.kill(pid, signal.SIGHUP)
+		sig = signal.SIGHUP if opts.next else signal.SIGUSR1
+		for pid in pid_set: os.kill(pid, sig)
 		return
 
 	if not opts.path: parser.error('At least one image file/dir path argument is required')
@@ -829,14 +834,17 @@ def main(args=None):
 	except ImagePickerError as err: parser.error(str(err))
 	with images:
 
-		daemon = False
+		daemon, bg_hold = False, threading.Event()
 		if opts.daemon:
 			daemon = SDDaemon( parse_time_delta(opts.interval),
 				opts.fork, sd_status_tpl='Next background cycle in {delta_str}' )
 			for sig in 'int term'.upper().split():
 				signal.signal(getattr(signal, f'SIG{sig}'), lambda sig,frm: sys.exit(0))
-			for sig in 'hup quit'.upper().split():
-				signal.signal(getattr(signal, f'SIG{sig}'), daemon.wakeup_signal)
+			for sig in 'hup quit'.upper().split(): signal.signal(
+				getattr(signal, f'SIG{sig}'),
+				lambda sig,frm: (bg_hold.clear(), daemon.wakeup_signal()) )
+			signal.signal(signal.SIGUSR1, lambda sig,frm: bg_hold.set())
+			signal.signal(signal.SIGUSR2, lambda sig,frm: bg_hold.clear())
 			if not opts.fork: daemon.ping() # send "ready" immediately
 			idle_interval = None
 			if opts.xprintidle_interval and '-' not in opts.xprintidle_interval:
@@ -856,23 +864,18 @@ def main(args=None):
 					if not ts_idle: # check and maybe set ts_idle for when to check next
 						try: xidle = int(sp.run(['xprintidle'], stdout=sp.PIPE).stdout) / 1000
 						except (OSError, ValueError): xidle = 0
-						if xidle > idle_interval: ts_idle = ts + idle_interval / 2
+						if xidle > idle_interval: ts_idle = ts + idle_interval / 2; bg_hold.clear()
 					if not ts_idle and not ts_idle_old: daemon.wakeup_reset() # new interval from now
-				if not ts_idle:
+				if not (ts_idle or bg_hold.is_set()):
 					dpy_list = dpy_info()
 					if mon_indexes: dpy_list = list(dpy_list[n] for n in mon_indexes)
 
 					if opts.no_image_proc_fork: set_bg_image(images, dpy_list, dx, dy)
 					elif pid := os.fork():
 						if os.waitpid(pid, 0)[1]: p_err('Failed to process/set bg image in a subprocess')
-					else:
-						set_bg_image(images, dpy_list, dx, dy)
-						exit(0)
+					else: return set_bg_image(images, dpy_list, dx, dy) # subprocess
 
-			if not daemon:
-				picker_opts.cleanup = False # keep processed files after exit, if any
-				break
-
+			if not daemon: picker_opts.cleanup = False; break # keep processed files after exit
 			if daemon.wakeup_sleep(ts_next, delay_max): ts_idle = None
 			status = None if not ts_idle else 'DE is idle, will update background after activity'
 			bg_cycle, ts_next = daemon.wakeup_check(status)

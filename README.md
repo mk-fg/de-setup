@@ -124,22 +124,22 @@ from ["riet" tool], which is updating it on its own separate schedule
 
 "sensors" binary there is being run from lua with separate interval
 (configured in lua sensors= map), and its outputs cached between runs,
-so doesn't update on the same interval as while conky UI, to avoid
+so doesn't update on the same interval as rest of conky UIs, to avoid
 running it every few seconds needlessly.
 
-Lua script formats sensor values as `chip__feature__subfeature` (e.g.
+Lua script formats sensor value names as `chip__feature__subfeature` (e.g.
 `k10temp-pci-00c3__Tctl__temp1_input` for `"k10temp-pci-00c3":{"Tctl":{"temp1_input":48.000}`
-nested-JSON data), which conky's `${lua sens_read ...}` can match by any string part
-or [lua regexp-like string.match pattern] - for example
+nested-JSON data), which conky's `${lua sens_read ...}` directive can match
+by any string part or [lua regexp-like string.match pattern] - for example
 `${lua sens_read k10temp-pci-[^_]+__Tctl__temp%d+_input}` to match any available
 temperature value on k10temp-pci "Tctl" feature (AMD CPU temperature), regardless
 of bus IDs and sensor number (as there's probably just one for Tctl).\
 Run `lua conky/helpers.lua` from the terminal (command line) to check/test
-lua-parsed sensors' names and outputs directly, same as in conky config.
+lua-parsed sensors' names and outputs directly, same as they'll be in conky config.
 
 [Displaying any lm_sensors data in conky] blog post has a bit more details,
-but outdated by now - used to need separate "sens" binary, obsoleted by
-lm\_sensors' `-j` option.
+but outdated by now - used to need separate "sens" binary for machine-friendly output,
+obsoleted by `-j` option in lm\_sensors' default cli tool.
 
 [lm_sensors]: https://archive.kernel.org/oldwiki/hwmon.wiki.kernel.org/lm_sensors.html
 ["riet" tool]: https://github.com/mk-fg/rst-icalendar-event-tracker
