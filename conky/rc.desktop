@@ -56,7 +56,7 @@ conky.config = {
 	template5 = '${if_up \\1}${downspeedgraph \\1 30,190 aa3333 3333aa \\2 -t -l}${alignr}${upspeedgraph \\1 30,190 3333aa aa3333 \\2 -t -l}${endif}',
 	template9 = '${color light slate gray}${if_match ${cpu cpu\\1} >= 85}${color red}${endif}${tab 7}${cpubar cpu\\1 5,60}',
 
-	lua_load = '~/.conkyrc.lua',
+	lua_load = os.getenv('HOME') .. '/.conkyrc.lua',
 	lua_draw_hook_pre = 'draw_graphics',
 
 	-- max_user_text = 10485760,
