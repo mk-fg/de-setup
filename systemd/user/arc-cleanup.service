@@ -1,6 +1,6 @@
 [Unit]
-Wants=arc-term.slice
-After=startx.target
+DefaultDependencies=no
+After=final.target
 
 [Service]
 Type=oneshot
