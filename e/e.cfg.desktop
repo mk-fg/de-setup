@@ -2741,7 +2741,6 @@ group "E_Config_Bindings" struct {
       value "params" string "main";
     }
     group "E_Config_Binding_Mouse" struct {
-      value "action" string "gadget_move";
       value "any_mod" uchar 0;
       value "button" uchar 1;
       value "context" int 9;
@@ -2769,6 +2768,13 @@ group "E_Config_Bindings" struct {
       value "context" int 3;
       value "modifiers" int 0;
       value "params" string "clients";
+    }
+    group "E_Config_Binding_Mouse" struct {
+      value "action" string "window_menu";
+      value "any_mod" uchar 0;
+      value "button" uchar 2;
+      value "context" int 9;
+      value "modifiers" int 8;
     }
     group "E_Config_Binding_Mouse" struct {
       value "action" string "menu_show";
