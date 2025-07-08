@@ -1,0 +1,9 @@
+[Unit]
+After=xorg.target background.target
+PartOf=startx.target
+
+[Service]
+ExecStart=leco-sdl-widget .leco.ini
+
+[Install]
+WantedBy=startx.target
