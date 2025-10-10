@@ -8,7 +8,7 @@ local symlink_dir = '/tmp/mpv-links'
 
 local function _file_path()
 	local p = mp.get_property('path')
-	if p:match(':') or p == '-' then return mp.msg.warn( 'SKIP: '..
+	if not p or p:match(':') or p == '-' then return mp.msg.warn( 'SKIP: '..
 		'not using currently-playing file - does not look like a path [ '..p..' ]' ) end
 	if not p:match('^/')
 		then p = mp.get_property('working-directory'):gsub('/+$', '')..'/'..p end
