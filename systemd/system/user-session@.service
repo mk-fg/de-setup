@@ -3,6 +3,7 @@ After=systemd-user-sessions.service
 
 [Service]
 Environment=XDG_VTNR=2
+Environment=XDG_SEAT=seat0
 Environment=XDG_SESSION_CLASS=user
 Environment=XDG_SESSION_TYPE=x11
 Environment=XDG_SESSION_DESKTOP=enlightenment
