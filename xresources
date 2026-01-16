@@ -30,6 +30,7 @@ XTerm*scrollBar: false
 XTerm*internalBorder: 0
 XTerm*borderWidth: 0
 XTerm*utf8Title: true
+XTerm*wideChars: true
 
 XTerm*multiScroll: true
 XTerm*jumpScroll: true
