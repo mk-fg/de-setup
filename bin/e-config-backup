@@ -34,7 +34,7 @@ cut_groups = { # bunch of groups with transient or unimportant data to cut
 cut_vals = [ # (group, value, type), where each can be ..., str, set or re
 	('Systray_Config', 'dbus', 'string'),
 	('E_Exehist', 'startup_id', 'int'),
-	(..., re.compile(r'^geom\.((pos|size|res)_?)?[whxy]?$'), {'int', 'double'}) ]
+	(..., re.compile(r'^geom\.((pos|size|res)_?)?[whxy]?\Z'), {'int', 'double'}) ]
 
 # Sorting blocks is useful for things like "modules" with no otherwise-stable order from E
 sort_blocks = [
@@ -108,7 +108,7 @@ def clean_file(p, eet_key):
 
 def find_cfg_files(*paths):
 	# Returns paths with the original prefix if possible, for shorter/consistent filenames
-	files, re_cfg = dict(), re.compile(r'(?<!\.[0-9])\.cfg$')
+	files, re_cfg = dict(), re.compile(r'(?<!\.[0-9])\.cfg\Z')
 	for p in paths:
 		try: p_real = p.expanduser().resolve(strict=True)
 		except FileNotFoundError: continue
@@ -119,7 +119,7 @@ def find_cfg_files(*paths):
 			for fn in fns:
 				if not re_cfg.search(fn): continue
 				if ( (pl.Path(root) / fn).is_symlink() and
-					(m := re.search(r'^e\.(\w+)\.cfg$', fn)) ): files[f'{fn_root}{fn}'] = m.group(1)
+					(m := re.search(r'^e\.(\w+)\.cfg\Z', fn)) ): files[f'{fn_root}{fn}'] = m.group(1)
 				else: files[f'{fn_root}{fn}'] = 'config'
 	return files
 

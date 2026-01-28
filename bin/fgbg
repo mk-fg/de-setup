@@ -384,7 +384,7 @@ class ImagePath(pl.PosixPath):
 
 class ImagePicker:
 
-	image_ext_re = re.compile(r'(?i)\.(bmp|png|jpe?g|webp)$')
+	image_ext_re = re.compile(r'(?i)\.(bmp|png|jpe?g|webp)\Z')
 
 	def __init__(self, paths, opts):
 		self.p_skip, self.opts = set(), opts
