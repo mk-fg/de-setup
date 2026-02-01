@@ -179,18 +179,19 @@ Bitrates are generally useful when streaming stuff over network.
 #### [fg.lavfi-audio-vis.lua]
 [fg.lavfi-audio-vis.lua]: mpv/fg.lavfi-audio-vis.lua
 
-Parameter-tweaker script that abuses --lavfi-complex to produce visualizations
+Parameter-tweaker script that (ab-)uses --lavfi-complex to produce visualizations
 (overlaid showcqt + avectorscope filters atm) for audio-only files if window is
 enabled/available (e.g. via --force-window=immediate) and there's no video
-stream in it (album art don't count).
+stream in it (album art don't count), or as a video overlay via hotkey/command.
 
 ![mpv-ffmpeg-vis](https://blog.fraggod.net/images/mpv-ffmpeg-vis.jpg)
 
-I.e. some fancy dynamic swarming/flowing colors instead of just blank black square.
+I.e. some fancy dynamic swarming/flowing colors, frequency/volume bars,
+instead of just blank black square. Image above is old, but it's like that.
 
-Also includes client events to toggle visualization and other --lavfi-complex
-filtering (if any) on/off explicitly, regardless of whether it was enabled on
-start.
+Also has some audio-filtering modes and client events to toggle visualization
+and other --lavfi-complex filtering (if any) on/off explicitly, regardless of
+whether it was enabled on start.
 
 Can be used for key bindings, e.g. via something like `y script-message
 fg.lavfi-audio-vis.on` in input.conf, and I'm using that in a player frontend
@@ -201,9 +202,9 @@ fg.lavfi-audio-vis.on` in input.conf, and I'm using that in a player frontend
 #### [fg.file-keys.lua]
 [fg.file-keys.lua]: mpv/fg.file-keys.lua
 
-Simple script to remove or manage playback timestamp in currently-playing
-filename, useful to cleanup or mark/seek whatever transient media files,
-as you go through them, e.g. one-off downloaded stuff from [yt-dlp].
+Simple script to remove/symlink files on hotkeys, or manage playback timestamp
+in currently-playing filename, useful to cleanup or mark/seek whatever transient
+media files as you go through them, e.g. one-off stuff downloaded via [yt-dlp].
 
 [yt-dlp]: https://github.com/yt-dlp/yt-dlp
 

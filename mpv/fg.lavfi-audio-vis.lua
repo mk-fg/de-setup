@@ -1,12 +1,6 @@
 ---- Auto-enable fancy visualization for audio files in mpv if window/vo is forced/enabled
 ---- mpv lua api: manpage + https://github.com/mpv-player/mpv/blob/master/player/lua/defaults.lua
 
-local function str_split(str, pat)
-	local res = {}
-	str:gsub(pat, function(x) res[#res+1]=x end)
-	return res
-end
-
 local function lavfi_filter_string(spec)
 	local filter_name, filter_str = nil, {}
 	for _,fx in ipairs(spec) do
@@ -32,9 +26,10 @@ local function lavfi_filter_string(spec)
 end
 
 
--- vis - visualization part, src - pre-exising part, *_disabled - flags to toggle each
-local lavfi_vis_disabled, lavfi_vis, lavfi_src, lavfi_src_disabled = true
-lavfi_src = mp.get_property('options/lavfi-complex') or ''
+-- vis - visualization part, src - pre-exising part
+-- *_disabled - flags to toggle each, lavfi_overlay - keeps original video stream
+local lavfi_vis_disabled, lavfi_vis, lavfi_overlay = true
+local lavfi_src, lavfi_src_disabled = mp.get_property('options/lavfi-complex') or ''
 
 local function lavfi_vis_update(src_toggle)
 	-- Sets mpv's --lavfi-complex option based on all lavfi_* vars above
@@ -87,43 +82,68 @@ local function lavfi_vis_init(force)
 	-- Filter Docs: https://ffmpeg.org/ffmpeg-filters.html
 	-- Fancy Examples: https://trac.ffmpeg.org/wiki/FancyFilteringExamples
 
-	local size_bg = '960x768'
-	local filter_bg = lavfi_filter_string{
-		'showcqt', {
-			fps = 30,
-			size = size_bg,
-			count = 2,
-			--csp = 'bt709',
-			bar_g = 2,
-			sono_g = 4,
-			bar_v = 9,
-			sono_v = 17,
-			font = "'Liberation Mono,Luxi Mono,Monospace|bold'", -- has to be monospace
-			fontcolor = "'st(0, (midi(f)-53.5)/12);"..
-				" st(1, 0.5 - 0.5 * cos(PI*ld(0))); r(1-ld(1)) + b(ld(1))'",
-			tc = '0.33',
-			tlength = "'st(0,0.17); 384*tc / (384 / ld(0)"..
-				" + tc*f /(1-ld(0))) + 384*tc / (tc*f / ld(0) + 384 /(1-ld(0)))'" } }
-		-- 'format=yuv420p' }
+	local w, h = 960, 768 -- used with no video underlay
+	if lavfi_overlay then
+		local wm, hm, wx, hx = 1920, 1080,
+			mp.get_property_number('video-params/w'),
+			mp.get_property_number('video-params/h')
+		if wx and hx then
+			if wx > wm or hx > hm then wx, hx = wm, hm end
+			w, h = wx, hx -- font sizes and such are NOT adjusted below
+		end
+	end
+	local wh, wha = ('%dx%d'):format(w, h), ('%d/%d'):format(w, h)
+
+	local filter_bg = lavfi_filter_string{'showcqt', {
+		fps = 30,
+		size = wh,
+		count = 2,
+		-- csp = 'bt709',
+		bar_g = 2,
+		sono_g = 4,
+		bar_v = 9,
+		sono_v = 17,
+		font = "'Liberation Mono, Luxi Mono, Monospace | bold'", -- has to be monospace
+		fontcolor = "'st(0, (midi(f)-53.5)/12);"..
+			" st(1, 0.5 - 0.5 * cos(PI*ld(0))); r(1-ld(1)) + b(ld(1))'",
+		tc = '0.33',
+		tlength = "'st(0,0.17); 384*tc / (384 / ld(0)"..
+			" + tc*f /(1-ld(0))) + 384*tc / (tc*f / ld(0) + 384 /(1-ld(0)))'" }}
 
 	local filter_fg = lavfi_filter_string{'showvolume', {
-		w=960, h=20, dm=3,
+		w=w, h=20, dm=3,
 		c='PEAK*255 + floor((1-PEAK)*255)*256 + 0xd06e0000' }}
 
-	local overlay = lavfi_filter_string{'overlay', {format='yuv420'}}
-	lavfi_vis = ' asplit=3 [ao][a1][a2];'..
-		' [a1] '..filter_bg..' [v1]; [a2] '..filter_fg..' [v2]; [v1][v2] '..overlay..' [vo]'
+	local vo, skip_aspect, vid = ' [vo]', true
+	if lavfi_overlay then vid = mp.get_property_number('vid') end
+	if vid then
+		local vid_scale = lavfi_filter_string{
+			'scale', { -- breaks aspect-ratio when scaling mpv window
+				w = ("'if(gte(iw/ih,%s),min(%d,iw),-2)'"):format(wha, w),
+				h = ("'if(lt(iw/ih,%s),min(%d,ih),-2)'"):format(wha, h) },
+			'pad', {
+				w=w, h=h, color='black',
+				x=("'if(lt(iw,%d),trunc((%d-iw)/2),0)'"):format(w,w),
+				y=("'if(lt(ih,%d),trunc((%d-ih)/2),0)'"):format(h,h) } }
+		vo, skip_aspect = ( -- colorkey removes cqt bg, v-seek needed for controls to work
+			', format=rgb24, colorkey = similarity=0.1 : blend=0.2, split=2 [v-x1][v-x2];'..
+			' [vid%d] '..vid_scale..' [v-base];'..
+			' [v-x1][v-base] overlay [v-seek]; [v-seek][v-x2] overlay'..vo ):format(vid)
+	end
+	lavfi_vis = ' asplit=3 [ao][a1][a2];'..' [a1] '..filter_bg..' [v-bg1];'..
+		' [a2] '..filter_fg..' [v-bg2]; [v-bg1][v-bg2] overlay = format=yuv420'..vo
 
 	-- These opts help window to not blink size briefly when switching tracks
-	mp.set_property('options/keepaspect', 'no')
-	mp.set_property('options/geometry', size_bg)
+	if skip_aspect then mp.set_property('options/keepaspect', 'no') end
+	mp.set_property('options/geometry', wh)
 
 	lavfi_vis_update()
 end
 
-local function lavfi_vis_toggle(state)
+local function lavfi_vis_toggle(state, overlay_mode)
 	-- Enables/disables visualization, initializing filter string if necessary
-	if state ~= nil then lavfi_vis_disabled = not state
+	if state ~= nil
+		then lavfi_vis_disabled, lavfi_overlay = not state, overlay_mode
 		else lavfi_vis_disabled = not lavfi_vis_disabled end
 	if not lavfi_vis_disabled and not lavfi_vis
 		then lavfi_vis_init(true) else lavfi_vis_update() end
@@ -135,6 +155,11 @@ end
 mp.register_script_message('fg.lavfi-audio-vis.on', function() lavfi_vis_toggle(true) end)
 mp.register_script_message('fg.lavfi-audio-vis.off', function() lavfi_vis_toggle(false) end)
 mp.register_script_message('fg.lavfi-audio-vis.toggle', function() lavfi_vis_toggle() end)
+mp.register_script_message(
+	'fg.lavfi-audio-vis.on.overlay', function() lavfi_vis_toggle(true, true) end )
+mp.register_script_message(
+	'fg.lavfi-audio-vis.toggle.overlay', function() lavfi_vis_toggle(nil, true) end )
+-- Toggle for keeping original audio-only lavfi enabled (stored in lavfi_src) in addition to vis
 mp.register_script_message('fg.lavfi-audio-vis.af.src', function() lavfi_vis_update(true) end)
 
 
@@ -172,10 +197,10 @@ end)
 
 
 ---- Initial state, depending on --vo/--force-window + --vid and such in lavfi_vis_init(force=nil)
-if str_split(mp.get_property('vo'), '[^,]+')[1] ~= 'null'
+if not mp.get_property('vo'):match('^null') -- can be "null,..."
 	and ({yes=1, immediate=1})[mp.get_property('force-window')]
 then
 	lavfi_vis_disabled = false
 	mp.add_hook('on_preloaded', 50, function() lavfi_vis_init() end)
--- else mp.msg.error('audio-vis disabled') end
+-- else mp.msg.info('audio-vis disabled') end
 end
