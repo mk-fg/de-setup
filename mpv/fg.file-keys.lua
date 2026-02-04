@@ -94,8 +94,19 @@ local function file_link()
 	mp.msg.info(('[symlink] created: %s'):format(p))
 end
 
+local function file_mtime()
+	local p = _file_path()
+	if not p then return mp.msg.info('missing file') end
+	local err_code = mp.command_native({
+		name='subprocess', args={'touch', '--no-create', p} }).status
+	if err_code ~= 0 then return mp.msg.error(
+		('[mtime] touch --no-create failed (code=%s): %s'):format(err_code, p) ) end
+	mp.msg.info(('[mtime] updated: %s'):format(p))
+end
+
 ---- Hotkey spec example: ctrl+k script-message fg.file-rm
 mp.register_script_message('fg.file-rm', function() file_rm() end)
 mp.register_script_message('fg.file-ts-save', function() file_ts_save() end)
 mp.register_script_message('fg.file-ts-seek', function() file_ts_seek() end)
 mp.register_script_message('fg.file-link', function() file_link() end)
+mp.register_script_message('fg.file-mtime', function() file_mtime() end)
