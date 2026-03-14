@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, sys
+import os, sys, re
 
 import pulsectl, pulsectl.lookup as pal
 
@@ -24,7 +24,12 @@ def main(args=None):
 	parser.add_argument('actions', nargs='*', help=dd('''
 		List of key=value tweaks or actions to apply to any matched objects.
 		Supported tweaks/actions: vol, props, vol-set, vol-change, mute.
-		Examples: vol-set=0.13, vol, props, mute=1, mute, vol-change=-0.1'''))
+		Values for vol-change can be in a special "<n>%%[:<min>-<max>]" format,
+			to use bounded percentage adjustment relative to current volume level.
+			<n> should be in 1-100 range, <min>-<max> bounds
+			are for absolute adjustment in same direction, i.e. smallest/largest step.
+		Examples: vol-set=0.13, vol, props, mute=1,
+			mute, vol-change=0.1, vol-change=-7%%:0.003-0.05'''))
 	parser.add_argument('-m', '--match', action='append', metavar='match-expr', help=dd('''
 		Match pulse objects to affect using provided expression(s).
 		Can be specified multiple times, to affect any/all matched objects.
@@ -58,7 +63,13 @@ def main(args=None):
 					print(f'{obj!r} proplist:')
 					for k, v in obj.proplist.items(): print(f'  {k} = {v}')
 				elif k == 'vol-set': pulse.volume_set_all_chans(obj, float(v))
-				elif k == 'vol-change': pulse.volume_change_all_chans(obj, float(v))
+				elif k == 'vol-change':
+					if '%' not in v: pulse.volume_change_all_chans(obj, float(v)); continue
+					if not (m := re.fullmatch(r'([-+]?[\d.]+)%(:([\d.]+)-([\d.]+))?', v)):
+						parser.error(f'Unrecognized vol-change format: vol-change={k!r}')
+					n_min, n_max = max(0, float(m[3] or 0)), min(99999, float(m[4] or 0))
+					adj = abs(pulse.volume_get_all_chans(obj) * ((n := float(m[1])) / 100))
+					pulse.volume_change_all_chans(obj, (n/abs(n)) * max(n_min, min(adj, n_max)))
 				elif k == 'mute':
 					v = (not obj.mute) if v is None else parse_bool(v)
 					pulse.mute(obj, v)
