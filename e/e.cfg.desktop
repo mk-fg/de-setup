@@ -1995,7 +1995,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "XF86AudioNext";
       value "modifiers" int 0;
-      value "params" string "ec -- -e \"(emms-next)\"";
+      value "params" string "de.music next";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2003,7 +2003,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "XF86AudioPlay";
       value "modifiers" int 0;
-      value "params" string "de.music.pause";
+      value "params" string "de.music pause";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2011,7 +2011,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "XF86AudioPrev";
       value "modifiers" int 0;
-      value "params" string "ec -- -e \"(emms-previous)\"";
+      value "params" string "de.music prev";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "backlight_adjust";
@@ -2027,7 +2027,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "XF86AudioLowerVolume";
       value "modifiers" int 0;
-      value "params" string "pa_tweak -m media.role:music -m application.process.binary:mpv -1 vol-change=-5%:0.003-0.05";
+      value "params" string "de.music vol-down";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2035,7 +2035,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "XF86AudioRaiseVolume";
       value "modifiers" int 0;
-      value "params" string "pa_tweak -m media.role:music -m application.process.binary:mpv -1 vol-change=+5%:0.003-0.05";
+      value "params" string "de.music vol-up";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "backlight_adjust";
@@ -2312,7 +2312,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "slash";
       value "modifiers" int 8;
-      value "params" string "ec -- -e \"(fg-emms-notify)\"";
+      value "params" string "de.music note";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "window_raise";
@@ -2342,7 +2342,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "semicolon";
       value "modifiers" int 8;
-      value "params" string "ec -- -e \"(emms-previous)\"";
+      value "params" string "de.music prev";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2350,7 +2350,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "apostrophe";
       value "modifiers" int 8;
-      value "params" string "ec -- -e \"(emms-next)\"";
+      value "params" string "de.music next";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "screen_send_to";
@@ -2573,7 +2573,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "bar";
       value "modifiers" int 9;
-      value "params" string "pa_tweak -m media.role:music vol-set=0.1738";
+      value "params" string "de.music vol-3";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2581,7 +2581,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "braceleft";
       value "modifiers" int 9;
-      value "params" string "pa_tweak -m media.role:music vol-set=0.1018";
+      value "params" string "de.music vol-1";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2589,7 +2589,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "semicolon";
       value "modifiers" int 9;
-      value "params" string "de.music.stop";
+      value "params" string "de.music stop";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2597,7 +2597,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "apostrophe";
       value "modifiers" int 9;
-      value "params" string "de.music.pause";
+      value "params" string "de.music pause";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2605,7 +2605,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "braceright";
       value "modifiers" int 9;
-      value "params" string "pa_tweak -m media.role:music vol-set=0.1296";
+      value "params" string "de.music vol-2";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "window_zone_move_by";
@@ -2704,7 +2704,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "bar";
       value "modifiers" int 11;
-      value "params" string "pa_tweak -m media.role:music vol-set=0.4079";
+      value "params" string "de.music vol-6";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2712,7 +2712,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "braceleft";
       value "modifiers" int 11;
-      value "params" string "pa_tweak -m media.role:music vol-set=0.2319";
+      value "params" string "de.music vol-4";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
@@ -2720,7 +2720,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "braceright";
       value "modifiers" int 11;
-      value "params" string "pa_tweak -m media.role:music vol-set=0.3080";
+      value "params" string "de.music vol-5";
     }
     group "E_Config_Binding_Key" struct {
       value "action" string "exec";
