@@ -20,4 +20,4 @@ WatchdogSec=300
 Restart=on-failure
 RestartSec=20
 StartLimitInterval=10min
-StartLimitBurst=5
+StartLimitBurst=2
