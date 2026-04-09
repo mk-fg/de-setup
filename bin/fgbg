@@ -511,6 +511,7 @@ class ImagePicker:
 						if (wm := str(w.message)) in warn_skip or warn_skip.add(wm): continue
 						p_err(f'----- WARNING: Non-fatal issue in image processing [ {p_src} ] - {wm}')
 					return res
+			except ImportError as err: raise # imagemagick/wand lib mismatch after updates
 			except Exception as err:
 				p_err(f'----- ERROR: Failed to process image [ {p_src} ] - {err}')
 				import traceback
