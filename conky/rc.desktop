@@ -85,7 +85,7 @@ ${color lightgrey}Processes:$color $processes  \
 ${color lightgrey}Running:$color $running_processes\
 ${alignr}\
 ${template3 cpu k10temp-pci-00c3__Tctl__temp1_input 68 C}\
-, ${template3 gpu-fan i915-pci-0a00__fan1__fan1_input 1000 \ rpm}\
+, ${template3 gpu-fan i915-pci-0800__fan1__fan1_input 1000 \ rpm}\
 ${if_empty ${lua file_cap_read Apple Wireless}}${else}${color lightgrey}, kb_batt: ${color}${lua file_cap_read Apple Wireless}${endif}
 ${color light slate gray}${cpugraph cpu0 20,400 0000ff 00ff00 -t -l}
 \
