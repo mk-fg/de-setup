@@ -32,24 +32,10 @@ err=0
 }
 xset r rate 250 40 || err=1
 
-# Not sure which it's supposed to apply to, gotta check
-dev='PS/2 Logitech Wheel Mouse'
-xinput list "$dev" &>/dev/null && {
-	xinput set-prop "$dev" --type=float 257 9999999 || err=1
-	xinput set-prop "$dev" --type=float 256 50 || err=1
-} ||:
-
-# Mouse - unmap any extra buttons
-evdev=
-for dev in $( xinput list |
-	gawk 'match($0,/\<COMPANY\s+USB\s+Device\s+id=([0-9]+)\s+\[slave\s+pointer\>/,a) {print a[1]}' )
-do
-	evdev=$(xinput list-props "$dev" | gawk 'match($0,/^\s+Device Node \S+:\s+"(\S+)"$/,a) {print a[1]}')
-	[[ -n "$evdev" ]] && udevadm info -q path -n "$evdev" | # match usb vid:pid from sysfs path
-		grep -Piq '/[\da-z]+:09DA:1EC0\.[\da-z]+/' || { evdev=; continue; }
-	xinput set-button-map "$dev" 1 2 3 4 5 0 0 0 0 0 0 0 || err=1
-	break
-done
+# Trackball button mappings - clockwise: RMB, MMB, LMB, MMB
+dev='Kensington Expert Mouse'
+xinput list "$dev" &>/dev/null \
+	&& xinput set-button-map "$dev" 1 2 2 4 5 0 0 3 0 || err=1
 
 # Synaptics settings, in case something (e.g. WM) messes these up
 synclient -l &>/dev/null && {
