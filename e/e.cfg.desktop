@@ -2702,6 +2702,14 @@ group "E_Config_Bindings" struct {
       value "action" string "exec";
       value "any_mod" uchar 0;
       value "context" int 9;
+      value "key" string "V";
+      value "modifiers" int 11;
+      value "params" string "exclip --verbatim --tabs-to-spaces 0";
+    }
+    group "E_Config_Binding_Key" struct {
+      value "action" string "exec";
+      value "any_mod" uchar 0;
+      value "context" int 9;
       value "key" string "bar";
       value "modifiers" int 11;
       value "params" string "de.music vol-6";
@@ -2728,7 +2736,7 @@ group "E_Config_Bindings" struct {
       value "context" int 9;
       value "key" string "V";
       value "modifiers" int 13;
-      value "params" string "exclip --tabs-to-spaces 0";
+      value "params" string "exclip --verbatim --tabs-to-spaces 0";
     }
   }
   group "mouse_bindings" list {
