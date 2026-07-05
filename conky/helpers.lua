@@ -285,7 +285,7 @@ clock_bin = {
 
 file_cap = {
 	values=nil,
-	glob_cmd="dash -c 'echo /sys/class/power_supply/*/'", glob_dirs=nil,
+	glob_cmd="echo /sys/class/power_supply/*/", glob_dirs=nil,
 	td_glob=600, ts_glob=0,
 	td_read=120, ts_read=0,
 }
