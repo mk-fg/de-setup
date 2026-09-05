@@ -124,7 +124,7 @@ local function file_link_tomkv_set(opt, value)
 	-- <pid_dir>/<p> is used if exists, otherwise last-ctime <pid_dir>/<p>.tomkv<opts>.<ext>
 	-- This way re-running file_link creates new symlink-name to tweak parameters in
 	local ext_pat = '(%.tomkv(%+.+))%.('..ext..')$'
-	local px, px_ts, tomkv, opts, opts_map
+	local px, px_ts, tomkv, opts
 	if mpu.file_info(pid_dir..p) then px, tomkv, opts = p, '', ''
 	else for _, pp in ipairs(mpu.readdir(pid_dir, 'files')) do
 		if pp:sub(1, stem:len()) == stem then
@@ -136,16 +136,16 @@ local function file_link_tomkv_set(opt, value)
 		end end end
 	if not px then file_link(); px, tomkv, opts = p, '', '' end
 
-	-- Parse opts -> opts_map, update, format back to opts
-	opts_map, opts = {}, opts:gsub('%+%+', '\x01')
-	opts = opts:gsub('%+([%w_]+=[^+]+)', function(v)
+	local omap, okeys = {}, {}
+	opts = opts:gsub('%+%+', '\x01'):gsub('%+([%w_]+=[^+]+)', function(v)
 		local k, v = v:match('^([%w_]+)=(.+)$')
-		opts_map[k] = v:gsub('\x01', '+'); return '' end)
+		omap[k] = v:gsub('\x01', '+'); return '' end)
 	if opts:len() > 0 then return mp.msg.error(( '[symlink-tomkv-%s]'..
 		' Unmatched tomkv-opts: %q [from %q ]' ):format(opt, opts, tomkv)) end
-	opts_map[opt] = value
-	for k, v in pairs(opts_map) do opts = opts ..
-		('+%s=%s'):format(k, v:gsub('%+', '++')) end
+	omap[opt] = value
+	for k in pairs(omap) do table.insert(okeys, k) end
+	table.sort(okeys); for _, k in ipairs(okeys)
+		do opts = opts .. ('+%s=%s'):format(k, omap[k]:gsub('%+', '++')) end
 
 	local pp = ('%s.tomkv%s.%s'):format(stem, opts, ext)
 	if pp ~= px then
