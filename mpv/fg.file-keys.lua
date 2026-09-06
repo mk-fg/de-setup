@@ -51,9 +51,9 @@ local function file_ts_save()
 	local p_ts = p_tpl:format(table.concat(ts))
 	local done, err_msg, err_code = os.rename(p, p_ts)
 	file_path_orig, file_path_new = file_path_orig or p, p_ts
-	if not done
-		then mp.msg.error(('[OSError %s] %s'):format(err_code, err_msg))
-		else mp.msg.info('filename-ts updated: '..p_ts) end
+	if not done then mp.msg.error(('[OSError %s] %s'):format(err_code, err_msg)) else
+		mp.msg.info('filename-ts updated: '..p_ts);
+		mp.osd_message('-- fn-ts set: ' .. p_ts:match('/([^/]+)$')) end
 end
 
 local function file_ts_seek()
@@ -74,9 +74,8 @@ local function file_rm()
 	local p = _file_path()
 	if not p then return mp.msg.info('skipped file removal') end
 	local done, err_msg, err_code = os.remove(p)
-	if not done
-		then mp.msg.error(('[OSError %s] %s'):format(err_code, err_msg))
-		else mp.msg.info('source file removed: '..p) end
+	if not done then mp.msg.error(('[OSError %s] %s'):format(err_code, err_msg)) else
+		mp.msg.info('source file removed: '..p); mp.osd_message('-- file removed') end
 end
 
 local function file_mtime()
@@ -87,6 +86,7 @@ local function file_mtime()
 	if err_code ~= 0 then return mp.msg.error(
 		('[mtime] touch --no-create failed (code=%s): %s'):format(err_code, p) ) end
 	mp.msg.info(('[mtime] updated: %s'):format(p))
+	mp.osd_message('-- mtime updated')
 end
 
 
@@ -110,6 +110,7 @@ local function file_link(fn)
 		if err_code ~= 0 then return mp.msg.error(
 			('[symlink] ln failed (code=%s): %s'):format(err_code, p) ) end
 		mp.msg.info(('[symlink] created: %s'):format(p))
+		mp.osd_message('-- symlink created')
 	end
 end
 
@@ -150,7 +151,8 @@ local function file_link_tomkv_set(opt, value)
 	local pp = ('%s.tomkv%s.%s'):format(stem, opts, ext)
 	if pp ~= px then
 		mp.msg.info(('[symlink] update: [ %s ] -> [ %s ]'):format(px, pp))
-		os.rename(pid_dir..px, pid_dir..pp) end
+		os.rename(pid_dir..px, pid_dir..pp)
+		mp.osd_message(('-- symlink updated: %s\n -> %s'):format(px, pp)) end
 end
 
 
